@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <Name>bekazone</Name>
+    <RootNamespace>bekazone</RootNamespace>
+    <InterpreterId>Global|VisualStudio|python35</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>135afaff-8f63-4be6-b76b-df574bf4cb57</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <ProjectTypeGuids>{5F0BE9CA-D677-4A4D-8806-6076C0FAAD37};{349c5851-65df-11da-9384-00065b846f21};{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <StartupFile>manage.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <WebBrowserUrl>http://localhost</WebBrowserUrl>
+    <LaunchProvider>Django launcher</LaunchProvider>
+    <DjangoSettingsModule>bekazone.settings</DjangoSettingsModule>
+    <OutputPath>.</OutputPath>
+    <SuppressCollectPythonCloudServiceFiles>true</SuppressCollectPythonCloudServiceFiles>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="bekazone\settings.py" />
+    <Compile Include="bekazone\utils.py" />
+    <Compile Include="cadmin\templatetags\template_tool.py" />
+    <Compile Include="cadmin\templatetags\__init__.py" />
+    <Compile Include="cadmin\utils.py" />
+    <Compile Include="cadmin\__init__.py" />
+    <Compile Include="manage.py" />
+    <Compile Include="bekazone\__init__.py" />
+    <Compile Include="bekazone\urls.py" />
+    <Compile Include="bekazone\views.py" />
+    <Compile Include="bekazone\wsgi.py" />
+    <Compile Include="cadmin\apps.py" />
+    <Compile Include="cadmin\baseadmin.py" />
+    <Compile Include="cadmin\baseform.py" />
+    <Compile Include="cadmin\perm_handle.py" />
+    <Compile Include="cadmin\urls.py" />
+    <Compile Include="cadmin\views.py" />
+    <Compile Include="common\redis_serializes.py" />
+    <Compile Include="common\utils.py" />
+    <Compile Include="users\permissions.py" />
+    <Compile Include="users\urls\web_urls.py" />
+    <Compile Include="users\views\web_views.py" />
+    <Compile Include="users\_admin.py" />
+    <Compile Include="users\forms.py" />
+    <Compile Include="users\apps.py" />
+    <Compile Include="users\auth.py" />
+    <Compile Include="users\models.py" />
+    <Compile Include="users\password_hasher.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bekazone\" />
+    <Folder Include="cadmin\" />
+    <Folder Include="cadmin\migrations\" />
+    <Folder Include="cadmin\templates\" />
+    <Folder Include="cadmin\templates\admin\" />
+    <Folder Include="cadmin\templates\admin\component\" />
+    <Folder Include="cadmin\templatetags\" />
+    <Folder Include="common\" />
+    <Folder Include="etc\" />
+    <Folder Include="etc\bekazone\" />
+    <Folder Include="obj\" />
+    <Folder Include="obj\Debug\" />
+    <Folder Include="static\" />
+    <Folder Include="static\css" />
+    <Folder Include="static\css\demo\" />
+    <Folder Include="static\css\demo\fonts\" />
+    <Folder Include="static\css\themes\" />
+    <Folder Include="static\css\themes\type-a\" />
+    <Folder Include="static\css\themes\type-b\" />
+    <Folder Include="static\css\themes\type-c\" />
+    <Folder Include="static\fonts\" />
+    <Folder Include="static\img\" />
+    <Folder Include="static\img\bg-img\" />
+    <Folder Include="static\js\" />
+    <Folder Include="static\plugins\" />
+    <Folder Include="static\plugins\bootbox\" />
+    <Folder Include="static\plugins\bootstrap-datepicker\" />
+    <Folder Include="static\plugins\bootstrap-datepicker\locales\" />
+    <Folder Include="static\plugins\bootstrap-select\" />
+    <Folder Include="static\plugins\bootstrap-timepicker\" />
+    <Folder Include="static\plugins\chosen\" />
+    <Folder Include="static\plugins\font-awesome\" />
+    <Folder Include="static\plugins\font-awesome\css\" />
+    <Folder Include="static\plugins\font-awesome\fonts\" />
+    <Folder Include="static\plugins\font-awesome\less\" />
+    <Folder Include="static\plugins\font-awesome\scss\" />
+    <Folder Include="static\plugins\go-flow\" />
+    <Folder Include="static\plugins\magic-check\" />
+    <Folder Include="static\plugins\magic-check\css\" />
+    <Folder Include="static\plugins\magic-check\sass\" />
+    <Folder Include="static\premium\" />
+    <Folder Include="static\premium\boxed-bg\" />
+    <Folder Include="static\premium\boxed-bg\abstract\" />
+    <Folder Include="static\premium\boxed-bg\abstract\bg\" />
+    <Folder Include="static\premium\boxed-bg\abstract\thumbs\" />
+    <Folder Include="static\premium\boxed-bg\blurred\" />
+    <Folder Include="static\premium\boxed-bg\blurred\bg\" />
+    <Folder Include="static\premium\boxed-bg\blurred\thumbs\" />
+    <Folder Include="static\premium\boxed-bg\polygon\" />
+    <Folder Include="static\premium\boxed-bg\polygon\bg\" />
+    <Folder Include="static\premium\boxed-bg\polygon\thumbs\" />
+    <Folder Include="static\premium\icon-sets\" />
+    <Folder Include="static\premium\icon-sets\icons\" />
+    <Folder Include="static\premium\icon-sets\icons\line-icons\" />
+    <Folder Include="static\premium\icon-sets\icons\line-icons\fonts\" />
+    <Folder Include="static\premium\icon-sets\icons\solid-icons\" />
+    <Folder Include="static\premium\icon-sets\icons\solid-icons\fonts\" />
+    <Folder Include="static\premium\icon-sets\thumbs\" />
+    <Folder Include="static\premium\icon-sets\thumbs\line-icons\" />
+    <Folder Include="static\premium\icon-sets\thumbs\solid-icons\" />
+    <Folder Include="templates\" />
+    <Folder Include="users\" />
+    <Folder Include="users\templates\" />
+    <Folder Include="users\templates\users\" />
+    <Folder Include="users\urls\" />
+    <Folder Include="users\views\" />
+    <Folder Include="var\" />
+    <Folder Include="var\logs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="cadmin\Readme" />
+    <Content Include="cadmin\templates\admin\admin_index.html" />
+    <Content Include="cadmin\templates\admin\admin_index_app.html" />
+    <Content Include="cadmin\templates\admin\admin_layout.html" />
+    <Content Include="cadmin\templates\admin\admin_table_add.html" />
+    <Content Include="cadmin\templates\admin\admin_table_change.html" />
+    <Content Include="cadmin\templates\admin\admin_table_delete.html" />
+    <Content Include="cadmin\templates\admin\admin_table_list.html" />
+    <Content Include="cadmin\templates\admin\component\add_input.html" />
+    <Content Include="cadmin\templates\admin\component\admin_app.html" />
+    <Content Include="cadmin\templates\admin\component\batch_action.html" />
+    <Content Include="cadmin\templates\admin\component\bread_nav.html" />
+    <Content Include="cadmin\templates\admin\component\filter.html" />
+    <Content Include="cadmin\templates\admin\component\item_delete.html" />
+    <Content Include="cadmin\templates\admin\component\page.html" />
+    <Content Include="cadmin\templates\admin\component\search_input.html" />
+    <Content Include="cadmin\templates\admin\component\table_add_form.html" />
+    <Content Include="cadmin\templates\admin\component\table_change_form.html" />
+    <Content Include="cadmin\templates\admin\component\table_change_form_nodelete.html" />
+    <Content Include="cadmin\templates\admin\component\table_list.html" />
+    <Content Include="cadmin\templates\admin\component\table_list_full.html" />
+    <Content Include="cadmin\templates\admin\component\table_list_nodelete.html" />
+    <Content Include="cadmin\templates\admin\component\table_list_script.html" />
+    <Content Include="cadmin\templates\admin\component\table_submit.html" />
+    <Content Include="etc\bekazone\config.conf" />
+    <Content Include="static\css\bootstrap.min.css" />
+    <Content Include="static\css\bulma.css" />
+    <Content Include="static\css\demo\fonts\nifty-demo-icons.eot" />
+    <Content Include="static\css\demo\fonts\nifty-demo-icons.svg" />
+    <Content Include="static\css\demo\fonts\nifty-demo-icons.ttf" />
+    <Content Include="static\css\demo\fonts\nifty-demo-icons.woff" />
+    <Content Include="static\css\demo\nifty-demo-icons.css" />
+    <Content Include="static\css\demo\nifty-demo-icons.min.css" />
+    <Content Include="static\css\demo\nifty-demo.css" />
+    <Content Include="static\css\demo\nifty-demo.min.css" />
+    <Content Include="static\css\demo\premium-icon-screenshot.css" />
+    <Content Include="static\css\hr_about.css" />
+    <Content Include="static\css\init.css" />
+    <Content Include="static\css\nifty.min.css" />
+    <Content Include="static\css\pace.min.css" />
+    <Content Include="static\css\setting.css" />
+    <Content Include="static\css\themes\type-a\theme-coffee.min.css" />
+    <Content Include="static\css\themes\type-a\theme-dark.min.css" />
+    <Content Include="static\css\themes\type-a\theme-dust.min.css" />
+    <Content Include="static\css\themes\type-a\theme-light.min.css" />
+    <Content Include="static\css\themes\type-a\theme-lime.min.css" />
+    <Content Include="static\css\themes\type-a\theme-mint.min.css" />
+    <Content Include="static\css\themes\type-a\theme-navy.min.css" />
+    <Content Include="static\css\themes\type-a\theme-ocean.min.css" />
+    <Content Include="static\css\themes\type-a\theme-prickly-pear.min.css" />
+    <Content Include="static\css\themes\type-a\theme-purple.min.css" />
+    <Content Include="static\css\themes\type-a\theme-well-red.min.css" />
+    <Content Include="static\css\themes\type-a\theme-yellow.min.css" />
+    <Content Include="static\css\themes\type-b\theme-coffee.min.css" />
+    <Content Include="static\css\themes\type-b\theme-dark.min.css" />
+    <Content Include="static\css\themes\type-b\theme-dust.min.css" />
+    <Content Include="static\css\themes\type-b\theme-light.min.css" />
+    <Content Include="static\css\themes\type-b\theme-lime.min.css" />
+    <Content Include="static\css\themes\type-b\theme-mint.min.css" />
+    <Content Include="static\css\themes\type-b\theme-navy.min.css" />
+    <Content Include="static\css\themes\type-b\theme-ocean.min.css" />
+    <Content Include="static\css\themes\type-b\theme-prickly-pear.min.css" />
+    <Content Include="static\css\themes\type-b\theme-purple.min.css" />
+    <Content Include="static\css\themes\type-b\theme-well-red.min.css" />
+    <Content Include="static\css\themes\type-b\theme-yellow.min.css" />
+    <Content Include="static\css\themes\type-c\theme-coffee.min.css" />
+    <Content Include="static\css\themes\type-c\theme-dark.min.css" />
+    <Content Include="static\css\themes\type-c\theme-dust.min.css" />
+    <Content Include="static\css\themes\type-c\theme-light.min.css" />
+    <Content Include="static\css\themes\type-c\theme-lime.min.css" />
+    <Content Include="static\css\themes\type-c\theme-mint.min.css" />
+    <Content Include="static\css\themes\type-c\theme-navy.min.css" />
+    <Content Include="static\css\themes\type-c\theme-ocean.min.css" />
+    <Content Include="static\css\themes\type-c\theme-prickly-pear.min.css" />
+    <Content Include="static\css\themes\type-c\theme-purple.min.css" />
+    <Content Include="static\css\themes\type-c\theme-well-red.min.css" />
+    <Content Include="static\css\themes\type-c\theme-yellow.min.css" />
+    <Content Include="static\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="static\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="static\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="static\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="static\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="static\img\bg-img-3.jpg" />
+    <Content Include="static\img\bg-img\1.jpg" />
+    <Content Include="static\img\bg-img\2.jpg" />
+    <Content Include="static\img\bg-img\3.jpg" />
+    <Content Include="static\img\bg-img\4.jpg" />
+    <Content Include="static\img\bg-img\5.jpg" />
+    <Content Include="static\img\bg-img\6.jpg" />
+    <Content Include="static\img\bg-img\7.jpg" />
+    <Content Include="static\img\bg-img\bg-img-1.jpg" />
+    <Content Include="static\img\bg-img\bg-img-2.jpg" />
+    <Content Include="static\img\bg-img\bg-img-3.jpg" />
+    <Content Include="static\img\bg-img\bg-img-4.jpg" />
+    <Content Include="static\img\bg-img\bg-img-5.jpg" />
+    <Content Include="static\img\bg-img\bg-img-6.jpg" />
+    <Content Include="static\img\bg-img\bg-img-7.jpg" />
+    <Content Include="static\img\gs-collapsed-nav.png" />
+    <Content Include="static\img\gs-error-page.png" />
+    <Content Include="static\img\gs-expanded-nav.png" />
+    <Content Include="static\img\gs-login-w-bg.png" />
+    <Content Include="static\img\gs-login.png" />
+    <Content Include="static\img\gs-push-nav.png" />
+    <Content Include="static\img\gs-reveal-nav.png" />
+    <Content Include="static\img\gs-slide-in-nav.png" />
+    <Content Include="static\img\logo.png" />
+    <Content Include="static\img\nav-profile.png" />
+    <Content Include="static\img\signed.ai" />
+    <Content Include="static\img\user_blank.ai" />
+    <Content Include="static\img\user_blank.png" />
+    <Content Include="static\img\user_blank_128x128.png" />
+    <Content Include="static\img\user_blank_256x256.png" />
+    <Content Include="static\img\user_blank_64x64.png" />
+    <Content Include="static\img\zhangzhong_logo.png" />
+    <Content Include="static\js\bootstrap.min.js" />
+    <Content Include="static\js\init.js" />
+    <Content Include="static\js\jquery.cookie.js" />
+    <Content Include="static\js\jquery.min.js" />
+    <Content Include="static\js\nifty.min.js" />
+    <Content Include="static\js\pace.min.js" />
+    <Content Include="static\js\table.js" />
+    <Content Include="static\plugins\bootbox\bootbox.js" />
+    <Content Include="static\plugins\bootbox\bootbox.min.js" />
+    <Content Include="static\plugins\bootbox\LICENSE.txt" />
+    <Content Include="static\plugins\bootstrap-datepicker\bootstrap-datepicker.css" />
+    <Content Include="static\plugins\bootstrap-datepicker\bootstrap-datepicker.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\bootstrap-datepicker.min.css" />
+    <Content Include="static\plugins\bootstrap-datepicker\bootstrap-datepicker.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\LICENSE.txt" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker-en-CA.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.ar-tn.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.ar.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.az.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.bg.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.bn.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.br.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.bs.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.ca.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.cs.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.cy.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.da.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.de.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.el.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.en-AU.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.en-GB.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.en-IE.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.en-NZ.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.en-ZA.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.eo.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.es.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.et.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.eu.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.fa.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.fi.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.fo.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.fr-CH.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.fr.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.gl.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.he.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.hi.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.hr.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.hu.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.hy.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.id.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.is.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.it-CH.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.it.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.ja.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.ka.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.kh.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.kk.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.km.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.ko.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.kr.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.lt.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.lv.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.me.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.mk.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.mn.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.ms.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.nb.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.nl-BE.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.nl.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.no.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.oc.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.pl.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.pt-BR.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.pt.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.ro.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.rs-latin.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.rs.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.ru.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.si.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.sk.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.sl.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.sq.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.sr-latin.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.sr.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.sv.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.sw.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.ta.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.tg.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.th.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.tr.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.uk.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.uz-cyrl.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.uz-latn.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.vi.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.zh-CN.min.js" />
+    <Content Include="static\plugins\bootstrap-datepicker\locales\bootstrap-datepicker.zh-TW.min.js" />
+    <Content Include="static\plugins\bootstrap-select\bootstrap-select.css" />
+    <Content Include="static\plugins\bootstrap-select\bootstrap-select.js" />
+    <Content Include="static\plugins\bootstrap-select\bootstrap-select.min.css" />
+    <Content Include="static\plugins\bootstrap-select\bootstrap-select.min.js" />
+    <Content Include="static\plugins\bootstrap-timepicker\bootstrap-timepicker.css" />
+    <Content Include="static\plugins\bootstrap-timepicker\bootstrap-timepicker.js" />
+    <Content Include="static\plugins\bootstrap-timepicker\bootstrap-timepicker.min.css" />
+    <Content Include="static\plugins\bootstrap-timepicker\bootstrap-timepicker.min.js" />
+    <Content Include="static\plugins\bootstrap-timepicker\LICENSE.txt" />
+    <Content Include="static\plugins\chosen\chosen.css" />
+    <Content Include="static\plugins\chosen\chosen.jquery.js" />
+    <Content Include="static\plugins\chosen\chosen.jquery.min.js" />
+    <Content Include="static\plugins\chosen\chosen.min.css" />
+    <Content Include="static\plugins\chosen\LICENSE.txt" />
+    <Content Include="static\plugins\font-awesome\css\font-awesome.css" />
+    <Content Include="static\plugins\font-awesome\css\font-awesome.css.map" />
+    <Content Include="static\plugins\font-awesome\css\font-awesome.min.css" />
+    <Content Include="static\plugins\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="static\plugins\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="static\plugins\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="static\plugins\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="static\plugins\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="static\plugins\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="static\plugins\font-awesome\less\animated.less" />
+    <Content Include="static\plugins\font-awesome\less\bordered-pulled.less" />
+    <Content Include="static\plugins\font-awesome\less\core.less" />
+    <Content Include="static\plugins\font-awesome\less\fixed-width.less" />
+    <Content Include="static\plugins\font-awesome\less\font-awesome.less" />
+    <Content Include="static\plugins\font-awesome\less\icons.less" />
+    <Content Include="static\plugins\font-awesome\less\larger.less" />
+    <Content Include="static\plugins\font-awesome\less\list.less" />
+    <Content Include="static\plugins\font-awesome\less\mixins.less" />
+    <Content Include="static\plugins\font-awesome\less\path.less" />
+    <Content Include="static\plugins\font-awesome\less\rotated-flipped.less" />
+    <Content Include="static\plugins\font-awesome\less\screen-reader.less" />
+    <Content Include="static\plugins\font-awesome\less\stacked.less" />
+    <Content Include="static\plugins\font-awesome\less\variables.less" />
+    <Content Include="static\plugins\font-awesome\license.html" />
+    <Content Include="static\plugins\font-awesome\License.txt" />
+    <Content Include="static\plugins\font-awesome\scss\font-awesome.scss" />
+    <Content Include="static\plugins\font-awesome\scss\_animated.scss" />
+    <Content Include="static\plugins\font-awesome\scss\_bordered-pulled.scss" />
+    <Content Include="static\plugins\font-awesome\scss\_core.scss" />
+    <Content Include="static\plugins\font-awesome\scss\_fixed-width.scss" />
+    <Content Include="static\plugins\font-awesome\scss\_icons.scss" />
+    <Content Include="static\plugins\font-awesome\scss\_larger.scss" />
+    <Content Include="static\plugins\font-awesome\scss\_list.scss" />
+    <Content Include="static\plugins\font-awesome\scss\_mixins.scss" />
+    <Content Include="static\plugins\font-awesome\scss\_path.scss" />
+    <Content Include="static\plugins\font-awesome\scss\_rotated-flipped.scss" />
+    <Content Include="static\plugins\font-awesome\scss\_screen-reader.scss" />
+    <Content Include="static\plugins\font-awesome\scss\_stacked.scss" />
+    <Content Include="static\plugins\font-awesome\scss\_variables.scss" />
+    <Content Include="static\plugins\go-flow\go-debug.js" />
+    <Content Include="static\plugins\go-flow\go.js" />
+    <Content Include="static\plugins\magic-check\css\magic-check.css" />
+    <Content Include="static\plugins\magic-check\css\magic-check.min.css" />
+    <Content Include="static\plugins\magic-check\LICENSE.txt" />
+    <Content Include="static\plugins\magic-check\sass\magic-check.scss" />
+    <Content Include="static\plugins\magic-check\sass\_checkbox.scss" />
+    <Content Include="static\plugins\magic-check\sass\_common.scss" />
+    <Content Include="static\plugins\magic-check\sass\_radio.scss" />
+    <Content Include="static\plugins\magic-check\sass\_variable.scss" />
+    <Content Include="static\premium\boxed-bg\abstract\bg\1.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\bg\10.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\bg\11.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\bg\12.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\bg\13.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\bg\14.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\bg\15.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\bg\16.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\bg\2.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\bg\3.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\bg\4.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\bg\5.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\bg\6.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\bg\7.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\bg\8.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\bg\9.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\thumbs\1.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\thumbs\10.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\thumbs\11.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\thumbs\12.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\thumbs\13.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\thumbs\14.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\thumbs\15.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\thumbs\16.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\thumbs\2.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\thumbs\3.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\thumbs\4.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\thumbs\5.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\thumbs\6.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\thumbs\7.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\thumbs\8.jpg" />
+    <Content Include="static\premium\boxed-bg\abstract\thumbs\9.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\bg\1.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\bg\10.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\bg\11.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\bg\12.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\bg\13.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\bg\14.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\bg\15.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\bg\16.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\bg\2.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\bg\3.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\bg\4.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\bg\5.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\bg\6.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\bg\7.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\bg\8.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\bg\9.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\thumbs\1.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\thumbs\10.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\thumbs\11.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\thumbs\12.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\thumbs\13.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\thumbs\14.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\thumbs\15.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\thumbs\16.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\thumbs\2.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\thumbs\3.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\thumbs\4.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\thumbs\5.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\thumbs\6.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\thumbs\7.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\thumbs\8.jpg" />
+    <Content Include="static\premium\boxed-bg\blurred\thumbs\9.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\bg\1.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\bg\10.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\bg\11.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\bg\12.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\bg\13.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\bg\14.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\bg\15.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\bg\16.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\bg\2.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\bg\3.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\bg\4.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\bg\5.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\bg\6.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\bg\7.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\bg\8.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\bg\9.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\thumbs\1.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\thumbs\10.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\thumbs\11.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\thumbs\12.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\thumbs\13.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\thumbs\14.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\thumbs\15.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\thumbs\16.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\thumbs\2.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\thumbs\3.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\thumbs\4.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\thumbs\5.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\thumbs\6.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\thumbs\7.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\thumbs\8.jpg" />
+    <Content Include="static\premium\boxed-bg\polygon\thumbs\9.jpg" />
+    <Content Include="static\premium\icon-sets\icons\line-icons\fonts\premium-line-icons.eot" />
+    <Content Include="static\premium\icon-sets\icons\line-icons\fonts\premium-line-icons.svg" />
+    <Content Include="static\premium\icon-sets\icons\line-icons\fonts\premium-line-icons.ttf" />
+    <Content Include="static\premium\icon-sets\icons\line-icons\fonts\premium-line-icons.woff" />
+    <Content Include="static\premium\icon-sets\icons\line-icons\premium-line-icons.css" />
+    <Content Include="static\premium\icon-sets\icons\line-icons\premium-line-icons.min.css" />
+    <Content Include="static\premium\icon-sets\icons\solid-icons\fonts\premium-solid-icons.eot" />
+    <Content Include="static\premium\icon-sets\icons\solid-icons\fonts\premium-solid-icons.svg" />
+    <Content Include="static\premium\icon-sets\icons\solid-icons\fonts\premium-solid-icons.ttf" />
+    <Content Include="static\premium\icon-sets\icons\solid-icons\fonts\premium-solid-icons.woff" />
+    <Content Include="static\premium\icon-sets\icons\solid-icons\premium-solid-icons.css" />
+    <Content Include="static\premium\icon-sets\icons\solid-icons\premium-solid-icons.min.css" />
+    <Content Include="static\premium\icon-sets\LICENSE.txt" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\alignment.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\animals.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\arrow-view.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\arrows.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\body.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\browser.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\building.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\business.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\chess.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\christmas.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\clothes.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\clouds.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\communications.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\database.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\design.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\desktop.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\education.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\emails.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\emoticons.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\files.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\folders.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\food.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\halloween.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\hardware.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\hipster.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\industry.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\interface.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\logos.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\maps.png" />
+    <Content Include="static\premium\icon-sets\thumbs\line-icons\media-control.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\alignment.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\animals.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\arrow-view.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\arrows.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\body.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\browser.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\building.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\business.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\chess.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\christmas.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\clothes.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\clouds.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\communications.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\database.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\design.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\desktop.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\education.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\emails.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\emoticons.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\files.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\folders.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\food.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\halloween.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\hardware.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\hipster.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\industry.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\interface.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\logos.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\maps.png" />
+    <Content Include="static\premium\icon-sets\thumbs\solid-icons\media-control.png" />
+    <Content Include="static\premium\line-icons-header.jpg" />
+    <Content Include="static\premium\solid-icons-header.jpg" />
+    <Content Include="templates\base.html" />
+    <Content Include="templates\index.html" />
+    <Content Include="templates\pages-404.html" />
+    <Content Include="templates\pages-500.html" />
+    <Content Include="templates\template.html" />
+    <Content Include="templates\_footer.html" />
+    <Content Include="templates\_head_js_css.html" />
+    <Content Include="templates\_menu.html" />
+    <Content Include="templates\_menu_contain.html" />
+    <Content Include="templates\_menu_user.html" />
+    <Content Include="templates\_nav_bar.html" />
+    <Content Include="templates\_nav_bar_user.html" />
+    <Content Include="templates\_return_head_btn.html" />
+    <Content Include="users\templates\users\change_passwd.html" />
+    <Content Include="users\templates\users\first_register.html" />
+    <Content Include="users\templates\users\group_create.html" />
+    <Content Include="users\templates\users\group_list.html" />
+    <Content Include="users\templates\users\login.html" />
+    <Content Include="users\templates\users\orderdict_test.html" />
+    <Content Include="users\templates\users\setting.html" />
+    <Content Include="users\templates\users\staff_create.html" />
+    <Content Include="users\templates\users\staff_list.html" />
+    <Content Include="users\templates\users\staff_list_ajax.html" />
+    <Content Include="var\logs\access.log" />
+    <Content Include="var\logs\errors.log" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|VisualStudio|python35" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Django.targets" />
+  <!-- Specify pre- and post-build commands in the BeforeBuild and 
+       AfterBuild targets below. -->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <AutoAssignPort>True</AutoAssignPort>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

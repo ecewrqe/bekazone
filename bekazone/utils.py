@@ -1,30 +1,19 @@
-# --encoding:utf8--
-from __future__ import unicode_literals
-"""
-去调用etc/bekazone/config.conf
-config大致模块：
-bekazone:平台的配置
-mysql:平台数据库配置
-logger:日志平台
-"""
-import ConfigParser
+
+from configparser import ConfigParser
 from django.shortcuts import render
 
-class KaoqingConfigParser(object):
+class BekaConfigParser(object):
     """
-    配置文件类
+    config file class
     """
     def __init__(self, config_path):
         self.config_path = config_path
-        self.config = ConfigParser.RawConfigParser()
+        self.config = ConfigParser()
         self.config.read(self.config_path)
 
     def get_config(self, section, option):
         """
-        获取配置
-        :param section:
-        :param option:
-        :return:
+        gain a section and a option, display the value
         """
         if self.config.has_option(section, option):
             res = self.config.get(section, option)
@@ -35,9 +24,7 @@ class KaoqingConfigParser(object):
 
     def get_mysql_config(self, option):
         """
-        获取mysql配置
-        :param option: mysql下的各种配置
-        :return:
+        gain a mysql config
         """
         res = self.get_config("mysql", option)
         return res

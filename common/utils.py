@@ -1,8 +1,3 @@
-#--coding:utf8--
-
-from __future__ import absolute_import
-from __future__ import unicode_literals
-
 import json
 import datetime
 import re
@@ -113,127 +108,16 @@ def copy_dictset(sr_dict,ds_dict):
     for key in sr_dict:
         ds_dict[key] = sr_dict[key]
 
-# class PageGenerator(object):
-#     '''
-#     旧分页
-#     用法：
-#     page_current=request.GET.get("p",default="1")
-#     rows=10
-#     base_url=request.path_info
-#
-#     cp=PageGenerator(page_current,rows,models.UserInfo,base_url)
-#     #指定条件
-#     cp.get_pm(mod_ret)
-#     #按照条件找记录
-#     mod_ret = cp.get_rows(mod_ret)
-#     '''
-#
-#     def __init__(self, current_page, rows, model_obj, base_url, page_size=7):
-#         '''
-#
-#         :param current_page:   传入当前页码，如果没有默认1
-#         :param rows:   一页的记录数
-#         :param mod:   指定数据库
-#         :param base_url:   指定全路径
-#         :param page_size:   指定一次最多显示多少个页码
-#
-#         page_count(页数)/row_start(每一页开始记录数)/row_stop(每一页结束记录数)/row_count(一共多少记录数)
-#         next_page(下一页数)/prev_page(上一页数)/is_next_page/is_prev_page
-#         page_list(页数列表)
-#         page_list[0][url](页面链接)/page_list[0][page] (页数)
-#         '''
-#         current_page = current_page or 1
-#         self.current_page = current_page if isinstance(current_page, int) else int(current_page)
-#         rows = rows or 10
-#         self.rows = rows if isinstance(rows, int) else int(rows)
-#
-#         self.model_obj = model_obj
-#         self.base_url = base_url
-#
-#         # 页码显示范围
-#         self.page_size = page_size
-#         self.page_key = '_page'
-#
-#
-#         # 确定总页数
-#
-#     def get_count_default(self):
-#         '''拿到数据总数'''
-#         count = self.model_obj.count()
-#         self.row_count = count
-#
-#     def get_rows(self):
-#         '''拿到切片内容'''
-#         mod_ret = self.model_obj[self.row_start: self.row_stop]
-#         self.get_count_default()
-#         return mod_ret
-#
-#     def get_pm(self):
-#         '''get_pagemember'''
-#         # 拿到数据库总数
-#         mod_ret_li = self.model_obj
-#         self.mod_count = mod_ret_li.count() if mod_ret_li else 0
-#
-#         # 根据数据库总数和每页数量---页码数，最后一页的记录数
-#         a, b = divmod(self.mod_count, self.rows)
-#         # all_page为总页码数：10页  1..10
-#         if b:
-#             self.page_count = a + 1
-#         else:
-#             self.page_count = a
-#
-#         self.current_page = self.current_page if self.current_page > 0 and \
-#                                                  self.current_page < self.page_count + 1 else 1
-#
-#         # 确定一页内显示的范围
-#         self.row_start = (self.current_page - 1) * self.rows
-#         self.row_stop = self.current_page * self.rows
-#
-#         # 确定上一页和下一页
-#         self.next_page = self.current_page + 1 if self.current_page < self.page_count else None
-#         self.prev_page = self.current_page - 1 if self.current_page > 1 else None
-#         self.is_next_page = True if self.current_page < self.page_count else False   #是否有下一页，如果和总页数相等则没有下一页
-#         self.is_prev_page = True if self.current_page > 1 else False   #是否有上一页，如果和1相等则没有上一页
-#
-#         # 确定页码显示范围
-#         if self.page_count <= self.page_size:  # 总页数小于一次显示的，显示所有
-#             self.start_page = 1
-#             self.end_page = self.page_count + 1
-#         elif self.current_page <= round(self.page_size / 2):
-#             self.start_page = 1
-#             self.end_page = self.page_size + 1
-#         elif self.current_page >= self.page_count - int(self.page_size / 2):
-#             self.start_page = self.page_count + 1 - self.page_size
-#             self.end_page = self.page_count + 1
-#         else:
-#             self.start_page = self.current_page - int(self.page_size / 2)
-#             self.end_page = self.current_page + int(self.page_size / 2) + 1
-#
-#         #拿到返回页码
-#         self.page_list=[]
-#
-#         self.page_list.append({"page":"上一页","url":make_url(self.base_url,self.page_key,self.prev_page)}) if self.is_prev_page else None
-#
-#         for page in range(self.start_page, self.end_page):
-#             self.page_list.append({"page": str(page), "url": make_url(self.base_url,self.page_key,page)})
-#
-#         self.page_list.append({"page":"下一页","url":make_url(self.base_url,self.page_key,self.next_page)}) if self.is_next_page else None
-
 class PageBranch(object):
     '''
-    *新分页，多种分页模式
+    generate page number
     '''
 
     def __init__(self, current_page, row_in_page, row_count=None, data_list=None, ):
-        '''
-        current_page和row_in_page都是int格式
-        :param current_page: 当前页，从1开始，int
-        :param row_in_page:  每页的记录数，int
-        :param row_count: 记录总数
-        :param data_list: 数据列表
-        pb = PageBranch(5, 20, 100)    当前页码为5，每页显示20条记录，总记录数是100
-        pb = PageBranch(5, 20, data_list=dl)    当前页码为5，每页显示20条记录，数据列表是dl
-        '''
+        """
+        
+        """
+        
         self.data_list = data_list
         self.current_page = current_page
         self.row_in_page = row_in_page
@@ -446,7 +330,9 @@ def img_changesize(img, size):
 
 
 def demark_safe(text):
-    """标签符号不想转义的字符串用这个命令"""
+    """
+    take the mark off
+    """
     text = text.replace("<", "&lt").replace(">", "&gt")
     return text
 
@@ -546,9 +432,6 @@ def parse_payload(payload):
                 raise Exception("payload格式不正确")
         if pos == payload_len:
             break
-
-
-
 
 def time_clock(func):
     def inner(*args, **kwargs):

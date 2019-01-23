@@ -1,10 +1,3 @@
-# --coding:utf8--
-# the file collected admin function, to manage database, display data
-
-from __future__ import absolute_import
-from __future__ import unicode_literals
-
-
 from cadmin.baseform import create_dynamic_modelform
 
 

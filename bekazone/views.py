@@ -1,8 +1,3 @@
-#--coding:utf8--
-
-from __future__ import absolute_import
-from __future__ import unicode_literals
-
 from users.auth import login_required
 from django.shortcuts import render
 from bekazone.utils import page_not_found

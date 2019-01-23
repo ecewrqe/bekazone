@@ -1,7 +1,3 @@
-#--coding:utf8--
-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
 from django.shortcuts import redirect, reverse, resolve_url, render
 from django.conf import settings

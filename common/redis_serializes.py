@@ -1,5 +1,3 @@
-# --coding:utf8--
-from __future__ import unicode_literals
 import redis
 class RedisIO(object):
     def __init__(self, url):
