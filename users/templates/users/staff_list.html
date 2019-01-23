@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% block header_custom_js_css %}
+
+{% endblock %}
+
+{% block title %}
+    <i class="fa fa-archive"></i>
+    员工列表
+{% endblock %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'index' %}">首页</a></li>
+    <li class="active">用户列表</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        员工列表
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table class="table table-bordered" id="data_content">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <div class="checkbox">
+                                            <input type="checkbox" class="magic-checkbox" id="checkall" onclick="check_all(this,'check_item')">
+                                            <label for="checkall"></label>
+                                        </div>
+                                    </th>
+                                    <th tname="username">
+                                        <a href="javascript:;" onclick="order_handle(this)">
+                                            username
+                                            <i  class="fa fa-sort"></i>
+                                        </a>
+                                    </th>
+                                    <th tname="email">
+                                        <a href="javascript:;" onclick="order_handle(this)">
+                                            email
+                                            <i  class="fa fa-sort"></i>
+                                        </a>
+                                    </th>
+                                    <th tname="groupname">
+                                        <a href="javascript:;" onclick="order_handle(this)">
+                                            groupname
+                                            <i  class="fa fa-sort"></i>
+                                        </a>
+                                    </th>
+                                    <th tname="groupname">
+                                        <a href="javascript:;" onclick="order_handle(this)">
+                                            phone
+                                            <i  class="fa fa-sort"></i>
+                                        </a>
+                                    </th>
+                                </tr>
+
+                                </thead>
+                                <tbody>
+                                {% for model_class_obj in model_class_objs %}
+                                    <tr>
+                                        <td>
+                                            <div class="checkbox check-transparent">
+                                                <input type="checkbox" class="magic-checkbox" id="check_{{ model_class_obj.id }}" name="check_item" value="{{ model_class_obj.id }}" onclick="check_component('check_item','checkall')">
+                                                <label for="check_{{ model_class_obj.id }}"></label>
+                                            </div>
+                                        </td>
+                                        <td>{{ model_class_obj.username }}</td>
+                                        <td>{{ model_class_obj.email }}</td>
+                                        <td>{{ model_class_obj.group.groupname }}</td>
+                                        <td>{{ model_class_obj.phone }}</td>
+                                    </tr>
+                                {% endfor %}
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div>
+                                {% include 'admin/component/page.html' %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block footer_custom_js %}
+
+    <script>
+    $(document).ready(function () {
+        var url_dict = url_parse(location.href);
+        (function () {
+            var tr_tag = $("table").find("thead tr");
+            var field_group = url_dict["querys"]["_o"];
+            console.log(field_group)
+
+            var td_tag;
+
+            if(field_group){
+
+
+                field_group = field_group.split(",");
+                for(var field in field_group){
+                    console.log(field);
+                    if(tr_tag.find("th[tname='" + field_group[field] + "']")[0]){
+                        td_tag = tr_tag.find("th[tname='" + field_group[field] + "'] a");
+                        td_tag.find("i").attr("class","fa fa-sort-asc");
+                    }else if(tr_tag.find("th[tname='" + field_group[field].replace(/-(.*)/, "$1") + "']")[0]){
+                        td_tag = tr_tag.find("th[tname='" + field_group[field].replace(/-(.*)/, "$1") + "'] a")
+                        td_tag.find("i").attr("class","fa fa-sort-desc");
+                    }
+                }
+            }
+        })();
+    })
+
+
+
+
+    function order_handle(item) {
+
+        var field = $(item).parents("th").attr("tname");
+
+        var url_dict = url_parse(location.href);
+        if(url_dict.querys["_o"]){
+            var field_group = url_dict.querys["_o"].split(",");
+
+            var field_index = -1;
+
+            if(field_group.indexOf(field) !== -1) {
+                field_index = field_group.indexOf(field);
+                field_group[field_index] = "-" + field;
+            }else if(field_group.indexOf("-" + field) !== -1) {
+                field_index = field_group.indexOf("-" + field);
+                field_group[field_index] = field;
+            } else {
+                field_group.push(field);
+            }
+            url_dict.querys["_o"] = field_group.join(",");
+        }else{
+            url_dict.querys["_o"] = field;
+        }
+
+        var url = url_unparse(url_dict);
+        location.href = url;
+
+
+
+
+    }
+
+
+
+
+    </script>
+{% endblock %}

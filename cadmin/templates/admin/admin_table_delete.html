@@ -1,0 +1,16 @@
+{% extends 'admin/admin_layout.html' %}
+{% load template_tool %}
+{% block container %}
+<div class="container">
+<ol class="breadcrumb">
+    <li><a href="/myadmin/">admin</a></li>
+    <li><a href="/myadmin/{{ app }}">{{ app }}</a></li>
+    <li><a href="/myadmin/{{ app }}/{{ table }}">{{ table }}</a></li>
+    <li><a href="/myadmin/{{ app }}/{{ table }}/{{ qs.id }}/change/">{{ qs }}</a></li>
+    <li class="active">delete</li>
+</ol>
+
+{% include 'admin/component/item_delete.html' %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block header_custom_js_css %}
+
+{% endblock %}
+
+{% block title %}
+    <i class="fa fa-archive"></i>
+    员工列表
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        员工列表
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12" id="table_frame">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12" id="page_frame">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block footer_custom_js %}
+    <script>
+    $(document).ready(function () {
+        /*
+        * 1,有字段的情况下，如果没有找到字段，在后面插入一条字段
+        * 2，插入可以是名字，tname和内容都是名字
+        * 3，也可以是键值，tname是键，内容是值，值可以是名字，也可以是function
+        * 4，可以用{target:序列，func:function},表示在第几列插入标题
+        * 凡是function都必须自定制th标签和内容
+        * */
+
+
+        table_func_tools.init({
+            table:"tb01",
+            parent_fn:"#table_frame",
+            classes:"table",
+            column_head_gen:true,
+            column_head_option:["id","name",{"password":"密码"},{target:0,func:function () {
+                return "<th>dfdsfsdsfd</th>";
+            }}],
+        })
+{#        table_func_tools.init({#}
+{#            table:"tb01",#}
+{#            parent_fn:"#table_frame",#}
+{#            classes:"table",#}
+{#            column_name_gen:false,#}
+{#            column_head_option:[{target:0,func:function(k){#}
+{#                        return "<th tname='"+k+"'><input type='checkbox' id='check_all'" +#}
+{#                                " onclick='table_func_tools.check_all(this,\"ck\")' /></th>";#}
+{#                }#}
+{#            }],#}
+{##}
+{#            column_options:{"name":function (arg) {#}
+{#                return "<td><strong>"+arg+"</strong></td>";#}
+{#            },"id":function (arg) {#}
+{#                return "<td><a href='javascript:;'>"+arg+"</a></td>";#}
+{#            }},#}
+{#            exist_column_options:[#}
+{#                {target:0,func:function (args) {#}
+{#                    return "<td><input type='checkbox' name='ck'" +#}
+{#                            " onclick='table_func_tools.check_component(\"ck\",\"check_all\")' /></td>"#}
+{#                },args:['name','password']}#}
+{#            ],#}
+{#            //ajax_url#}
+{##}
+{#            column_head_ajax:{#}
+{#                exec:true,#}
+{#                url:"{% url 'users:staff-list-ajax' %}?_type=h",#}
+{#            },#}
+{#            tbody_ajax:{#}
+{#                exec:true,#}
+{#                url:"{% url 'users:staff-list-ajax' %}?_type=b",#}
+{#                rows:10,#}
+{#                page_size:7,#}
+{#            },#}
+{#            page_frame:{#}
+{#                fn:"#page_frame",#}
+{#                li_formatter:function (page,_page,intro,page_other) {#}
+{#                    if(!intro){#}
+{#                        if(page == _page){#}
+{#                            return "<li class=\"paginate_button active\"><a href=\"javascript:;\">"+page+"</a></li>"#}
+{#                        }else{#}
+{#                            return "<li class=\"paginate_button\"><a href=\"javascript:;\" onclick=\"table_func_tools.tbody_ajax("+page+")\">"+page+"</a></li>"#}
+{#                        }#}
+{#                    }else{#}
+{#                        if(intro == "上一页" && _page == 1 || intro == "下一页" && _page == page_other.page_count){#}
+{##}
+{#                        }else{#}
+{#                            return "<li class=\"paginate_button\"><a href=\"javascript:;\" onclick=\"table_func_tools.tbody_ajax("+page+")\">"+intro+"</a></li>";#}
+{#                        }#}
+{##}
+{##}
+{#                    }#}
+{##}
+{#                },#}
+{#            }#}
+{#        });#}
+
+
+    });
+    </script>
+{% endblock %}

@@ -1,0 +1,58 @@
+.active-link{
+    background-color: #ff784d;
+}
+.setting li{
+    border-bottom: 1px solid #dbdbdd;
+    padding: 20px;
+    overflow: hidden;
+}
+.setting_l{
+    float:left;
+    width: 80%;
+}
+
+.setting_r{
+    display: block;
+    color: #0b75cb;
+    float: right;
+    padding-top: 10px;
+}
+.separate_set{
+    float: right;
+    padding-top: 10px;
+    color: #CCCCCC
+}
+
+.mr10{
+    margin-right: 10px;
+}
+.btn-bd-primary{
+    border: 1px solid #42a5f5;
+}
+.btn-bd-info{
+    border: 1px solid #009cb0;
+}
+.btn-bd-success{
+    border: 1px solid #8bc34a;
+}
+.btn-bd-mint{
+    border: 1px solid #26a69a;
+}
+.btn-bd-warning{
+    border: 1px solid #ffa726;
+}
+
+.btn-bd-danger{
+    border: 1px solid #ef5350;
+}
+
+.btn-bd-pink{
+    border: 1px solid #ec407a;
+}
+
+.btn-bd-purple{
+    border: 1px solid #ba68c8;
+}
+.btn-bd-dark{
+    border: 1px solid #263238;
+}

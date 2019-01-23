@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block header_custom_js_css %}
+特殊js和css导入
+{% endblock %}
+{% block title %}
+标题
+{% endblock %}
+{% block breadcrumb %}
+<ol class="breadcrumb">
+    <li class="active">路径</li>
+</ol>
+{% endblock %}
+{% block content %}
+内容
+{% endblock %}
+{% block footer_custom_js %}
+    脚步
+<script>
+$(document).ready(function(){
+});
+</script>
+{% endblock %}
+
+<!--dialog template-->
+<div class="modal fade" id="user-del-modal" role="dialog" tabindex="-1" aria-labelledby="user-del-modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!--Modal header-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                <h4 class="modal-title">标题</h4>
+                <span class="text-danger err-msg" id="user-del-msg"></span>
+            </div>
+
+            <!--Modal body-->
+            <div class="modal-body">
+                内容
+            </div>
+
+            <!--Modal footer-->
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+                <button class="btn btn-primary js-submt-user-del">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/dialog template-->

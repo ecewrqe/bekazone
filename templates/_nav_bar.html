@@ -1,0 +1,47 @@
+
+<header id="navbar">
+    <div id="navbar-container" class="boxed">
+
+        <!--Brand logo & name-->
+        <!--================================-->
+        <div class="navbar-header">
+
+            <a href="index.html" class="navbar-brand">
+
+                <div class="brand-title">
+                    <span class="brand-text">
+                        bekazone
+                    </span>
+                </div>
+            </a>
+        </div>
+        <!--Navbar Dropdown-->
+                <!--================================-->
+                <div class="navbar-content clearfix">
+                    <ul class="nav navbar-top-links pull-left">
+
+                        <!--Navigation toogle button-->
+                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                        <li class="tgl-menu-btn">
+                            <a class="mainnav-toggle" href="#">
+                                <i class="pli-view-list icon-lg"></i>
+                            </a>
+                        </li>
+                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                        <!--End Navigation toogle button-->
+                    </ul>
+                    <ul class="nav navbar-top-links pull-right">
+                        {% include '_nav_bar_user.html' %}
+
+                        <li>
+                            <a href="#" class="aside-toggle navbar-aside-icon">
+                                <i class="pci-ver-dots"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!--================================-->
+                <!--End Navbar Dropdown-->
+
+    </div>
+</header>

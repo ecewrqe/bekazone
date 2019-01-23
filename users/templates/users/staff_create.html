@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block header_custom_js_css %}
+
+{% endblock %}
+
+{% block title %}
+    <i class="fa fa-archive"></i>
+创建员工
+{% endblock %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'index' %}">首页</a></li>
+    <li><a href="{% url 'users:staff-list' %}">用户列表</a></li>
+    <li class="active">用户创建</li>
+</ol>
+{% endblock %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        创建员工
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <form id="reg-form" class="form-horizontal" novalidate>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ form.username.auto_id }}"  class="col-lg-3 control-label">{{ form.username.label }}:</label>
+                            <div class="col-lg-7">
+                                {{ form.username }}
+                            </div>
+                            <div class="col-lg-2 text-left">
+                                <span class="text-danger">{{ form.username.help_text }}</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.email.auto_id }}" class="col-lg-3 control-label">{{ form.email.label }}</label>
+                            <div class="col-lg-7">
+                                {{ form.email }}
+                            </div>
+                            <div class="col-lg-2 text-left">
+                                <span class="text-danger">{{ form.email.help_text }}</span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="{{ form.group.auto_id }}" class="col-lg-3 control-label">{{ form.group.label }}</label>
+                            <div class="col-lg-7">
+                                {{ form.group }}
+                            </div>
+                            <div class="col-lg-2 text-left">
+                                <span class="text-danger">{{ form.group.help_text }}</span>
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label for="{{ form.phone.auto_id }}" class="col-lg-3 control-label">{{ form.phone.label }}</label>
+                            <div class="col-lg-7">
+                                {{ form.phone }}
+                            </div>
+                            <div class="col-lg-2 text-left">
+                                <span class="text-danger">{{ form.phone.help_text }}</span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-8 col-lg-offset-2">
+                            <input type="button" class="btn btn-primary btn-block js-first-reg-btn" value="submit" />
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block footer_custom_js %}
+<script>
+$(".js-first-reg-btn").click(function () {
+    var form_dict=collect_form("reg-form");
+
+    $.ajax({
+        url:'{% url 'users:staff-reg' %}',
+        type:'POST',
+        data:form_dict,
+        dataType:'JSON',
+        success:function (data) {
+            if(data.status==200){
+                get_form_msg("reg-form",data.data,200);
+                setTimeout(function () {
+                   location.href=data.url;
+                },1000);
+
+            }else{
+                get_form_msg("reg-form",data.errors,data.status);
+            }
+        }
+    })
+
+
+});
+$("#{{ form.group.auto_id }}").chosen();
+</script>
+{% endblock %}

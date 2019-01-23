@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load template_tool %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'index' %}">Home</a></li>
+    <li><a href="{% url 'admin:index' %}">Admin</a></li>
+    <li><a href="{% url 'admin:table_model_list' app %}">{{ app }}</a></li>
+    <li><a href="{% url 'admin:table_list' app table %}">{{ table }}</a></li>
+    <li class="active">add</li>
+</ol>
+{% endblock %}
+{% block content %}
+<div class="container">
+    {% include 'admin/component/table_add_form.html' %}
+</div>
+{% endblock %}

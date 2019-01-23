@@ -1,0 +1,142 @@
+#head_pic_url{
+        cursor: pointer;
+        width:256px;
+        height:256px;
+}
+#head_pic_url img{
+    width:100%;
+    height:100%;
+}
+.pic_modal_back{
+    background-color: rgba(0,0,0,0.2);
+    position: fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index: 1000;
+
+}
+.pic_modal_back .pic_modal{
+    width: 868px;
+    height: 466px;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    margin: -233px 0 0 -434px;
+    background-color: white;
+    border:5px solid #0a6dbd;
+}
+.pic_modal_back .pic_modal .close_btn{
+    width: 14px;
+    height:14px;
+    position: absolute;
+    right: 22px;
+    top: 22px;
+    cursor: pointer;
+}
+.pic_modal_back .pic_modal .pic_frame{
+    margin: 50px 0 0 34px;
+    border: 1px solid #000;
+    height:294px;
+    width: 779px;
+}
+.pic_modal_back .pic_modal .upload_btn{
+    width: 123px;
+    height: 34px;
+    float:left;
+
+    margin: 21px 0 0 34px;
+}
+.pic_modal_back .pic_modal .upload_btn a{
+    display: block;
+    width: 100%;
+    text-align: center;
+    line-height: 17px;
+    border: 1px solid #000;
+    -webkit-border-radius: 17px;
+    -moz-border-radius: 17px;
+    border-radius: 17px;
+}
+
+.pic_modal_back .pic_modal .submit_btn{
+    float: right;
+    margin: 15px 100px 0 0;
+}
+.pic_modal img{
+    width: 100%;
+    height: 100%;
+}
+
+/*上传图片*/
+.pic{
+}
+.source_pic_frame{
+    height: 293px;
+    width: 256px;
+    float: left;
+
+}
+.source_pic_frame .intr_detr{
+    height:21px;
+    width:48px;
+    margin: 5px auto;
+}
+.source_pic_frame .intr_detr a{
+    float:left;
+    height:21px;
+    width: 24px;
+    border: 1px solid #000;
+    display: block;
+    text-align: center;
+}
+
+.source_pic_frame .intr_detr .intr{
+    border-radius: 10px 0 0 10px;
+}
+.source_pic_frame .intr_detr .detr{
+    border-radius: 0 10px 10px 0;
+
+}
+
+.source_256_frame{
+    height: 293px;
+    width: 256px;
+    float: left;
+    margin-left: 37px;
+}
+.source_128_frame{
+    height: 153px;
+    width: 128px;
+    float: left;
+    margin: 21px 0 0 37px;
+
+}
+.source_64_frame{
+    height: 97px;
+    width: 64px;
+    float: left;
+    margin-left: 37px;
+}
+.source_move{
+    height: 256px;
+    width: 256px;
+    border: 1px solid #000;
+    cursor: move;
+}
+.source_128_pic{
+    height: 128px;
+    width: 128px;
+    border: 1px solid #000;
+}
+.source_256_pic{
+    height: 256px;
+    width: 256px;
+    border: 1px solid #000;
+}
+.source_64_pic{
+    height: 64px;
+    width: 64px;
+    border: 1px solid #000;
+}
+/*上传图片 end*/

@@ -1,0 +1,27 @@
+.menu_div{
+    position: fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:200px;
+    border: 1px solid #0a6dbd;
+    float:left;
+}
+.nav_div{
+    position: fixed;
+    left:200px;
+    top:0;
+    right:0;
+    float: left;
+}
+.page_content{
+    position: fixed;
+    left: 200px;
+    top:41px;
+    right:0;
+    bottom:0;
+    overflow: auto;
+
+    width:80%;
+
+}

@@ -1,0 +1,26 @@
+{% load template_tool %}
+<!--分页插件-->
+<div>
+    <ul class="pagination">
+        {% for page in pb.page_list %}
+            {% if page == "..." %}
+            <li class="disabled"><a>{{ page }}</a></li>
+                {% elif page == "上一页" or page == "prev" %}
+                <li><a href="?_p={{ pb.prev_page }}">{{ page }}</a></li>
+                {% elif page == "下一页" or page == "next" %}
+                <li><a href="?_p={{ pb.next_page }}">{{ page }}</a></li>
+                {% elif page == "首页" or page == "first" %}
+                <li><a href="?_p={{ pb.first_page }}">{{ page }}</a></li>
+                {% elif page == "尾页" or page == "last" %}
+                <li><a href="?_p={{ pb.last_page }}">{{ page }}</a></li>
+                {% elif page == pb.current_page %}
+                <li class="active"><a>{{ page }}</a></li>
+                {% else %}
+                <li><a href="?_p={{ page }}">{{ page }}</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+
+<!--/分页插件-->
+<span>当前页码{{ pb.current_page }}/{{ pb.page_count }}---总记录数{{ pb.row_count }}</span>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started | Nifty - Admin Template</title>
+    {% include '_head_js_css.html' %}
+    {% block header_custom_js_css %}
+
+    {% endblock %}
+</head>
+
+<!--TIPS-->
+<!--You may remove all ID or Class names which contain "demo-", they are only used for demonstration. -->
+
+
+<body>
+    <div id="container" class="cls-container">
+
+        <div class="boxed">
+
+            <div id="content-container">
+            <div class="row">
+                <div class="col-lg-6 col-lg-offset-3">
+                    <div class="panel">
+		        <div class="panel-body">
+		            <div class="mar-ver pad-btm">
+		                <p>修改密码</p>
+		            </div>
+
+                    <form id="change-passwd-form" novalidate>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="old-passwd" class="col-lg-3  control-label">Old Password</label>
+                            <div class="col-lg-7">
+                                <input type="password" id="old-passwd" class="form-control" name="old_passwd" />
+                            </div>
+                            <span class="text-danger">*</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="new-passwd" class="col-lg-3  control-label">New Password</label>
+                            <div class="col-lg-7">
+                                <input type="password" id="new-passwd" class="form-control" name="new_passwd" />
+                            </div>
+                            <span class="text-danger">*</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="new-passwd-confirm" class="col-lg-3  control-label">New Password Confirm</label>
+                            <div class="col-lg-7">
+                                <input type="password" id="new-passwd-confirm" class="form-control" name="new_passwd_confirm" />
+                            </div>
+                            <span class="text-danger">*</span>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-8 col-lg-offset-2">
+                                <input type="button" class="btn btn-primary js-change-password-btn" value="change password" >
+                            </div>
+                        </div>
+                    </form>
+
+
+		        </div>
+		    </div>
+                </div>
+            </div>
+
+
+		</div>
+
+
+
+            </div>
+
+    </div>
+    {% block footer_custom_js %}
+        <script>
+        $(document).keydown(function(e){
+            if(e.keyCode == 13){
+                $(".js-change-password-btn").click();
+            }
+        })
+        $(".js-change-password-btn").click(function () {
+            var form_dict=collect_form("change-passwd-form");
+            console.log(get_form_msg());
+            $.ajax({
+                url:'{% url 'users:change-passwd' %}',
+                type:'POST',
+                data:form_dict,
+                dataType:'JSON',
+                success:function (data) {
+
+                    if(data.status==200){
+                        get_form_msg("change-passwd-form",data.data,200);
+                        setTimeout(function () {
+                           location.href=data.url;
+                        },1000);
+
+                    }else{
+                        get_form_msg("change-passwd-form",data.errors,data.status);
+                    }
+                }
+            })
+        })
+
+
+
+
+
+        </script>
+    {% endblock %}
+    </body>
+
+
+</html>

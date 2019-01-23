@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="tb01-frame">
+
+</div>
+<div id="pg01-frame"></div>
+
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/jquery.cookie.js"></script>
+<script src="/static/js/init.js"></script>
+<script>
+    var tb01 = new table_func_tools();
+    tb01.init({
+        table:"tb01",    //必须指定table id
+        parent_fn:"#tb01-frame",
+        page:"pg01",    //分页区域的id
+        column_head_ajax:{
+            exec:true,
+            url:"/od-test/",
+        },
+
+        column_head_option:new OrderDict([1,"name","id","password"],{1:function () {
+            return "<th>sdfdsfdddddd</th>";
+        },"name":"名字","id":"编号","password":"密码"}),
+
+        column_options:new OrderDict([1,"id"],{1:function () {   //必须时数字0才是序列
+            return "<td>sdfdsfd</td>";
+        },"id":function (arg) {
+            if(arg == 1){
+                return "<td>一等</td>";
+            }else{
+                return "<td>二等</td>";
+            }
+        }}),
+
+        tbody_ajax:{
+            exec:true,
+            url:"/od-test/",
+        }
+
+
+
+
+
+    })
+{#    tb01.tbody_gen([#}
+{#        {"id":"1","name":"1439","password":"123456","email":"1439493061@qq.com"},#}
+{#        {"id":"2","name":"euewrqe","password":"123456","email":"euewrqe@qq.com"},#}
+{#    ])#}
+
+
+</script>
+</body>
+</html>

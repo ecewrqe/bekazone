@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OA考勤管理系统</title>
+    {% include '_head_js_css.html' %}
+    {% block header_custom_js_css %}
+        <style>
+            div.login-cls-container {
+                background-image: url("{% static "premium/boxed-bg/abstract/bg/1.jpg" %}");
+            }
+        </style>
+    {% endblock %}
+</head>
+
+<!--TIPS-->
+<!--You may remove all ID or Class names which contain "demo-", they are only used for demonstration. -->
+
+
+<body>
+<div id="container" class="cls-container login-cls-container">
+
+    <div>
+
+        <div>
+            <div class="cls-content">
+                <div class="cls-content-sm panel">
+                    <div class="panel-body" style="margin: 150px 0 0 -10px">
+                        <div class="row">
+                            <img src="{% static "img/zhangzhong_logo.png" %}" width="300">
+                        </div>
+
+
+                        <form id="login-form" novalidate="novalidate">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {{ form.username }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.password }}
+                            </div>
+                            <div class="checkbox pad-btm text-left">
+                                <input id="demo-form-checkbox" class="magic-checkbox" name="rem_me" value="0"
+                                       type="checkbox">
+                                <label for="demo-form-checkbox" style="color: #fff">记住密码</label>
+                            </div>
+                            <input class="btn btn-primary btn-lg btn-block js-login-btn" value="登陆"/>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</div>
+</div>
+{% block footer_custom_js %}
+    <script>
+        $(document).keydown(function (e) {
+            if (e.keyCode == 13) {
+                $(".js-login-btn").click();
+            }
+        })
+        $(".js-login-btn").click(function () {
+            var form_dict = collect_form("login-form");
+            var form_tag = $("#login-form");
+
+            form_dict['rem_me'] = $("#demo-form-checkbox").prop('checked');
+
+            $.ajax({
+                url: "{% url 'users:login' %}",
+                type: 'POST',
+                data: form_dict,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.status == 200) {
+                        get_form_msg("login-form", data.data, 200);
+                        setTimeout(function () {
+                            location.href = data.url;
+                        }, 1000);
+
+                    } else {
+                        get_form_msg("login-form", data.errors, data.status);
+                    }
+                }
+            })
+        })
+    </script>
+{% endblock %}
+</body>
+
+
+</html>

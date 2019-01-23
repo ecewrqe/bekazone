@@ -1,0 +1,72 @@
+
+{% load template_tool %}
+
+<!--table-->
+<div style="display: none">
+    <span class="app-name">{{ app }}</span>---<span class="table-name">{{ table }}</span>表
+</div>
+
+<table class="table table-hover" id="database">
+    <thead>
+    {% if table_item_admin.list_display %}
+        <tr>
+            <th style='width:42px'>
+                <div class="checkbox check-transparent">
+                    <input type="checkbox" id="chckall">
+                    <label for="chckall"></label>
+                </div>
+            </th>
+            {% for field in table_item_admin.list_display %}
+                <!--xxx&_o=name,status,xxx,xxx-->
+                <th><a href="?{% get_order_url request field %}">{{ field }}
+                    {% check_order_field request.GET field as check_flag %}
+                    {% if check_flag == "+" %}
+                        <i class="fa fa-angle-up"></i>
+                    {% elif check_flag == "-" %}
+                        <i class="fa fa-angle-down"></i>
+                    {% endif %}
+                </a></th>
+            {% endfor %}
+            {% else %}
+        <tr>
+            <th style='width:50px'>
+                <div class="checkbox check-transparent">
+                    <input type="checkbox" id="chckall">
+                    <label for="chckall"></label>
+                </div>
+            </th>
+            <th>{{ table }}</th>
+
+        </tr>
+    {% endif %}
+
+    </thead>
+    <tbody>
+    <!--record由all_record决定的，all_record是从数据库拿的-->
+    {% for model_item in model_items %}
+        {% if table_item_admin.list_display %}
+            <!--这些内容全在后台搞，一条记录对应一个表admin，获取表内容-->
+            <tr>
+                {% get_model_item request model_item table_item_admin %}
+            </tr>
+
+            {% else %}<!--如果table_item_admin没有，返回对象的__str__-->
+
+            <tr>
+                <td>
+                    <div class="checkbox check-transparent">
+                        <input type="checkbox" id="chck{{ model_item.id }}" record-id="{{ model_item.id }}">
+                        <label for="chck{{ model_item.id }}"></label>
+                    </div>
+                </td>
+                {% get_model_url request model_item model_item %}
+
+
+            </tr>
+
+        {% endif %}
+
+    {% endfor %}
+    </tbody>
+</table>
+<!--/table-->

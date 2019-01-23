@@ -1,0 +1,79 @@
+{% load template_tool %}
+
+<form class="form-horizontal" method="post" onsubmit="cancel_disabled(this)">
+    {% csrf_token %}
+        {% for field in form_obj %}
+            <div class="form-group">
+
+
+                <label class="col-sm-2 control-label">
+                    {% if field.field.required %}   <!--表示必填-->
+                    {{ field.label }}
+                    {% else %}
+                    <span style="font-weight: normal">{{ field.name }}</span>
+                    {% endif %}
+
+                </label>
+                <div class="col-sm-8">
+                    <!--多对多操作，两个select选择框，第一个为不存在的列表，第二个为已经存在的列表
+                    该字段是否在filter_horizontal中来判断是否需要多选特殊样式，提交的时候提交第二个框的所有
+                    -->
+                    <div class="row">
+                        {{ field }}
+                    </div>
+
+
+                </div>
+            <!--提示信息-->
+                <span style="color:gray;font-size: 10px">{{ field.help_text }}</span>
+                  <span style="color: red">{{ field.errors.0 }}  </span>
+            </div>
+
+        {% endfor %}
+        <div class="form-group">
+            <div class="col-md-1 col-md-offset-7">
+                <input type="submit" class="btn btn-success js-submit-btn" value="提交" />
+            </div>
+        </div>
+
+    </form>
+<!-- 本页面脚本
+<script>
+
+    /**
+     * 从select from到select_to,哪些option
+     * @param select_from
+     * @param select_to
+     */
+
+    function select_change(select_from,select_to){
+        $("#"+select_from).children("option:selected").appendTo($("#"+select_to));
+    }
+    function select_change_all(select_from,select_to){
+        $("#"+select_from).children("option").appendTo($("#"+select_to));
+    }
+    $(".js-submit-btn").click(function () {
+        $("select[id $= 'to']").children("option").prop("selected",true);
+    })
+    /**
+     * 选择它下面的select中有该关键字的
+     * @param itm
+     */
+    function input_select(itm){
+        $(itm).siblings("select").children("option").each(function () {
+            if($(this).text().indexOf($(itm).val())>=0 || $(itm).val() == ""){
+                $(this).removeClass("hide");
+            }else{
+                $(this).addClass("hide");
+            }
+        });
+
+    }
+    function cancel_disabled(item) {
+        $(item).find("[disabled]").removeAttr("disabled");
+    }
+
+
+</script>
+-->
+

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load template_tool %}
+{% block title %}
+admin
+{% endblock %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'index' %}">Home</a></li>
+    <li class="active">Admin</li>
+</ol>
+{% endblock %}
+{% block content %}
+
+    <div class="container">
+
+        <div class="col-md-3">
+
+            {% for app,model_objs in app_dict.items %}
+                <div class="panel">
+
+                    <div class="panel-heading">
+                        <a href="{% url 'admin:table_model_list' app %}"><h3 class="panel-title">{{ app }}</h3></a>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="list-group">
+
+                            {% for model_name, model_obj in model_objs.items %}
+
+                                    <a href="{% url 'admin:table_list' app model_name %}" class="list-group-item">
+                                        {% get_verbose_name model_obj as model_verbose_name %}
+                                        {% if model_verbose_name %}
+                                            {{ model_verbose_name }}
+                                        {% else %}
+                                            {{ model_name }}
+                                        {% endif %}
+
+                                    </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+
+
+        </div>
+
+
+    </div>
+{% endblock %}
+
+
+
+

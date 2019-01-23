@@ -1,0 +1,22 @@
+{% load template_tool %}
+<div class="col-md-2">
+    <!--#从前端打包发到view，函数名+每个id+admin，后端通过反射admin和函数名，拿到函数对象()，
+    传入id对应的queryset和request-->
+    <label for="">批量操作</label>
+    <select name="_batch" class="form-control" id="batch-select">
+        <option value="">--------</option>
+
+        {% for action in admin_class_obj.actions %}
+            <option value="{{ action }}">
+                <!--accoutadmin.艹猫.xxxdescritbe-->
+                {% get_description admin_class_obj action %}
+
+            </option>
+        {% endfor %}
+
+    </select>
+</div>
+<div class="col-md-2">
+
+    <input type="submit" class="btn btn-info js-batch-select-btn" value="操作" style="margin-top: 24px;"/>
+</div>

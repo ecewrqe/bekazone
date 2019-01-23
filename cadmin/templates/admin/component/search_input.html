@@ -1,0 +1,20 @@
+{% load template_tool %}
+
+{% if admin_class.search_fields %}
+<form method="get">
+    <div class=" col-md-8">
+        <input class="form-control" type="search" name="_s"
+               value="{% if search_keyword %}{{ search_keyword }}{% endif %}"
+               placeholder="{% for field in admin_class.search_fields %}{{ field }} {% endfor %}">
+    </div>
+
+    {% for k,v in request.GET.items %}
+        {% if k != "_s" %}
+            <input class="form-control" type="hidden" name="{{ k }}" value="{{ v }}">
+        {% endif %}
+
+    {% endfor %}
+    <input type="submit" class="btn btn-default" value="搜索">
+
+</form>
+{% endif %}

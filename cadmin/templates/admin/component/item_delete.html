@@ -1,0 +1,11 @@
+{% load template_tool %}
+<!--qs下找所有被关联的外键和m2m关联-->
+ {% get_relate_depth qs as related_html %}
+{{ related_html|safe }}
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ qs.id }}" />
+        <input type="submit" value="确定删除" class="btn btn-danger" />
+        <a href="/myadmin/{{ app }}/{{ table }}/" class="btn btn-default">不删除</a>
+
+    </form>

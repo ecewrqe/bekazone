@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load template_tool %}
+{% block title %}
+字段修改
+{% endblock %}
+{% block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'index' %}">Home</a></li>
+    <li><a href="{% url 'admin:index' %}">Admin</a></li>
+    <li><a href="{% url 'admin:table_model_list' app %}">{{ app }}</a></li>
+    <li><a href="{% url 'admin:table_list' app table %}">{{ table }}</a></li>
+    <li class="active">{{ form_obj.instance.id }}</li>
+</ol>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">字段修改</h3>
+            </div>
+            <div class="panel-body">
+                {% include 'admin/component/table_change_form.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

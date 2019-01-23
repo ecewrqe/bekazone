@@ -1,0 +1,29 @@
+{% load template_tool %}
+
+{% if admin_class.list_filter %}
+
+<form method="get">
+    <div class="form-inline" style="padding: 10px 0;">
+        {% for field in admin_class.list_filter %}
+            <div class="form-group col-md-2">
+                <div>
+                    <label for="-{{ field }}">{% get_field_verbose_name model_class field %}</label><br/>
+                    <select class="form-control" name="{{ field }}" id="-{{ field }}" style="width: 150px;">
+                        {% get_filter_options model_class field %}
+                    </select>
+                </div>
+            </div>
+        {% endfor %}
+
+        {% if admin_class.list_filter %}
+            <div class="col-md-2">
+
+                <input type="submit" class="btn btn-info" value="筛选" style="margin-top: 24px;"/>
+            </div>
+        {% endif %}
+
+
+        <div style="clear: both"></div>
+    </div>
+</form>
+{% endif %}

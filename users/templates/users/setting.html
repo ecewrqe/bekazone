@@ -1,0 +1,291 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block header_custom_js_css %}
+    <link rel="stylesheet" href="{% static 'css/setting.css' %}">
+{% endblock %}
+
+{% block title %}
+    <i class="fa fa-archive"></i>
+    用户配置
+{% endblock %}
+{% block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'index' %}">Home</a></li>
+    <li class="active">settings</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="tab-base tab-stacked-left">
+
+    <!--Nav tabs-->
+    <ul class="nav nav-tabs" style="width: 150px;">
+        <li class="active">
+            <a data-toggle="tab" href="#demo-stk-lft-tab-1">用户配置</a>
+        </li>
+        <li>
+            <a data-toggle="tab" href="#demo-stk-lft-tab-2">ssh key</a>
+        </li>
+        <li>
+            <a data-toggle="tab" href="#demo-stk-lft-tab-3">xxx</a>
+        </li>
+    </ul>
+
+    <!--Tabs Content-->
+    <div class="tab-content">
+        <div id="demo-stk-lft-tab-1" class="tab-pane fade active in">
+            <p class="text-main text-semibold">用户配置</p>
+            <div>
+
+                <!--如果该用户是admin用户1，都能修改，如果是普通用户，只能修改用户名和图片-->
+            <form id="setting_form" class="form-horizontal">
+                {% csrf_token %}
+{#                {% if setting_form.instance.group.id == 1 %}#}
+
+                    <div class="form-group">
+                        <label for="head-pic"  class="col-lg-3 control-label">头像:</label>
+                        <div class="col-lg-7">
+                            <div id="head_pic_url" style="width:128px;height:128px">
+                                <img src="{% if setting_form.instance.head_pic_url %}{{ setting_form.instance.head_pic_url }}{% else %}/static/img/user_blank_128x128.png{% endif %}" style="border: 1px solid #333" alt="">
+                            </div>
+                            <input type="hidden" name="head_pic_url" value="{% if setting_form.instance.head_pic_url %}{{ setting_form.instance.head_pic_url }}{% else %}/static/img/user_blank_128x128.png{% endif %}" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="{{ setting_form.username.auto_id }}"  class="col-lg-3 control-label">用户名:</label>
+                        <div class="col-lg-7">
+                            <div>
+                                {{ setting_form.username }}
+                            </div>
+
+                        </div>
+                        <div class="col-lg-2 text-left">
+                            <span class="text-danger">{{ setting_form.username.help_text }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">用户组:</label>
+                        <div class="col-lg-7">{{ setting_form.instance.group.groupname }}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ setting_form.email.auto_id }}"  class="col-lg-3 control-label">邮箱:</label>
+                        <div class="col-lg-7">
+                            <div>
+                                {{ setting_form.email }}
+                            </div>
+                        </div>
+                        <div class="col-lg-2 text-left">
+                            <span class="text-danger">{{ setting_form.email.help_text }}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ setting_form.phone.auto_id }}"  class="col-lg-3 control-label">手机:</label>
+                        <div class="col-lg-7">
+                            <div>
+                                {{ setting_form.phone }}
+                            </div>
+                        </div>
+                        <div class="col-lg-2 text-left">
+                            <span class="text-danger">{{ setting_form.phone.help_text }}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ setting_form.person_name.auto_id }}"  class="col-lg-3 control-label">真实姓名:</label>
+                        <div class="col-lg-7">
+                            <div>
+                                {{ setting_form.person_name }}
+                            </div>
+                        </div>
+                        <div class="col-lg-2 text-left">
+                            <span class="text-danger">{{ setting_form.person_name.help_text }}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ setting_form.birth_date.auto_id }}"  class="col-lg-3 control-label">出生日期:</label>
+                        <div class="col-lg-7">
+                            <div id="birth_date_div">
+                                {{ setting_form.birth_date }}
+                            </div>
+                        </div>
+                        <div class="col-lg-2 text-left">
+                            <span class="text-danger">{{ setting_form.birth_date.help_text }}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ setting_form.card_id.auto_id }}"  class="col-lg-3 control-label">身份证:</label>
+                        <div class="col-lg-7">
+                            <div>
+                                {{ setting_form.card_id }}
+                            </div>
+                        </div>
+                        <div class="col-lg-2 text-left">
+                            <span class="text-danger">{{ setting_form.card_id.help_text }}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ setting_form.introduce.auto_id }}"  class="col-lg-3 control-label">说明:</label>
+                        <div class="col-lg-7">
+                            <div id="birth_date_div">
+                                {{ setting_form.introduce }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-offset-5">
+                        <input type="button" value="提交" class="btn btn-success js-settings-submit">
+                    </div>
+            </form>
+
+            </div>
+        </div>
+        <div id="demo-stk-lft-tab-2"></div>
+        <div id="demo-stk-lft-tab-3"></div>
+    </div>
+</div>
+<!--图片对话框-->
+    <div class="pic_modal_back hidden">
+        <div class="pic_modal hidden">
+            <div class="close_btn js_close_btn">关</div>
+            <div class="pic_frame">
+                <div class="pic source_pic_frame">
+                    <div class="source_move"></div>
+                    <div class="intr_detr">
+                        <a href="javascript:;" class="intr">+</a>
+                        <a href="javascript:;" class="detr">-</a>
+                    </div>
+                </div>
+                <div class="pic source_256_frame">
+                    <div class="source_256_pic_intro">256*256</div>
+                    <div class="source_256_pic">
+                        <img src="" alt="">
+                    </div>
+                </div>
+                <div class="pic source_64_frame">
+                    <div class="source_64_pic_intro">64*64</div>
+                    <div class="source_64_pic">
+                        <img src="" alt="">
+                    </div>
+                </div>
+                <div class="pic source_128_frame">
+                    <div class="source_128_pic_intro">128*128</div>
+                    <div class="source_128_pic">
+                        <img src="" alt="">
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="upload_btn">
+                <a href="javascript:;" class="js_upload_pic_btn">上传图片</a>
+                <input type="file" name="pic_upload" style="display: none" />
+            </div>
+            <div class="submit_btn">
+                <a href="javascript:;" class="btn btn-primary js-btn-rounded">提交</a>
+            </div>
+        </div>
+    </div>
+<!--图片对话框end-->
+{% endblock %}
+
+{% block footer_custom_js %}
+<script>
+$(document).ready(function () {
+    $("#birth_date_div input").datepicker('setStartDate', '2012-01-01');
+
+})
+
+/*
+* 提交表单，正常提交
+* */
+$(".js-settings-submit").click(function () {
+    $.ajax({
+        url: "{% url 'users:setting' %}",
+        type: "POST",
+        data: $("#setting_form").serialize(),
+        dataType: "JSON",
+        success: function (data) {
+            if(data.status == 200){
+                get_form_msg("setting_form", data.data, 200);
+                setTimeout(function () {
+                   location.href=data.url;
+                },1000);
+            }else{
+                get_form_msg("setting_form", data.errors, data.status);
+            }
+        }
+    })
+})
+
+$("#head_pic_url").click(function () {
+    $(".pic_modal_back").removeClass("hidden");
+    $(".pic_modal").removeClass("hidden");
+})
+
+$(".pic_modal .js_close_btn").click(function () {
+    $(".pic_modal_back").addClass("hidden");
+    $(".pic_modal").addClass("hidden");
+})
+
+$(".js_upload_pic_btn").click(function () {
+    $("[name='pic_upload']").click();
+})
+
+$("[name='pic_upload']").change(function () {
+
+    var formData = new FormData();
+    formData.append("pic_upload", $("[name='pic_upload']")[0].files[0]);
+    formData.append("csrfmiddlewaretoken", $("[name='csrfmiddlewaretoken']").val());
+
+    $.ajax({
+        url: "{% url 'users:head_pic_upload' %}",
+        type: "POST",
+        data: formData,
+        processData:false,
+        contentType:false,
+        success:function (data) {
+            ///head-pic/?filename=a2993902752ec4ea5ce301efaf38cdba.jpg&size=128
+            var url_128 = "/users/head_pic/?filename="+data+"&size=128";
+            var url_256 = "/users/head_pic/?filename="+data+"&size=256";
+            var url_64 = "/users/head_pic/?filename="+data+"&size=64";
+            $(".source_256_pic img").attr("src", url_256);
+            $(".source_128_pic img").attr("src", url_128);
+            $(".source_64_pic img").attr("src", url_64);
+            $(".source_move").css("background-image", "url('"+url_256+"')");
+            $(".source_move").attr("filename", data);
+        }
+
+    })
+})
+
+$(".js-btn-rounded").click(function () {
+    $.ajax({
+        url: "{% url 'users:head_pic_upload' %}?filename=" + $(".source_move").attr("filename"),
+        type: "GET",
+        dataType: "JSON",
+        success:function (data) {
+
+            if(data.status == 200){
+                console.log(data.url);
+                $(".pic_modal").addClass("hidden");
+                $(".pic_modal_back").addClass("hidden");
+                $("#head_pic_url img").attr("src", data.url);
+                $("input[name='head_pic_url']").val(data.url)
+
+            }else{
+                console.log(data);
+            }
+        }
+    })
+
+})
+
+</script>
+{% endblock %}

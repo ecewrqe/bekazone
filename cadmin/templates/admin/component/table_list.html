@@ -1,0 +1,71 @@
+
+{% load template_tool %}
+
+<!--table-->
+
+<table class="table table-bordered" id="data_content">
+    <thead>
+    <tr>
+        <th>
+            <div class="checkbox">
+                <input type="checkbox" class="magic-checkbox" id="checkall" onclick="check_all(this,'check_item')">
+                <label for="checkall"></label>
+            </div>
+        </th>
+
+        {% if admin_class.list_display %}
+            {% for field in admin_class.list_display %}
+                {% if field not in admin_class.order_fields %}
+                    <th tname="{{ field }}">
+                        {% get_field_verbose_name model_class field %}
+                    </th>
+                {% else %}
+                    <th tname="{{ field }}">
+                        <div class="th-inner"></div>
+                        <a href="javascript:;" onclick="order_handle(this)">
+                            {% get_field_verbose_name model_class field %}
+                            <i class="fa fa-sort"></i>
+                        </a>
+                    </th>
+                {% endif %}
+
+            {% endfor %}
+        {% else %}
+            <th tname="{{ field }}">{{ table }}</th>
+        {% endif %}
+    </tr>
+
+    </thead>
+    <tbody>
+
+    <!--record由all_record决定的，all_record是从数据库拿的-->
+    {% if admin_class.list_display %}
+        {% for obj in model_class_objs %}
+        <tr>
+            {% get_model_item request obj admin_class  %}
+        </tr>
+        {% endfor %}
+
+    {% else %}
+        {% for obj in model_class_objs %}
+            <tr>
+            <td>
+                <div class="checkbox">
+                    <input type="checkbox" class="magic-checkbox" id="check_{{ obj.id }}"
+                           name="check_item" value="{{ obj.id }}" onclick="check_component('check_item','checkall')" />
+                    <label for="check_{{ obj.id }}"></label>
+                </div>
+            </td>
+            <td>
+                <a href="{% url 'admin:table_change' app table obj.id  %}">
+                    {{ obj }}
+                </a>
+            </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+
+
+    </tbody>
+</table>
+<!--/table-->

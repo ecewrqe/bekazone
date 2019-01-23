@@ -1,0 +1,55 @@
+<ul id="mainnav-menu" class="list-group">
+    <!--Category name-->
+    <li class="list-header">列表</li>
+{% if request.session.user.groupname != "normal" %}
+<!--Menu list item-->
+    <li>  <!--高亮显示active_link-->
+        <a href="{% url 'index' %}">
+            <i class="psi-quill-2"></i>
+            <span class="menu-title">首页</span>
+        </a>
+    </li>
+
+    <!--Menu list item-->
+    <li class="list-divider"></li>
+    <!--Category name-->
+
+    <!--Menu list item-->
+    <li>
+        <a href="javascript:;">
+            <i class="psi-mouse-3"></i>
+            <span class="menu-title">用户</span>
+            <i class="arrow"></i>
+        </a>
+
+        <!--Submenu-->
+        <ul class="collapse">
+            <li><a href="{% url 'users:staff-reg' %}">用户注册</a></li>
+            <li><a href="{% url 'users:staff-list' %}">用户查询</a></li>
+            <li><a href="{% url 'users:group_create' %}">用户组创建</a></li>
+            <li><a href="{% url 'users:group_list' %}">用户组列表</a></li>
+        </ul>
+
+    </li>
+
+
+    <li>
+        <a href="{% url 'admin:index' %}">
+            <i class="psi-mouse-3"></i>
+            <span class="menu-title">admin</span>
+        </a>
+    </li>
+
+    <!--Menu list item-->
+
+{% else %}
+
+{% endif %}
+
+
+
+
+
+
+
+</ul>

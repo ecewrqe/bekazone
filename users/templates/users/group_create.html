@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block header_custom_js_css %}
+
+{% endblock %}
+
+{% block title %}
+    <i class="fa fa-archive"></i>
+创建员工
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        创建用户组
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <form id="reg-form" class="form-horizontal" novalidate>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ form.groupname.auto_id }}"  class="col-lg-3 control-label">{{ form.groupname.label }}:</label>
+                            <div class="col-lg-7">
+                                {{ form.groupname }}
+                            </div>
+                            <div class="col-lg-2 text-left">
+                                <span class="text-danger">{{ form.groupname.help_text }}</span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-8 col-lg-offset-2">
+                            <input type="button" class="btn btn-primary btn-block js-ct-group" value="submit" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block footer_custom_js %}
+<script>
+$(".js-ct-group").click(function () {
+    var form_dict=collect_form("reg-form");
+
+    console.log(form_dict);
+
+    $.ajax({
+        url:'{% url 'users:group_create' %}',
+        type:'POST',
+        data:form_dict,
+        dataType:'JSON',
+        success:function (data) {
+            if(data.status==200){
+                get_form_msg("reg-form",data.data,200);
+                setTimeout(function () {
+                   location.href=data.url;
+                },1000);
+
+            }else{
+                get_form_msg("reg-form",data.errors,data.status);
+            }
+        }
+    })
+
+
+});
+</script>
+{% endblock %}

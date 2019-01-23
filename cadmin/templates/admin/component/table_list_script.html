@@ -1,0 +1,169 @@
+<script src="/static/js/jquery.cookie.js"></script>
+<script>
+        /*
+        *  本函数用来生成url字典
+        *  /aaa/bbb/?a=10&b=20&c=30
+        *  path_info=/aaa/bbb/
+        *  params_dict={a:10,b:20,c:30}
+        *  */
+
+        $(document).ready(function () {
+            //刷新页面时保存筛选的动作
+
+            var url_dict = url_parse(location.href);
+            console.log(url_dict)
+
+
+            //for循环字典拿到的是key，循环数组拿到的是下标
+            for (var name in url_dict["querys"]) {
+                /*-+字段名=id
+                 * 拿到id对应的select，找到option的value对应的值，如果items[1]没有，就是最顶部的那个
+                 * 然后添加selected属性
+                 * */
+                var select_tag = $("#-" + name);
+
+                url_dict["querys"][name] = decodeURI(url_dict["querys"][name]);
+                if (select_tag) {
+                    select_tag.children("option[value='" + url_dict["querys"][name] + "']").prop("selected", true);
+                }
+
+            }
+            // 拿到url分析_o的参数，在每个field后面加一个图标
+            (function () {
+{#                var url_dict = url_parse(location.href);#}
+                var tr_tag = $("table").find("thead tr");
+
+                var field_group = url_dict["querys"]["_o"];
+
+                var td_tag;
+
+                if(field_group){
+                    field_group = field_group.split(",");
+                    for(var field in field_group){
+                        if(tr_tag.find("th[tname='" + field_group[field] + "']")[0]){
+                            td_tag = tr_tag.find("th[tname='" + field_group[field] + "'] a");
+                            td_tag.find("i").attr("class","fa fa-sort-asc");
+                        }else if(tr_tag.find("th[tname='" + field_group[field].replace(/-(.*)/, "$1") + "']")[0]){
+                            td_tag = tr_tag.find("th[tname='" + field_group[field].replace(/-(.*)/, "$1") + "'] a")
+                            td_tag.find("i").attr("class","fa fa-sort-desc");
+                        }
+                    }
+
+                }
+            })();
+
+
+        });
+
+
+
+        // 拿到url分析_o的参数，然后自动转跳
+        function order_handle(item) {
+            console.log($(item).parents("th")[0]);
+            var field = $(item).parents("th").attr("tname");
+            var url_dict = url_parse(location.href);
+            if(url_dict.querys["_o"]){
+                var field_group = url_dict.querys["_o"].split(",");
+
+                var field_index = -1;
+
+                if(field_group.indexOf(field) !== -1) {
+                    field_index = field_group.indexOf(field);
+                    field_group[field_index] = "-" + field;
+                }else if(field_group.indexOf("-" + field) !== -1) {
+                    field_index = field_group.indexOf("-" + field);
+                    field_group[field_index] = field;
+                } else {
+                    field_group.push(field);
+                }
+                url_dict.querys["_o"] = field_group.join(",");
+            }else{
+                url_dict.querys["_o"] = field;
+            }
+
+            var url = url_unparse(url_dict);
+            location.href = url;
+
+        }
+
+        //批量action按钮事件
+        $(".js-batch-select-btn").click(function () {
+            var csrftoken = $.cookie('csrftoken');
+
+            var selected_opt = $("#batch-select").children("option:selected");
+            var send_dict = {};
+            send_dict["action"] = selected_opt.val();
+            send_dict["package"] = [];
+            $("#data_content tbody input:checked").each(function () {
+                console.log(this);
+                send_dict["package"].push($(this).val());
+            });
+            send_dict["package"] = send_dict["package"].join(",");
+            send_dict["table"] = $("#table_name").text();
+            send_dict["app"] = $("#app_name").text();
+            console.log(send_dict);
+            $.ajax({
+                url: "{% url 'admin:get_action' %}",
+                type: "POST",
+                data: send_dict,
+                headers: {"X-CSRFToken": csrftoken},
+                success: function (data) {
+                    if (data == "200") {
+                        location.reload();
+                    }else if(data == "301"){
+                        location.href="{% url 'admin:get_action' %}";
+                    }
+                }
+            })
+        });
+
+        $(".js-batch-submit").click(function () {
+            /*
+             var send_dict={
+             app:null,
+             table:null,
+             data:{"01":{"name":xxx,"age":xxx}},
+
+             };
+             */
+            var send_dict = {};
+            send_dict["table"] = $("#table_name").text().trim();
+            send_dict["app"] = $("#app_name").text().trim();
+            send_dict["data"] = {};
+
+            var csrftoken = $.cookie('csrftoken');
+
+
+            $("#data_content tbody tr").each(function () {
+                var id = $(this).children("td").find("input:checkbox").val();
+                console.log(id);
+                send_dict.data[id] = {};
+
+                $(this).children("td").find("input, select").each(function () {
+                    var name = $(this).attr("name");
+                    if (name && name != "check_item") {
+                        var value = $(this).val();
+                        send_dict.data[id][name] = value;
+                    }
+
+                });
+
+
+            })
+            send_dict.data = JSON.stringify(send_dict.data);
+            //发送
+            $.ajax({
+                url: "{% url 'admin:batch_update' %}",
+                type: "POST",
+                data: send_dict,
+                headers: {"X-CSRFToken": csrftoken},
+                dataType: "JSON",
+                success: function (data) {
+                    if (data.status == 200) {
+                        location.reload();
+                    }
+                }
+            })
+        })
+
+    </script>

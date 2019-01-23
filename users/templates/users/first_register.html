@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bekazone system init</title>
+    {% include '_head_js_css.html' %}
+    {% block header_custom_js_css %}
+        <style>
+        #container{
+            background-image: url("/static/premium/boxed-bg/abstract/bg/3.jpg");
+        }
+        </style>
+    {% endblock %}
+</head>
+
+<!--TIPS-->
+<!--You may remove all ID or Class names which contain "demo-", they are only used for demonstration. -->
+
+
+<body>
+    <div id="container" class="cls-container">
+        <div class="col-lg-6 col-lg-offset-3" style="margin-top: 40px;">
+                    <div class="panel">
+		        <div class="panel-body">
+		            <div class="mar-ver pad-btm">
+		                <h1 class="h3">bekazone</h1>
+		                <p>初始化注册</p>
+		            </div>
+
+                    <form id="reg-form" class="form-horizontal" novalidate>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ form.username.auto_id }}"  class="col-lg-3 control-label">用户名:</label>
+                            <div class="col-lg-7">
+                                {{ form.username }}
+                            </div>
+                            <div class="col-lg-2 text-left">
+                                <span class="text-danger">{{ form.username.help_text }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.password1.auto_id }}"  class="col-lg-3 control-label">密码:</label>
+                            <div class="col-lg-7">
+                                {{ form.password1 }}
+                            </div>
+                            <div class="col-lg-2 text-left">
+                                <span class="text-danger">{{ form.password1.help_text }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.password2.auto_id }}"  class="col-lg-3 control-label">密码确认:</label>
+                            <div class="col-lg-7">
+                                {{ form.password2 }}
+                            </div>
+                            <div class="col-lg-2 text-left">
+                                <span class="text-danger">{{ form.password2.help_text }}</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.email.auto_id }}" class="col-lg-3 control-label">邮箱</label>
+                            <div class="col-lg-7">
+                                {{ form.email }}
+                            </div>
+                            <div class="col-lg-2 text-left">
+                                <span class="text-danger">{{ form.email.help_text }}</span>
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label for="{{ form.phone.auto_id }}" class="col-lg-3 control-label">手机号</label>
+                            <div class="col-lg-7">
+                                {{ form.phone }}
+                            </div>
+                            <div class="col-lg-2 text-left">
+                                <span class="text-danger">{{ form.phone.help_text }}</span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-8 col-lg-offset-2">
+                            <input type="button" class="btn btn-primary btn-block js-first-reg-btn" value="提交" />
+                        </div>
+
+
+                    </form>
+
+		        </div>
+		    </div>
+                </div>
+    </div>
+    {% block footer_custom_js %}
+        <script>
+        $(document).keydown(function(e){
+            if(e.keyCode == 13){
+                $(".js-first-reg-btn").click();
+            }
+        })
+        $(".js-first-reg-btn").click(function () {
+            let form_dict=collect_form("reg-form");
+            $.ajax({
+                url:'{% url 'users:system_init' %}',
+                type:'POST',
+                data:form_dict,
+                dataType:'JSON',
+                success:function (data) {
+                    if(data.status==0){
+                        get_form_msg("reg-form",data.data,200);
+                        setTimeout(function () {
+                           location.href=data.url;
+                        },1000);
+
+                    }else{
+                        get_form_msg("reg-form",data.errors,data.status);
+                    }
+                }
+            })
+        })
+
+
+
+
+
+        </script>
+    {% endblock %}
+    </body>
+
+
+</html>
