@@ -14,10 +14,9 @@ import re
 
 def authenticate(**kwargs):
     """
-    登陆验证
+    to verify the username and password
     authenticate({"username":"example","password":"example123"})
-    :param kwargs:
-    :return: boolean类型，{1，验证成功;2，验证失败}
+    :return: user object or false
     """
     user = User.objects.filter(username=kwargs['username']).first()
     if user:
@@ -32,9 +31,8 @@ def authenticate(**kwargs):
 
 def auth_login(request, user):
     """
-    登陆句柄
-    一般在验证后登陆,本质是创建session
-    users: Users数据库对象
+    login function, while the verification exact, can use the current function to login, add session
+
     """
     user_dict = user.__dict__
     user_dict['birth_date'] = date_to_string(user_dict['birth_date'])
@@ -55,23 +53,18 @@ def auth_login(request, user):
 
 def auth_logout(request):
     '''
-    登出句柄，本质是删除session
+    delete the user session
     '''
     if request.session.get('user'):
         del request.session['user']
 
 def login_required(login_url_name='login'):
     """
-    1，登陆判定装饰器，判断session有没有该请求的user
-    2，在没有的情况下，存储当前path到session，返回登陆页面
+    
     """
     def required(func):
         def inner(request, *args, **kwargs):
             """
-            该函数适用于非login的普通函数
-            1,如果user没有的情况下，跳转到login
-            2,如果数据库一个用户都没有，跳转到system_init
-            3,如果以上都有就执行被装饰的函数
             """
             if not request.session.get("user"):
                 login_url = reverse(login_url_name)

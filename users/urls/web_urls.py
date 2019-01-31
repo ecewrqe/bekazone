@@ -1,9 +1,6 @@
 
 from django.conf.urls import url
-
 from users.views import web_views
-
-
 
 urlpatterns = [
     url('^login/$', web_views.login, name='login'),

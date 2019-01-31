@@ -25,11 +25,7 @@ def logout(request):
 
 def login(request):
     """
-    登陆页面交互函数
-    1，GET返回登陆页面
-    2，POST验证登陆
-    3，如果没有任何一个用户，返回首次注册页面
-    4，如果有用户已经登陆直接跳转到index
+    sign in view
     :param request:
     :return:
     """
@@ -70,13 +66,7 @@ def login(request):
 
 def system_init(request):
     """
-    用户首次登陆函数
-    1，GET返回页面
-    2，POST验证并注册
-    3，如果有1个用户就直接跳到用户登陆页面
-    4，如果session里有user直接跳转到index页面
-
-    创建第一个用户时首先创建一个admin的用户组
+    while the system initial, the first apply user
     """
     user_count = User.objects.count()
     if user_count == 1:
@@ -105,7 +95,9 @@ def system_init(request):
 
 @login_required(login_url_name='users:login')
 def change_passwd(request):
-    """修改密码"""
+    """
+    update the new password
+    """
     if request.method == 'GET':
         return render(request, 'users/change_passwd.html')
     else:
@@ -125,7 +117,9 @@ def change_passwd(request):
 
 @login_required(login_url_name="users:login")
 def user_setting(request):
-    """用户配置"""
+    """
+    user setting page
+    """
     if request.method == "GET":
         id = request.session["user"]["id"]
 
@@ -138,9 +132,8 @@ def user_setting(request):
         user_id = request.session["user"]["id"]
         user_obj = User.objects.get(id=user_id)
         setting_form = forms.UserSettingForm(data=request.POST, instance=user_obj)
-        # 没有验证成功
+        # comparinent
         if setting_form.is_valid():
-
             setting_form.save(request)
 
 
@@ -153,7 +146,6 @@ def user_setting(request):
             jrs.set_success(200, 'change setting success')
             jrs.url = reverse('index')
         return HttpResponse(jrs.set_json_pack())
-
 
 @login_required(login_url_name='users:login')
 def staff_reg(request):
@@ -182,7 +174,7 @@ def staff_reg(request):
 def staff_list(request):
     model_class = User
 
-    model_class_objs, filter_dict = get_filter_obj(request, model_class)  # 所有筛选后的记录
+    model_class_objs, filter_dict = get_filter_obj(request, model_class)
 
     model_class_objs = get_order_obj(request, model_class_objs)
 
@@ -239,7 +231,9 @@ def head_pic_upload(request):
 
 @login_required(login_url_name='users:login')
 def get_head_pic(request):
-    '''本函数用于切割图片'''
+    """
+    the current function to cut a picture
+    """
     size = int(request.GET.get("size"))
     filename = request.GET.get("filename")
     username = request.session['user']['username']

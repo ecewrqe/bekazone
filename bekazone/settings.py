@@ -1,5 +1,5 @@
 import os
-
+from bekazone import utils
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = 'fqcbjs4t#%)-m*)$igcr_mo4f)47(^d*c(+-vy)o@(7c7=iq#b'
@@ -15,14 +15,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # import my app
+
     'users',
     'cadmin'
 ]
 
-from bekazone import utils
+
 CONFIGFILE_PATH = "etc/bekazone/config.conf"
-kcp = utils.KaoqingConfigParser(os.path.join(BASE_DIR, CONFIGFILE_PATH))
+kcp = utils.BekaConfigParser(os.path.join(BASE_DIR, CONFIGFILE_PATH))
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -107,13 +107,3 @@ STATICFILES_DIRS = [
 USER_SESSION_EXPIRED = kcp.get_config("bekazone", "user_session_expired")
 if USER_SESSION_EXPIRED:
     USER_SESSION_EXPIRED = eval(USER_SESSION_EXPIRED)
-
-
-
-
-
-
-
-
-
-

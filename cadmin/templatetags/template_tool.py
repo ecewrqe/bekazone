@@ -1,4 +1,3 @@
-
 from django import template
 from django.utils.safestring import mark_safe
 # A site is a piece of ground that is used for a particular purpose or where a particular thing habbens
@@ -20,12 +19,12 @@ def decode_utf8(src):
 
 @register.simple_tag
 def get_field_verbose_name(model_class, field):
-    '''
+    """
     verbose_name/related_name
     :param model_class:
     :param field:
     :return:
-    '''
+    """
     fields = field.split("__", 1)
     field_obj = model_class._meta.get_field(fields[0])
     if len(fields) == 2:

@@ -6,7 +6,8 @@ from django.db.models import QuerySet
 
 
 def search_fieldobj(model_class, field):
-    '''找到字段的对象'''
+    '''
+    '''
     fields = field.split("__", 1)
     field_obj = model_class._meta.get_field(fields[0])
     if len(fields) == 2:
@@ -16,9 +17,9 @@ def search_fieldobj(model_class, field):
 
 
 def get_filter_obj(request, model_class):
-    '''
-    拿到所有GET字段和当前表，返回表记录对象和搜索记录
-    '''
+    """
+    filter a table's row
+    """
     filter_dict = {}
     q1 = Q()
     q1.connector = "AND"
@@ -39,9 +40,6 @@ def get_filter_obj(request, model_class):
 
 
 def get_search_obj(request, model_objs, search_field):
-    '''
-    拿到需要查询字段，
-    '''
     search_keyword = keyword = request.GET.get("_s")
     if keyword:
         q_search = Q()

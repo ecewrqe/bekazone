@@ -2,6 +2,10 @@ from django import forms
 
 class BaseModelForm(forms.ModelForm):
     def __new__(cls, *args, **kwargs):
+        """
+        give any new subform original form model
+        cls is BaseModelForm
+        """
         for field_name in cls.base_fields:
             field = cls.base_fields[field_name]
             attr_dic = {'class': 'form-control'}
@@ -12,11 +16,10 @@ class BaseModelForm(forms.ModelForm):
 
 def create_dynamic_modelform(model_class):
     # to generate many class object
-
     class Meta:
         model = model_class
         fields = "__all__"
 
-    base_form=type("DynamicForm".encode("utf8"), (BaseModelForm, ), {'Meta':Meta})
+    base_form=type("DynamicForm", (BaseModelForm, ), {'Meta':Meta})
     return base_form
 

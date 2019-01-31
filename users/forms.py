@@ -1,4 +1,3 @@
-
 import re
 from django import forms
 from django.forms import ValidationError
@@ -10,9 +9,9 @@ from .password_hasher import SaltMD5PasswordHasher
 
 
 class PasswordValidator(object):
-    '''
-    密码匹配
-    '''
+    """
+    to validate password
+    """
     message = ""
     max_length = 8
     letter_regex = re.compile(r'\D')
@@ -42,10 +41,11 @@ class UserLoginForm(forms.Form):
 
 
 class UserCreateForm(forms.ModelForm):
-    """用户创建表单"""
+    """
+    to make a form to create user
+    """
     def mix_compare_password(self, cleaned_data):
         """
-        加密，同时比较两个密码
         :param cleaned_data:
         :return:
         """
@@ -56,7 +56,6 @@ class UserCreateForm(forms.ModelForm):
         return res
 
     def save(self, commit=True):
-        """保存用户"""
         compare_ret = self.mix_compare_password(self.cleaned_data)
         self.cleaned_data['password'] = self.cleaned_data['password1']
         self.instance.password = self.cleaned_data['password']
@@ -69,13 +68,15 @@ class UserCreateForm(forms.ModelForm):
 
 
 class UserFirstCreateForm(UserCreateForm):
-    """用户第一次登陆用表单"""
+    """
+    make a form to create initial user
+    """
 
-    password1 = forms.CharField(label='密码', widget=forms.PasswordInput(attrs={
+    password1 = forms.CharField(label="password", widget=forms.PasswordInput(attrs={
         "class": "form-control",
-        "placeholder": "密码大于8位，并且字母不小于3个"
+        "placeholder": "the password is greater than 8 digits and the letters are not less than 3"
     }), validators=[PasswordValidator(), ], help_text="*", )
-    password2 = forms.CharField(label='密码确认', widget=forms.PasswordInput(attrs={
+    password2 = forms.CharField(label="confirm password", widget=forms.PasswordInput(attrs={
         "class": "form-control",
 
     }), help_text="*")
@@ -92,7 +93,7 @@ class UserFirstCreateForm(UserCreateForm):
         widgets = {
             "username": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": '用户名',
+                "placeholder": "username",
             }),
             "email": forms.EmailInput(attrs={
                 "class": "form-control",
@@ -100,7 +101,7 @@ class UserFirstCreateForm(UserCreateForm):
             }),
             "phone": forms.TextInput(attrs={
                 "class": "form-control",
-                'placeholder': '手机号'
+                'placeholder': '000-0000-0000'
             })
         }
 
@@ -126,10 +127,7 @@ class PasswdChangeForm(forms.Form):
 
     def mix_passwd_compare(self, cleaned_data, user_dict):
         """
-        1，比较旧密码和session中的密码
-        2，加密新密码
-        3，比较加密后的新密码和第二遍的新密码
-        :return: 首先在cleaned_data中加入password，最终的密码，如果有errors，add_errors，
+        to update personal password
         """
         hasher = SaltMD5PasswordHasher()
         old_pass_res = hasher.verify(cleaned_data['old_passwd'], user_dict['password'])
@@ -139,7 +137,7 @@ class PasswdChangeForm(forms.Form):
             if new_pass_res:
                 cleaned_data['password'] = new_password
             else:
-                self.add_error('new_passwd_confirm','new password unfirmness')
+                self.add_error('new_passwd_confirm','error')
         else:
             self.add_error('old_passwd', 'old password error')
 
@@ -147,7 +145,6 @@ class PasswdChangeForm(forms.Form):
 
     def save(self, user_dict):
         """
-        密码保存和验证，应该传入session的user
         :param user_dict:
         :return:
         """
@@ -161,7 +158,7 @@ class PasswdChangeForm(forms.Form):
 
 class UserSettingForm(forms.ModelForm):
     """
-    用户配置表单
+    give a form to config personal information
     """
 
     class Meta:
@@ -231,7 +228,8 @@ class UserSettingForm(forms.ModelForm):
 
 class StaffCreateForm(UserCreateForm):
     '''
-    创建员工/管理员：默认密码:123456,
+
+    default_password: 123456
     '''
     try:
         GROUP_CHOICES = models.User._meta.get_field('group').get_choices()
@@ -297,8 +295,8 @@ class GroupCreateForm(forms.ModelForm):
         }
 
 class EmployeeCreateForm(forms.Form):
-    employee_num = forms.CharField(label="工号", required=True)
-    userid = forms.CharField(label="微信号", required=True)
-    name = forms.CharField(label="姓名", required=True)
-    email = forms.CharField(label="邮箱", required=True)
-    mobile = forms.CharField(label="手机号", required=True)
+    employee_num = forms.CharField(label="employee num", required=True)
+    userid = forms.CharField(label="wechat id", required=True)
+    name = forms.CharField(label="name", required=True)
+    email = forms.CharField(label="email", required=True)
+    mobile = forms.CharField(label="phone num", required=True)

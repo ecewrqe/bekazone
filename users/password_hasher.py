@@ -7,12 +7,9 @@ def get_random_string(length=12, allow_chars="abcdefghijklmnopqrstuvwxyzABCDEFGH
     return ''.join([random.choice(allow_chars) for i in range(length) ])
 
 def compare_digest(val1, val2):
-    '''
-    比较两个字符串是否相等，
-    1，长度是否相等
-    2，内容是否相等
-    如果内容相等，位^运算必定为0，必须每个对比都是0才是true，否则是或
-    '''
+    """
+    compare two value
+    """
     if len(val1) != len(val2):
         return False
     result=0
@@ -28,10 +25,7 @@ def compare_digest(val1, val2):
 
 def force_bytes(s, encoding='utf8', errors='strick'):
     '''
-    把字符串强行转换成bytes
-    1，bytes:s必须传utf8格式的字节码
-    2，可以传memoryview，直接转成bytes
-    3，如果是字符串，自动转换{python2和python3的字符串格式判断}
+    force to change text encoding
     '''
     if isinstance(s, bytes):
         if encoding == 'utf8':
@@ -49,13 +43,6 @@ def force_bytes(s, encoding='utf8', errors='strick'):
 
 
 class SaltMD5PasswordHasher(object):
-    '''
-    1, 生成hash
-    2，比较hash
-    encoding:传入字符串，salt随机生成盐
-    verify:比较新的字符串和加密后的字符串
-    :return: (格式:hash类型&hash值&盐)
-    '''
     algorithm = 'md5'
     def salt(self):
 
@@ -74,23 +61,13 @@ class SaltMD5PasswordHasher(object):
         return '%s&%s&%s' % (self.algorithm, hash, salt)
 
     def verify(self, password, encoded):
-        '''
-        :param password:   要比较的加密前的密码
-        :param encoded:    加密后的密码
-        :return: 返回bool
-        '''
         algorithm, hash, salt = encoded.split('&')
         encoded_2 = self.encoding(password, salt)
         return compare_digest(encoded, encoded_2)
 
 
 class MD5PasswordHasher(object):
-    '''
-    不加盐md5hash
-    encoding:传入字符串
-    verify:比较新的字符串和加密后的字符串
-    :return: (格式:hash类型&hash值&盐)
-    '''
+    
     algorithm = 'md5'
     @staticmethod
     def encoding(password):
@@ -106,11 +83,7 @@ class MD5PasswordHasher(object):
 
     @classmethod
     def verify(cls, password, encoded):
-        '''
-        :param password:   要比较的加密前的密码
-        :param encoded:    加密后的密码
-        :return: 返回bool
-        '''
+        
         hash = encoded
         encoded_2 = cls.encoding(password)
         return compare_digest(encoded, encoded_2)

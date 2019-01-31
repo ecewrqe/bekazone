@@ -24,13 +24,17 @@ for app in settings.INSTALLED_APPS:
 
 @login_required(login_url_name="login")
 def index(request):
-    """django启动时，使用site实例，收集所有app和model，当访问时返回字符串给前端"""
+    """
+    to collect every app
+    """
     app_dict = site.app_dict
     return render(request,'admin/admin_index.html',locals())
 
 @login_required(login_url_name="login")
 def app_model(request,app):
-    """某一个app的models"""
+    """
+    app name to bind a model name
+    """
     app_dict = site.app_dict
     model_objs = site.app_dict[app]
 
@@ -41,22 +45,19 @@ def app_model(request,app):
 @login_required(login_url_name="login")
 def table_list(request, app, table, path="tamplate"):
     """
-    1, 拿到app和表名，取到表对象和admin对象
-    2，拿到filter列表，进行表格筛选
-    3，拿到搜索信息，按照筛选的结果进行搜索
-    4，拿到所有排序信息，根据搜索结果进行排序
-    5，拿到分页信息，根据分页信息在页面上显示表和页码
-
-    path: 为了让其他app调用，设置path判断，如果是template，说明是浏览器调用本app，如果是call说明是其他
+    to display a table
+    usually table = model
     """
     request.session["old_url"] = request.path_info
 
-    app_dict = site.app_dict
-    model_class, admin_class = app_dict[app][table]   # 具体某一个表和这个表的admin
+    app_dict = site.app_dict # to reference such a dict
+    model_class, admin_class = app_dict[app][table]
 
-    model_class_objs, filter_dict = get_filter_obj(request,model_class)   # 所有筛选后的记录
+    # to filter a table's row
+    model_class_objs, filter_dict = get_filter_obj(request, model_class)
 
     search_fields = admin_class.search_fields
+
     model_class_objs, search_keyword = get_search_obj(request, model_class_objs, search_fields)
 
     model_class_objs = get_order_obj(request, model_class_objs)
@@ -65,9 +66,8 @@ def table_list(request, app, table, path="tamplate"):
     row_in_page = int(admin_class.list_per_page)   # 一页显示7条
 
 
-
     admin_class_obj = admin_class()
-
+    # to attach a page operator
     pb = PageBranch(current_page, row_in_page, data_list=model_class_objs)
     pb.get_pglist3()
     model_class_objs = pb.get_data_list()
@@ -89,22 +89,16 @@ def table_list(request, app, table, path="tamplate"):
 @login_required(login_url_name="login")
 def table_change(request, app, table, id, path="template"):
     """
-    修改一条记录
-    :param request:
-    :param app: 修改字段的app_name
-    :param table:   修改字段的table_name
-    :param id: 修改字段的id
-    :param path:
-    :return:
+    give a form to change a table's record's informations
     """
 
     app_dict = site.app_dict
-    model_class, admin_class = app_dict[app][table]  # 具体某一个表和这个表的admin
+    model_class, admin_class = app_dict[app][table]
 
     form = admin_class.model_change_form
     model_obj = model_class.objects.get(id=id)
 
-    # form是modelform类，instance是把数据库中的信息放入form形成表单，data是把提交的信息放入form验证
+    
     if request.method == "GET":
         form_obj = form(instance=model_obj)
     else:
@@ -112,6 +106,7 @@ def table_change(request, app, table, id, path="template"):
         if form_obj.is_valid():
             form_obj.save()
 
+            # make a url to redirect
             url_path = request.path.rsplit("/",3)[0] + "/?" + "&".join(
                 ["%s=%s" % (k, v) for k, v in request.GET.items()]
             )
@@ -129,18 +124,16 @@ def table_change(request, app, table, id, path="template"):
 @login_required(login_url_name="login")
 def table_add(request,app,table,path="template"):
     '''
-    通用的表单生成，拿到这个表的表单列表
-    拿到id查询对应表的数据， 放入form的instance中
+    give a form to add table
     :return:
     '''
 
     app_dict = site.app_dict
-    app_model, table_item_admin = app_dict[app][table]  # 具体某一个表和这个表的admin
+    app_model, table_item_admin = app_dict[app][table]
 
 
     form=table_item_admin.model_add_form
 
-    #form是modelform类，instance是把数据库中的信息放入form形成表单，data是把提交的信息放入form验证
     if request.method == "GET":
         form_obj=form()
     else:
@@ -165,7 +158,7 @@ def table_add(request,app,table,path="template"):
 @login_required(login_url_name="login")
 def table_delete(request, app_name, table, row_id, path="template"):
     app_dict = site.app_dict
-    app_model, table_item_admin = app_dict[app_name][table]  # 具体某一个表和这个表的admin
+    app_model, table_item_admin = app_dict[app_name][table]
 
     qs=app_model.objects.filter(id=row_id)
     if request.method == "POST":
@@ -189,7 +182,9 @@ action_ret = None
 
 @login_required(login_url_name="login")
 def get_action(request):
-    """批量执行命令"""
+    """
+
+    """
 
     global action_ret
 
@@ -222,7 +217,7 @@ def get_action(request):
             if hasattr(admin_class, action):
                 ret = getattr(admin_obj, action)(request, query_set)
                 if ret:
-                    # 如果是redirect，先不转跳，把数据传过去，让ajax转跳,301转跳，200不敢任何事
+                    
                     action_ret = ret
                     return HttpResponse("301")
                 else:

@@ -14,9 +14,9 @@ class UserAdmin(baseadmin.create_admin()):
     readonly_field_for_change = ("group", )
 
     def tigermark(self, request, query_set):
-        return HttpResponse("欢迎来到老虎动物园")
+        return HttpResponse("welcome to tiger zoo")
 
-    tigermark.short_description = "老虎动物园"
+    tigermark.short_description = "tiger zoo"
 
 
 class GroupAdmin(baseadmin.create_admin()):

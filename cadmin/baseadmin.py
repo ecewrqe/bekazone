@@ -8,7 +8,7 @@ def create_admin():
 
     batch_delete.short_description = "批量删除"
 
-    baseadmin = type('BaseAdmin'.encode("utf8"), (object,), {
+    baseadmin = type('BaseAdmin', (object,), {
         "list_display": (),
         "list_filter": (),
         "search_fields": (),
@@ -20,7 +20,7 @@ def create_admin():
         "list_per_page": 10,
         "actions": ['batch_delete', ],
         "list_editable": (),
-        "readonly_field_for_change": (),
+        "readonly_field_for_change": ()
 
     })
 
@@ -37,14 +37,7 @@ class AdminSite(object):
 
     def register(self, model_class, admin_class=None, **options):
         """
-        主页上所有内容都是在register中生成的：
-        {'app01':[model01,model02],'app02':[xxx]}
-        site.register(model),
-        拿到model对象和admin对象
-        :param model_class:
-        :param admin_class:
-        :param options:
-        :return:
+        a model_class only have an admin_class, if not system generate it
         """
 
         baseadmin = create_admin()
@@ -57,12 +50,9 @@ class AdminSite(object):
         admin_class.model_add_form = form_class if not admin_class.model_add_form else admin_class.model_add_form
         admin_class.model_change_form = form_class if not admin_class.model_change_form else admin_class.model_change_form
 
-        # 每次注册创建一个表单基类，放到admin_class中
-
-        # if not admin_class:
-        #     adm=BaseAdmin(model_or_iterable)
-        # else:
-        #     adm=admin_class(model_or_iterable)
+        # every model should be belong to every app
+        # admin_class bind with every model_name
+        # {app_name:{model_name: [model_class, admin_class]}}
 
         app_label = model_class._meta.app_label
         if app_label not in self.app_dict:
@@ -70,7 +60,6 @@ class AdminSite(object):
         model_name = model_class._meta.model_name
 
         self.app_dict[app_label][model_name] = [model_class, admin_class, ]
-
 
 site = AdminSite()
 
