@@ -9,11 +9,8 @@
 
         </span>
         <div class="username hidden-xs">
-            {% if request.session.user.groupname == "normal" %}
-            {{ request.session.user.person_name }}
-            {% else %}
-                {{ request.session.user.username }}
-            {% endif %}
+            {{ request.session.user.username }}
+            
 
         </div>
     </a>
@@ -27,13 +24,13 @@
         <ul class="head-list">
             <li>
                 <a href="{% url 'users:change-passwd' %}">
-                    <i class="pli-male icon-fw icon-lg"></i> 修改密码
+                    <i class="pli-male icon-fw icon-lg"></i> change password
                 </a>
             </li>
             <li>
                 <a href="{% url 'users:setting' %}">
                     <span class="badge badge-danger pull-right">9</span>
-                    <i class="pli-mail icon-fw icon-lg"></i> 配置
+                    <i class="pli-mail icon-fw icon-lg"></i> setting
                 </a>
             </li>
         </ul>
@@ -41,7 +38,7 @@
         <!-- Dropdown footer -->
         <div class="pad-all text-right">
             <a href="{% url 'users:logout' %}" class="btn btn-primary">
-                <i class="pli-unlock icon-fw"></i> 登出
+                <i class="pli-unlock icon-fw"></i> logout
             </a>
         </div>
     </div>

@@ -140,3 +140,10 @@
     border: 1px solid #000;
 }
 /*上传图片 end*/
+.panel-title h3 {
+    border-bottom: 1px solid #000;
+}
+
+a.js_upload_pic_btn:hover {
+    background-color: aqua;
+}

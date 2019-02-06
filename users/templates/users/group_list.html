@@ -5,7 +5,7 @@
 
 {% block title %}
     <i class="fa fa-archive"></i>
-    用户组列表
+    group list
 {% endblock %}
 
 {% block content %}
@@ -15,11 +15,43 @@
             <div class="panel">
 
                 <div class="panel-body">
-                    <div class="list-group">
-                        {% for obj in group_objs %}
-                        <a href="javascript:;" class="list-group-item">{{ obj.groupname }}</a>
-                        {% endfor %}
+                    <div class="row" style="margin-bottom:10px;">
+                        <a href="/users/group-create/" class="btn btn-warning">create new group</a>
+                        <button class="btn btn-warning" onclick="js_del_group()">delete group</button>
+                        <span class="failure-msg"></span>
                     </div>
+                    <div class="row">
+                        <div class="list-group">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>
+                                    <div class="checkbox">
+                                            <input type="checkbox" class="magic-checkbox" id="checkall" onclick="check_all(this,'check_item')">
+                                            <label for="checkall"></label>
+                                        </div>
+                                </th>
+                                <th>group</th>
+                                <th>user_num</th>
+                            </tr>
+                            {% for group in group_list %}
+                            <tr>
+                                <td>
+                                    <div class="checkbox check-transparent">
+                                                <input type="checkbox" class="magic-checkbox" id="check_{{ group.group_id }}" name="check_item" value="{{ group.group_id }}" onclick="check_component('check_item','checkall')">
+                                                <label for="check_{{ group.group_id }}"></label>
+                                            </div>
+
+                                </td>
+                                <td>{{ group.groupname }}</td>
+                                <td>{{ group.group_ucount }}</td>
+                            </tr>
+                                
+                            {% endfor %}
+                        </table>
+                        
+                    </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -28,6 +60,38 @@
 
 {% endblock %}
 {% block footer_custom_js %}
+<script>
+    function js_del_group() {
+        var group_list = [];
+            $("[name=check_item]").each(function () {
+                if (this.checked) {
+                    group_list.push(this.value)
+                }
+            })
+            
+        var ul_str = JSON.stringify(group_list);
+        $.ajax({
+                url: "/users/group-list/",
+                type: "POST",
+                data: {"check_list":ul_str},
+                dataType: "JSON",
+                success: function (data) {
+                    console.log(data)
+                    if (data.status == 0) {
+                        
+                        location.href = data.url
+                    } else {
+                        $(".failure-msg").text(data.data)
+                        setTimeout(function () {
+                            $(".failure-msg").text("")
+                        }, 1000)
+                    }
+                    
+                }
+            })
+    }
+</script>
+<!--
     <script>
     $(document).ready(function () {
         table_func_tools.init({
@@ -56,11 +120,11 @@
 
             column_head_ajax:{
                 exec:true,
-                url:"{% url 'users:staff-list-ajax' %}?_type=h",
+                url:"{% url 'users:group-list' %}?_type=h",
             },
             tbody_ajax:{
                 exec:true,
-                url:"{% url 'users:staff-list-ajax' %}?_type=b",
+                url:"{% url 'users:group-list' %}?_type=b",
                 rows:10,
                 page_size:7,
             },
@@ -91,6 +155,6 @@
     });
 
 
-{#        $("#{{ form.role.auto_id }}").chosen();#}
-    </script>
+        $("#{{ form.role.auto_id }}").chosen();
+    </script>-->
 {% endblock %}

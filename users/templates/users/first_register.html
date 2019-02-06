@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bekazone system init</title>
+    <link href="/static/img/favocon.ico" rel="shortcut icon" type="image/x-icon" />
     {% include '_head_js_css.html' %}
     {% block header_custom_js_css %}
         <style>
@@ -26,13 +27,13 @@
 		        <div class="panel-body">
 		            <div class="mar-ver pad-btm">
 		                <h1 class="h3">bekazone</h1>
-		                <p>初始化注册</p>
+		                <p>initial</p>
 		            </div>
 
                     <form id="reg-form" class="form-horizontal" novalidate>
                         {% csrf_token %}
                         <div class="form-group">
-                            <label for="{{ form.username.auto_id }}"  class="col-lg-3 control-label">用户名:</label>
+                            <label for="{{ form.username.auto_id }}"  class="col-lg-3 control-label">username:</label>
                             <div class="col-lg-7">
                                 {{ form.username }}
                             </div>
@@ -41,7 +42,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="{{ form.password1.auto_id }}"  class="col-lg-3 control-label">密码:</label>
+                            <label for="{{ form.password1.auto_id }}"  class="col-lg-3 control-label">password:</label>
                             <div class="col-lg-7">
                                 {{ form.password1 }}
                             </div>
@@ -50,7 +51,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="{{ form.password2.auto_id }}"  class="col-lg-3 control-label">密码确认:</label>
+                            <label for="{{ form.password2.auto_id }}"  class="col-lg-3 control-label">password confirm:</label>
                             <div class="col-lg-7">
                                 {{ form.password2 }}
                             </div>
@@ -60,7 +61,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="{{ form.email.auto_id }}" class="col-lg-3 control-label">邮箱</label>
+                            <label for="{{ form.email.auto_id }}" class="col-lg-3 control-label">email</label>
                             <div class="col-lg-7">
                                 {{ form.email }}
                             </div>
@@ -72,7 +73,7 @@
 
 
                         <div class="form-group">
-                            <label for="{{ form.phone.auto_id }}" class="col-lg-3 control-label">手机号</label>
+                            <label for="{{ form.phone.auto_id }}" class="col-lg-3 control-label">pnone</label>
                             <div class="col-lg-7">
                                 {{ form.phone }}
                             </div>
@@ -82,7 +83,7 @@
                         </div>
 
                         <div class="col-lg-8 col-lg-offset-2">
-                            <input type="button" class="btn btn-primary btn-block js-first-reg-btn" value="提交" />
+                            <input type="button" class="btn btn-primary btn-block js-first-reg-btn" value="submit" />
                         </div>
 
 
@@ -108,11 +109,10 @@
                 dataType:'JSON',
                 success:function (data) {
                     if(data.status==0){
-                        get_form_msg("reg-form",data.data,200);
+                        get_form_msg("reg-form",data.data,0);
                         setTimeout(function () {
                            location.href=data.url;
                         },1000);
-
                     }else{
                         get_form_msg("reg-form",data.errors,data.status);
                     }

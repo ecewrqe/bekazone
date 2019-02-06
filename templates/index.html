@@ -4,11 +4,11 @@
 
 {% endblock %}
 {% block title %}
-首页
+bekazone
 {% endblock %}
 {% block breadcrumb %}
 <ol class="breadcrumb">
-    <li class="active">首页</li>
+    <li class="active">index</li>
 </ol>
 {% endblock %}
 {% block content %}
@@ -20,8 +20,8 @@
                     <div>
                         <img src="{% static "" %}" alt="">
                     </div>
-                    <h3>欢迎使用bekazone</h3>
-                    <h4>登陆时间：{{ now_date }}&nbsp&nbsp{{ now_time }}</h4>
+                    <h3>welcome {% if groupname == "admin" %}<strong style="color: #0094ff">{{ groupname }}</strong>{% endif %} bekazone</h3>
+                    <h4>login time：{{ now_date }}&nbsp&nbsp{{ now_time }}</h4>
 
                 </div>
 

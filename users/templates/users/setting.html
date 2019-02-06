@@ -6,7 +6,7 @@
 
 {% block title %}
     <i class="fa fa-archive"></i>
-    用户配置
+    setting
 {% endblock %}
 {% block breadcrumb %}
 <ol class="breadcrumb">
@@ -21,7 +21,7 @@
     <!--Nav tabs-->
     <ul class="nav nav-tabs" style="width: 150px;">
         <li class="active">
-            <a data-toggle="tab" href="#demo-stk-lft-tab-1">用户配置</a>
+            <a data-toggle="tab" href="#demo-stk-lft-tab-1">account settings</a>
         </li>
         <li>
             <a data-toggle="tab" href="#demo-stk-lft-tab-2">ssh key</a>
@@ -34,7 +34,10 @@
     <!--Tabs Content-->
     <div class="tab-content">
         <div id="demo-stk-lft-tab-1" class="tab-pane fade active in">
-            <p class="text-main text-semibold">用户配置</p>
+            <div class="panel-title">
+                <h3 class="text-main text-semibold">user settings</h3>
+            </div>
+            
             <div>
 
                 <!--如果该用户是admin用户1，都能修改，如果是普通用户，只能修改用户名和图片-->
@@ -43,7 +46,7 @@
 {#                {% if setting_form.instance.group.id == 1 %}#}
 
                     <div class="form-group">
-                        <label for="head-pic"  class="col-lg-3 control-label">头像:</label>
+                        <label for="head-pic"  class="col-lg-3 control-label">head icon:</label>
                         <div class="col-lg-7">
                             <div id="head_pic_url" style="width:128px;height:128px">
                                 <img src="{% if setting_form.instance.head_pic_url %}{{ setting_form.instance.head_pic_url }}{% else %}/static/img/user_blank_128x128.png{% endif %}" style="border: 1px solid #333" alt="">
@@ -54,7 +57,7 @@
 
                     <div class="form-group">
 
-                        <label for="{{ setting_form.username.auto_id }}"  class="col-lg-3 control-label">用户名:</label>
+                        <label for="{{ setting_form.username.auto_id }}"  class="col-lg-3 control-label">username:</label>
                         <div class="col-lg-7">
                             <div>
                                 {{ setting_form.username }}
@@ -66,11 +69,27 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label">用户组:</label>
-                        <div class="col-lg-7">{{ setting_form.instance.group.groupname }}</div>
+                        <label class="col-lg-3 control-label">group:</label>
+                        {% if setting_form.instance.is_superadmin %}
+                        <div class="col-lg-7">
+                            {{ setting_form.instance.group.groupname }}
+                            <input type="hidden" name="group_id" value="1" />
+                        </div>
+                        {% else %}
+                        <div class="col-lg-7">
+                            
+                            <select name="group_id" style="width:100%" required id="id_group">
+                                {% for group in group_list %}
+                                <option value="{{ group.id }}" {% if setting_form.instance.group_id == group.id %} selected {% endif %}>{{ group.groupname }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                        {% endif %}
                     </div>
                     <div class="form-group">
-                        <label for="{{ setting_form.email.auto_id }}"  class="col-lg-3 control-label">邮箱:</label>
+                        <label for="{{ setting_form.email.auto_id }}"  class="col-lg-3 control-label">email:</label>
                         <div class="col-lg-7">
                             <div>
                                 {{ setting_form.email }}
@@ -82,7 +101,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="{{ setting_form.phone.auto_id }}"  class="col-lg-3 control-label">手机:</label>
+                        <label for="{{ setting_form.phone.auto_id }}"  class="col-lg-3 control-label">phone:</label>
                         <div class="col-lg-7">
                             <div>
                                 {{ setting_form.phone }}
@@ -94,7 +113,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="{{ setting_form.person_name.auto_id }}"  class="col-lg-3 control-label">真实姓名:</label>
+                        <label for="{{ setting_form.person_name.auto_id }}"  class="col-lg-3 control-label">surname:</label>
                         <div class="col-lg-7">
                             <div>
                                 {{ setting_form.person_name }}
@@ -106,7 +125,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="{{ setting_form.birth_date.auto_id }}"  class="col-lg-3 control-label">出生日期:</label>
+                        <label for="{{ setting_form.birth_date.auto_id }}"  class="col-lg-3 control-label">birth date:</label>
                         <div class="col-lg-7">
                             <div id="birth_date_div">
                                 {{ setting_form.birth_date }}
@@ -118,7 +137,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="{{ setting_form.card_id.auto_id }}"  class="col-lg-3 control-label">身份证:</label>
+                        <label for="{{ setting_form.card_id.auto_id }}"  class="col-lg-3 control-label">identity:</label>
                         <div class="col-lg-7">
                             <div>
                                 {{ setting_form.card_id }}
@@ -130,7 +149,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="{{ setting_form.introduce.auto_id }}"  class="col-lg-3 control-label">说明:</label>
+                        <label for="{{ setting_form.introduce.auto_id }}"  class="col-lg-3 control-label">explainment:</label>
                         <div class="col-lg-7">
                             <div id="birth_date_div">
                                 {{ setting_form.introduce }}
@@ -138,20 +157,25 @@
                         </div>
                     </div>
                     <div class="col-lg-offset-5">
-                        <input type="button" value="提交" class="btn btn-success js-settings-submit">
+                        <input type="button" value="submit" class="btn btn-success js-settings-submit">
                     </div>
             </form>
 
             </div>
         </div>
-        <div id="demo-stk-lft-tab-2"></div>
-        <div id="demo-stk-lft-tab-3"></div>
+        <!--<div id="demo-stk-lft-tab-2">
+            <div class="panel-title">
+                <h3 class="text-main text-semibold">ssh settings</h3>
+            </div>
+        </div>-->
     </div>
 </div>
-<!--图片对话框-->
+<!--head icon setting dialog-->
     <div class="pic_modal_back hidden">
         <div class="pic_modal hidden">
-            <div class="close_btn js_close_btn">关</div>
+            <div class="close_btn js_close_btn">
+                <i class="fa fa-times"></i>
+            </div>
             <div class="pic_frame">
                 <div class="pic source_pic_frame">
                     <div class="source_move"></div>
@@ -178,21 +202,18 @@
                         <img src="" alt="">
                     </div>
                 </div>
-
-
-
             </div>
 
             <div class="upload_btn">
-                <a href="javascript:;" class="js_upload_pic_btn">上传图片</a>
+                <a href="javascript:;" class="js_upload_pic_btn">file_select</a>
                 <input type="file" name="pic_upload" style="display: none" />
             </div>
             <div class="submit_btn">
-                <a href="javascript:;" class="btn btn-primary js-btn-rounded">提交</a>
+                <a href="javascript:;" class="btn btn-primary js-btn-rounded">submit</a>
             </div>
         </div>
     </div>
-<!--图片对话框end-->
+<!--icon setting dialog end-->
 {% endblock %}
 
 {% block footer_custom_js %}
@@ -203,17 +224,17 @@ $(document).ready(function () {
 })
 
 /*
-* 提交表单，正常提交
+* submit form
 * */
 $(".js-settings-submit").click(function () {
     $.ajax({
-        url: "{% url 'users:setting' %}",
+        url: "{% url 'users:user_setting' %}",
         type: "POST",
         data: $("#setting_form").serialize(),
         dataType: "JSON",
         success: function (data) {
-            if(data.status == 200){
-                get_form_msg("setting_form", data.data, 200);
+            if(data.status == 0){
+                get_form_msg("setting_form", data.data, 0);
                 setTimeout(function () {
                    location.href=data.url;
                 },1000);

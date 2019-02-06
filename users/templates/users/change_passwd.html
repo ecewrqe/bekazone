@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Getting Started | Nifty - Admin Template</title>
+    <title>bekazone</title>
     {% include '_head_js_css.html' %}
     {% block header_custom_js_css %}
 
@@ -16,8 +16,13 @@
 
 
 <body>
+    {% include "_nav_bar.html" %}
     <div id="container" class="cls-container">
 
+        <!--Brand logo & name-->
+        <!--================================-->
+        
+        
         <div class="boxed">
 
             <div id="content-container">
@@ -25,38 +30,43 @@
                 <div class="col-lg-6 col-lg-offset-3">
                     <div class="panel">
 		        <div class="panel-body">
-		            <div class="mar-ver pad-btm">
-		                <p>修改密码</p>
-		            </div>
+                    <h3>change password</h3>
 
-                    <form id="change-passwd-form" novalidate>
+                    <form id="change-passwd-form" novalidate  class="form-horizontal">
                         {% csrf_token %}
                         <div class="form-group">
-                            <label for="old-passwd" class="col-lg-3  control-label">Old Password</label>
+                            <label for="old-passwd" class="col-lg-3 control-label text-right">old password</label>
                             <div class="col-lg-7">
                                 <input type="password" id="old-passwd" class="form-control" name="old_passwd" />
                             </div>
-                            <span class="text-danger">*</span>
+                            <div class="col-lg-2 text-left">
+                                <span class="text-danger">*</span>
+                            </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="new-passwd" class="col-lg-3  control-label">New Password</label>
+                            <label for="new-passwd" class="col-lg-3  control-label text-right">new password</label>
                             <div class="col-lg-7">
                                 <input type="password" id="new-passwd" class="form-control" name="new_passwd" />
                             </div>
-                            <span class="text-danger">*</span>
+                            <div class="col-lg-2 text-left">
+                                <span class="text-danger">*</span>
+                            </div>
+                            
                         </div>
 
                         <div class="form-group">
-                            <label for="new-passwd-confirm" class="col-lg-3  control-label">New Password Confirm</label>
+                            <label for="new-passwd-confirm" class="col-lg-3  control-label text-right">confirm new password</label>
                             <div class="col-lg-7">
                                 <input type="password" id="new-passwd-confirm" class="form-control" name="new_passwd_confirm" />
                             </div>
-                            <span class="text-danger">*</span>
+                            <div class="col-lg-2 text-left">
+                                <span class="text-danger">*</span>
+                            </div>
                         </div>
                         <div class="form-group">
                             <div class="col-lg-8 col-lg-offset-2">
-                                <input type="button" class="btn btn-primary js-change-password-btn" value="change password" >
+                                <input type="button" class="btn btn-primary js-change-password-btn" value="update password" >
                             </div>
                         </div>
                     </form>
@@ -92,8 +102,8 @@
                 dataType:'JSON',
                 success:function (data) {
 
-                    if(data.status==200){
-                        get_form_msg("change-passwd-form",data.data,200);
+                    if(data.status==0){
+                        get_form_msg("change-passwd-form",data.data,0);
                         setTimeout(function () {
                            location.href=data.url;
                         },1000);

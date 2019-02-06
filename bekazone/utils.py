@@ -22,6 +22,9 @@ class BekaConfigParser(object):
 
         return res
 
+    def get_option_dict(self, section):
+        options = self.config.options(section)
+        return options
     def get_mysql_config(self, option):
         """
         gain a mysql config

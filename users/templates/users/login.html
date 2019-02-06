@@ -1,16 +1,17 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 {% load static %}
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OA考勤管理系统</title>
+    <title>bekazone</title>
+    <link href="/static/img/favocon.ico" rel="shortcut icon" type="image/x-icon" />
     {% include '_head_js_css.html' %}
     {% block header_custom_js_css %}
         <style>
             div.login-cls-container {
-                background-image: url("{% static "premium/boxed-bg/abstract/bg/1.jpg" %}");
+                background-image: url("{% static "premium/boxed-bg/abstract/bg/15.jpg" %}");
             }
         </style>
     {% endblock %}
@@ -29,8 +30,8 @@
             <div class="cls-content">
                 <div class="cls-content-sm panel">
                     <div class="panel-body" style="margin: 150px 0 0 -10px">
-                        <div class="row">
-                            <img src="{% static "img/zhangzhong_logo.png" %}" width="300">
+                        <div class="row" style="margin-bottom:20px">
+                            <img src="{% static "img/beka_logo.png" %}" width="300" />
                         </div>
 
 
@@ -45,9 +46,9 @@
                             <div class="checkbox pad-btm text-left">
                                 <input id="demo-form-checkbox" class="magic-checkbox" name="rem_me" value="0"
                                        type="checkbox">
-                                <label for="demo-form-checkbox" style="color: #fff">记住密码</label>
+                                <label for="demo-form-checkbox" style="color: #fff">forgot password</label>
                             </div>
-                            <input class="btn btn-primary btn-lg btn-block js-login-btn" value="登陆"/>
+                            <input class="btn btn-primary btn-lg btn-block js-login-btn" value="sign in"/>
                         </form>
                     </div>
 
@@ -79,8 +80,8 @@
                 data: form_dict,
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.status == 200) {
-                        get_form_msg("login-form", data.data, 200);
+                    if (data.status == 0) {
+                        get_form_msg("login-form", data.data, 0);
                         setTimeout(function () {
                             location.href = data.url;
                         }, 1000);

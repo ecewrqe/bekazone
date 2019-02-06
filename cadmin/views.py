@@ -7,7 +7,6 @@ from django.db.models import Q
 
 # from cadmin.perm_handle import check_permission
 
-
 from common.utils import JsonResponse
 
 from common.utils import PageBranch

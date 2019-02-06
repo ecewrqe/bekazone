@@ -29,15 +29,14 @@ function collect_form(form_id) {
 
 
 /**
- * 表单有错误的情况下，每个提示对应表单元素
- * 如果没有错误，在顶端给提示
+ * add a msg to display success or danger
  * @param form_id
  * @param form_item_msg
  * @param status
  */
 function get_form_msg(form_id, form_item_msg, status) {
     $("#" + form_id).find(".msg").remove();
-    if (status == 200) {
+    if (status == 0) {
         $("#" + form_id).prepend("<span class='text-success msg'>" + form_item_msg + "</span>");
     } else {
         $.each(form_item_msg, function (name, list) {
@@ -68,7 +67,7 @@ var str01 = "hello/world";
 str01.lsplit("/", 1);
 
 
-//url解析
+//url parse
 function url_parse(url) {
     var url_dict = {
         host: null,
@@ -79,7 +78,6 @@ function url_parse(url) {
         querys = null;
 
     if (url.split("//").length === 2) {
-        //说明开头是有主机名的
         url = url.split("//")[1];
 
         var parts = url.split("/");
@@ -107,9 +105,8 @@ function url_parse(url) {
 
     return url_dict;
 }
-//url反解析
+//url unparse
 function url_unparse(url_dict) {
-    //如果有host，必须在前面加//
     var url = "";
     var query_list = []
 
@@ -125,7 +122,6 @@ function url_unparse(url_dict) {
     return url
 }
 
-//添加参数
 function add_query(url, dict) {
     var url_dict = url_parse(url);
 
@@ -163,9 +159,6 @@ function orderdict(keys, dict) {
     }
 
 
-    /**
-     * 有：修改，没有:插入
-     */
     this.iset = function (i, k, v) {
         if (this.keys.indexof(k) == -1) {
             this.keys.splice(i, 0, k);
@@ -174,11 +167,7 @@ function orderdict(keys, dict) {
     };
 
 
-    /**
-     * 有：修改，没有：往后追加
-     */
     this.set = function (k, v) {
-        //set只修改，不添加
         if (this.keys.indexof(k) == -1) {
             this.keys.push(k);
         }
@@ -186,9 +175,6 @@ function orderdict(keys, dict) {
         this.dict[k] = v;
     };
 
-    /**
-     * 一律插入
-     */
     this.insert = function (i, k, v) {
         if (i >= this.size()) {
             throw "index out of key size"
@@ -246,9 +232,7 @@ function orderdict(keys, dict) {
         return res;
     }
 
-    /**
-     * 循环取键,值
-     */
+
     this.each = function (fn) {
         for (var i in this.keys) {
             var flag = fn(this.keys[i], this.dict[this.keys[i]]);
@@ -259,9 +243,7 @@ function orderdict(keys, dict) {
             }
         }
     }
-    /**
-     * 循环取索引，值
-     */
+
     this.ieach = function (fn) {
         for (var i in this.keys) {
             var flag = fn(i, this.dict[this.keys[i]]);
@@ -273,9 +255,6 @@ function orderdict(keys, dict) {
         }
     }
 
-    /**
-     * 循环取索引，键，值
-     */
     this.ieach2 = function (fn) {
         for (var i in this.keys) {
             var flag = fn(i, this.keys[i], this.dict[this.keys[i]]);

@@ -8,6 +8,10 @@ import datetime
 def index(request):
     now_date = datetime.date.today().strftime("%Y/%m/%d")
     now_time = datetime.datetime.now().strftime("%H:%M:%S")
+    user_dict = request.session.get('user')
+    groupname = user_dict["groupname"]
+    
+
     return render(request, 'index.html', locals())
 
 

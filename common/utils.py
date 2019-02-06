@@ -4,6 +4,10 @@ import re
 import time
 from _io import BytesIO
 from PIL import Image
+import logging
+import os
+from bekazone.utils import BekaConfigParser
+from bekazone.settings import CONFIGFILE_PATH
 
 class JsonResponse(object):
     """
@@ -441,3 +445,53 @@ def time_clock(func):
         print(stop_clock - start_clock)
         return res
     return inner
+
+class LoggerCollection(object):
+    """
+    log analyse tool, log manage
+    simplify log code, 
+    """
+    def __init__(self):
+        cp = BekaConfigParser(CONFIGFILE_PATH)
+        
+        log_path = cp.get_config("logger", "log_path")
+        log_file = cp.get_config("logger", "log_file")
+        log_file = os.path.join(log_path, log_file)
+        log_name = cp.get_config("logger", "log_name")
+        # formatter
+        format = cp.get_config("logger", "format")
+        format = logging.Formatter(format)
+
+
+        date_fmt = cp.get_config("logger", "date_fmt")
+        screen_level = cp.get_config("logger", "screen_level")
+        file_level = cp.get_config("logger", "file_level")
+        
+        self.logger = logging.getLogger(log_name)
+        self.logger.setLevel(logging.NOTSET)
+        
+        
+        fh = logging.FileHandler(log_file)
+        sh = logging.StreamHandler()
+        
+
+        self.logger.addHandler(fh)
+        self.logger.addHandler(sh)
+
+        fh.setLevel(file_level)
+        sh.setLevel(screen_level)
+
+        fh.setFormatter(format)
+        sh.setFormatter(format)
+        
+
+
+    def log_output(self, level, msg):
+        standard_level = ("debug", "info", "warning", "error", "critical")
+        level = level.lower()
+        if level in standard_level:
+            #level = level.capitalize()
+            
+            getattr(self.logger, level, )(msg)
+        else:
+            assert "the level isn't belong with system_level"

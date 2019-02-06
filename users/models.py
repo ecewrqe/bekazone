@@ -9,6 +9,7 @@ class User(models.Model):
     email = models.EmailField(verbose_name='email', max_length=128)
     group = models.ForeignKey('Group', related_name='u_group', null=True, blank=True)
     phone = models.CharField(verbose_name='phonenumber', max_length=128, null=True, blank=True)
+    is_superadmin = models.BooleanField(verbose_name='is_superadmin', default=False)
 
     head_pic_url = models.CharField(verbose_name="headicon", max_length=512, null=True, blank=True)
     person_name = models.CharField(verbose_name="surname", max_length=32, null=True, blank=True)
@@ -26,5 +27,5 @@ class Group(models.Model):
     groupname = models.CharField(verbose_name="groupname", max_length=128, unique=True)
     introduce = models.TextField(verbose_name="introduce", max_length=200, null=True, blank=True)
     def __str__(self):
-        return "<User: %s>" % (self.username)
+        return "<Group: %s>" % (self.groupname)
 

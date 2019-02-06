@@ -107,6 +107,7 @@ class UserFirstCreateForm(UserCreateForm):
 
     def save(self, commit=True):
         self.cleaned_data["group_id"] = models.Group.objects.get(groupname="admin").id
+        self.cleaned_data["is_superadmin"] = True
 
         super(UserFirstCreateForm, self).save(commit)
 
@@ -148,7 +149,7 @@ class PasswdChangeForm(forms.Form):
         :param user_dict:
         :return:
         """
-        self.cleaned_data = self.mix_passwd_compare(self.cleaned_data,user_dict)
+        self.cleaned_data = self.mix_passwd_compare(self.cleaned_data, user_dict)
         if not self.errors:
             uid = user_dict['id']
             new_obj = models.User.objects.filter(id=uid).first()
@@ -160,7 +161,10 @@ class UserSettingForm(forms.ModelForm):
     """
     give a form to config personal information
     """
-
+    group_all = models.Group.objects.all()
+    group_all_tuple = [(group.id, group.groupname) for group in group_all]
+    
+    group_id = forms.CharField(required=False, )
     class Meta:
         fields = ["username", "email", "phone", "head_pic_url", "person_name",
                   "birth_date", "card_id", "introduce"]
@@ -171,9 +175,6 @@ class UserSettingForm(forms.ModelForm):
             "username": "*",
             "email": "*",
             "phone": "*",
-            "person_name": "*",
-            "birth_date": "*",
-            "card_id": "*",
         }
 
         widgets = {
@@ -208,39 +209,54 @@ class UserSettingForm(forms.ModelForm):
         }
 
     def save(self, request, commit=True):
-        print(self.cleaned_data)
-        super(UserSettingForm, self).save(commit)
-        user_id = int(request.session['users']['id'])
-        print(user_id)
-        user_obj = models.User.objects.get(id=user_id)
-        print(user_obj)
+        #print(self.cleaned_data)
+        #super(UserSettingForm, self).save(commit)
+        if not self.cleaned_data["group_id"]:
+            self.add_error('group_id','not empty')
+            return
+        user_obj = models.User.objects.get(id=self.instance.id)
+        user_obj.username = self.cleaned_data["username"]
+        user_obj.email = self.cleaned_data["email"]
+        user_obj.phone = self.cleaned_data["phone"]
+        user_obj.head_pic_url = self.cleaned_data["head_pic_url"]
+        user_obj.person_name = self.cleaned_data["person_name"]
+        user_obj.birth_date = self.cleaned_data["birth_date"]
+        user_obj.card_id = self.cleaned_data["card_id"]
+        user_obj.introduce = self.cleaned_data["introduce"]
+        user_obj.group_id = self.cleaned_data["group_id"]
+        user_obj.save()
 
+
+
+        user_id = int(request.session['user']['id'])
+
+        
         user_dict = user_obj.__dict__
-        print(user_dict)
         # user_dict.pop["group"]
-        del user_dict['_state']
-        del user_dict['_group_cache']
+        
 
         user_dict['birth_date'] = date_to_string(user_dict['birth_date'])
         user_dict['instaff_date'] = date_to_string(user_dict['instaff_date'])
+        user_dict['groupname'] = user_obj.group.groupname
+        if user_dict.get("_state"):
+            del user_dict['_state']
+        if user_dict.get("_group_cache"):
+            del user_dict['_group_cache']
         request.session['user'] = user_dict
 
 
-class StaffCreateForm(UserCreateForm):
+class AccountCreateForm(UserCreateForm):
     '''
 
     default_password: 123456
     '''
-    try:
-        GROUP_CHOICES = models.User._meta.get_field('group').get_choices()
 
-        group = forms.ChoiceField(initial='', choices=GROUP_CHOICES, widget=forms.Select(attrs={
-            'style': 'width:100%',
-        }))
-    except Exception:
-        group = forms.ChoiceField(initial='', choices=[], widget=forms.Select(attrs={
-            'style': 'width:100%',
-        }))
+    group_all = models.Group.objects.all()
+    group_all_tuple = [(group.id, group.groupname) for group in group_all]
+    group = forms.ChoiceField(initial='', choices=group_all_tuple, widget=forms.Select(attrs={
+        'style': 'width:100%',
+    }))
+
 
     class Meta:
         fields = ['username', 'email', 'phone']
@@ -274,7 +290,6 @@ class StaffCreateForm(UserCreateForm):
         self.cleaned_data['password'] = hasher.encoding(self.cleaned_data['password'])
         self.instance.password = self.cleaned_data['password']
         self.instance.group_id = self.cleaned_data['group']
-        print(self.cleaned_data['password'])
         super(UserCreateForm, self).save()
 
 
@@ -293,6 +308,15 @@ class GroupCreateForm(forms.ModelForm):
                 "placeholder": 'Groupname',
             }),
         }
+    def save(self):
+        groupname = self.instance.groupname
+        g_obj = models.Group.objects.filter(groupname=groupname)
+        if g_obj:
+            print("is_repeated")
+            self.add_error('groupname','is repeated')
+        else:
+            super(GroupCreateForm, self).save()
+        
 
 class EmployeeCreateForm(forms.Form):
     employee_num = forms.CharField(label="employee num", required=True)

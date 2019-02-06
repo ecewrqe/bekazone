@@ -35,20 +35,22 @@ def auth_login(request, user):
 
     """
     user_dict = user.__dict__
+    
     user_dict['birth_date'] = date_to_string(user_dict['birth_date'])
     user_dict['instaff_date'] = date_to_string(user_dict['instaff_date'])
     user_dict["groupname"] = user.group.groupname
+    
     if user_dict["groupname"] == "normal":
         request.session["now_path"] = "/kaoqing/user_detail/"
     else:
         request.session["now_path"] = "/"
-    del user_dict['_state']
-    del user_dict['_group_cache']
-    print(user_dict)
+
+    if user_dict.get("_state"):
+        del user_dict['_state']
+    if user_dict.get("_group_cache"):
+        del user_dict['_group_cache']
+    print("login:user_dict===", user_dict)
     request.session['user'] = user_dict
-
-
-
     request.session.set_expiry(settings.USER_SESSION_EXPIRED or 300)
 
 def auth_logout(request):
@@ -64,8 +66,6 @@ def login_required(login_url_name='login'):
     """
     def required(func):
         def inner(request, *args, **kwargs):
-            """
-            """
             if not request.session.get("user"):
                 login_url = reverse(login_url_name)
                 prepath = request.path_info
@@ -75,16 +75,9 @@ def login_required(login_url_name='login'):
                 user_dict = request.session.get('user')
                 username = user_dict["username"]
                 groupname = user_dict["groupname"]
-                """
-                如果path_info没有在permission允许的范围内返回404
-                如果该url在白名单中，就通过
-                如果该url在黑名单中，不通过
-                用户优先组
-                当该Url在用户白名单中，直接通过
-                当该url不在白名单中，在黑名单中，不通过
-                当该url不在用户白名单中也不在用户黑名单中，找组
                 
-                """
+                
+                
                 PERMISSIONS_GROUP = permissions.PERMISSIONS_GROUP
                 PERMISSIONS_PERSON = permissions.PERMISSIONS_PERSON
                 path_info = request.path_info
@@ -120,7 +113,7 @@ def login_required(login_url_name='login'):
                             if path_info == resolve_url(name):
                                 return page_not_found(request)
 
-
+                
                 res = func(request, *args, **kwargs)
             return res
         return inner
