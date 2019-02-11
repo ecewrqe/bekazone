@@ -58,7 +58,7 @@ def login(request):
                 print(jrs.url)
 
                 lc = LoggerCollection()
-                lc.log_output("info", "account:%s, login success"%username)
+                lc.log_output("info", "account:%s, login success" % username)
                 if request.session.get("prepath"):
                     del request.session["prepath"]
 

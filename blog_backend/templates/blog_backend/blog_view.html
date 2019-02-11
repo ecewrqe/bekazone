@@ -1,0 +1,35 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}
+blog view: {{ bl_obj.title }}
+{% endblock %}
+{% block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'index' %}">index</a></li>
+    <li><a href="{% url 'blog_backend:display_blog_list' %}">display blog list</a></li>
+    <li class="active">blog view</li>
+</ol>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-7">
+        <div class="panel">
+            <div class="panel-control"></div>
+            <div class="panel-heading">
+                <div class="panel-title">blog view</div>
+            </div>
+            <div class="panel-body">
+                <h3>{{ bl_obj.title }}</h3>
+
+                {{ bl_obj.blog_content }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block footer_custom_js %}
+<script>
+$(document).ready(function(){
+});
+</script>
+{% endblock %}

@@ -1,4 +1,4 @@
-
+# It is bekauser's admin
 from django.shortcuts import HttpResponse
 
 # Register your models here.

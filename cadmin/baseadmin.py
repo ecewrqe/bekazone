@@ -6,7 +6,7 @@ def create_admin():
     def batch_delete(self, request, query_set):
         query_set.delete()
 
-    batch_delete.short_description = "批量删除"
+    batch_delete.short_description = "batch_delete"
 
     baseadmin = type('BaseAdmin', (object,), {
         "list_display": (),
@@ -39,7 +39,6 @@ class AdminSite(object):
         """
         a model_class only have an admin_class, if not system generate it
         """
-
         baseadmin = create_admin()
 
         if not admin_class:
@@ -53,7 +52,6 @@ class AdminSite(object):
         # every model should be belong to every app
         # admin_class bind with every model_name
         # {app_name:{model_name: [model_class, admin_class]}}
-
         app_label = model_class._meta.app_label
         if app_label not in self.app_dict:
             self.app_dict[app_label] = {}

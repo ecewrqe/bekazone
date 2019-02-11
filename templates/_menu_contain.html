@@ -31,7 +31,20 @@
         </ul>
 
     </li>
-
+    <li>
+        <a href="javascript:;">
+            <i class="psi-mouse-3"></i>
+            <span class="menu-title">blog</span>
+            <i class="arrow"></i>
+        </a>
+        <ul class="collapse">
+            <li><a href="{% url "blog_backend:edit_blog" %}">new blog</a></li>
+            <li><a href="{% url "blog_backend:display_blog_list" %}">blog list</a></li>
+            <li>
+                <a href="{% url "blog_backend:message_list" %}">message list</a>
+            </li>
+        </ul>
+    </li>
 
     <li>
         <a href="{% url 'admin:index' %}">

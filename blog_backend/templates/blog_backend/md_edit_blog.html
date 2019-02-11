@@ -1,0 +1,78 @@
+﻿{% extends 'base.html' %}
+{% block header_custom_js_css %}
+<link rel="stylesheet" href="/static/plugins/editmd/css/editormd.css" />
+{% endblock %}
+
+{% block title %}
+new markdown blog
+{% endblock %}
+{% block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'index' %}">index</a></li>
+    <li><a href="{% url 'blog_backend:edit_blog' %}">select blog type</a></li>
+    <li class="active">new markdown blog</li>
+</ol>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="panel-title">edit board</div>
+            </div>
+            <div class="panel-body">
+                <form id="edit_board" class="form-horizontal" novalidate>
+                    {% csrf_token %}
+                    <div class="form-group">
+
+                        <label for="title_edit" class="col-lg-3 control-label"><strong style="font-size:18px">title:</strong></label>
+                        <div class="col-lg-7">
+                            <input type="text" name="title" class="form-control" />
+                        </div>
+                        
+                            
+                    </div>
+                    <div class="form-group">
+                        <div id="text-editmd">
+                            <textarea style="display:none;"></textarea>
+                        </div>
+                        
+                    </div>
+                    <div class="form-group">
+                        tag
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="row">
+            <div class="panel">
+                
+                <div class="panel-body">
+                    <button class="btn btn-success">undo</button>
+                    <button class="btn btn-success">submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer_custom_js %}
+<script src="/static/plugins/editmd/editormd.min.js"></script>
+<script>
+    $(function () {
+        textEditor = editormd("text-editmd", {
+            width: "90%",
+            height: 640,
+            syncScrolling: "single",
+            path: "/static/plugins/editmd/lib/"
+
+        })
+    })
+</script>
+
+{% endblock %}

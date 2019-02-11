@@ -1,0 +1,362 @@
+﻿{% extends 'base.html' %}
+{% block header_custom_js_css %}
+
+{% endblock %}
+{% block title %}
+blog list
+{% endblock %}
+{% block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'index' %}">index</a></li>
+    <li class="active">blog list</li>
+</ol>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        
+        
+        <div class="row">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="panel-control">
+                        <button class="btn btn-default" data-target="#create_blog" data-toggle="modal" title="create blog">
+                            <i class="fa fa-plus"></i>
+                        </button>
+
+                        <button class="btn btn-default" data-toggle="modal" title="delete blog" onclick="delete_blog()">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="panel-title">blog table</div>
+                </div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="checkbox">
+                                                <input type="checkbox" class="magic-checkbox" id="checkall" onclick="check_all(this,'blog_id')">
+                                                <label for="checkall"></label>
+                                            </div>
+                            
+                            </th>
+                            <th>blog title</th>
+                            <th>kind</th>
+                            <th>tags</th>
+                            <th>creator</th>
+                            <th>last date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bl_obj in bl_obj_list %}
+                        <tr>
+                            <td>
+                                <div class="checkbox">
+                                    <input type="checkbox" class="magic-checkbox" id="check_{{ bl_obj.id }}" name="blog_id" onclick="check_component('blog_id','checkall')" value="{{ bl_obj.id }}">
+                                    <label for="check_{{ bl_obj.id }}"></label>
+                                </div>
+
+                            </td>
+                            <td>
+                                <a href="/blog-backend/normal-edit-blog/?id={{ bl_obj.id }}" class="btn-link">{{ bl_obj.title }}</a>
+                            </td>
+                            <td>{{ bl_obj.blog_kind.name }}</td>
+                            <td>
+                                {% for tag in bl_obj.tag.all %}
+                                {{ tag.name }}|
+                                {% endfor %}
+                            </td>
+                            <td>{{ bl_obj.creator.username }}</td>
+                            <td>
+                                {% if bl_obj.adjustment_date %}
+                                {{ bl_obj.adjustment_date }}
+                                {% else %}
+                                {{ bl_obj.create_date }}
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    
+                </table>
+            </div>
+        </div>
+        </div>
+        
+    </div>
+    
+    <div class="col-lg-2">
+        <div class="row">
+            <div class="panel">
+            <div class="panel-heading">
+                <div class="panel-control">
+                    <button class="btn btn-default" data-target="#create_kind" data-toggle="modal" title="plus">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                    <button class="btn btn-default" data-target="" data-toggle="modal" title="delete" onclick="kind_delete()">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                    <button class="btn btn-default" data-target="" data-toggle="modal" title="come in">
+                        <i class="fa fa-check"></i>
+                    </button>
+                </div>
+                <div class="panel-title">kind_select</div>
+            </div>
+            <div class="panel-body">
+                <div id="kind_list" class="list-group">
+                    {% for bk_obj in bk_obj_list %}
+                    <a href="javascript:;" title="{{ bk_obj.alias }}" class="list-group-item">{{ bk_obj.name }}</a>
+                    {% endfor %}
+                    
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="panel-control">
+                        <button class="btn btn-default"  data-target="#create_tag" data-toggle="modal">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <button class="btn btn-default"  onclick="tag_delete()">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="panel-title">
+                        tag
+                    </div>
+                </div>
+                <div class="panel-body" id="tag_box">
+                    {% for tag in tag_sim_list %}
+                    <button data-toggle="button" class="btn btn-{{ tag.1 }} btn-labeled" aria-pressed="true">{{ tag.0 }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+</div>
+
+
+<!--create blog-->
+<div class="modal fade" id="create_blog" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!--Modal header-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                <h4 class="modal-title">select</h4>
+                <span class="text-danger err-msg"></span>
+            </div>
+
+            <!--Modal body-->
+            <div class="modal-body">
+                <form action="/blog-backend/edit-blog/" id="type_select" class="form-horizontal" novalidate>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="col-lg-5 control-label"><strong>please select a editor to edit:</strong></label>
+                        <div class="col-lg-5">
+                            
+
+                            <div class="radio">
+                                <input type="radio" id="sel_01" name="edit_type" value="message" class="magic-radio" />
+                                <label for="sel_01">message</label>
+                                </div>
+                            <div class="radio">
+                                <input type="radio" id="sel_02" name="edit_type" value="normal_blog" class="magic-radio" />
+                                <label for="sel_02">normal_blog</label>
+                            </div>
+                            <div class="radio">
+                                <input type="radio" id="sel_03" name="edit_type" value="md_blog" class="magic-radio" />
+                                <label for="sel_03">md_blog</label>
+                            </div>
+                                
+                                
+                            
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-7 col-lg-offset-5">
+                            <button class="btn btn-primary">come in</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--/create blog-->
+
+<!--create group-->
+<div class="modal fade" id="create_kind" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                <h4 class="modal-title">kind add:</h4>
+                <span class="text-danger err-msg"></span>
+            </div>
+
+            <div class="modal-body">
+                <span id="kind_create_msg" class="text-danger"></span>
+                <form id="kind_create" class="form-horizontal" novalidate>
+                    <div class="form-group">
+                        <label for="kind_name" class="col-lg-3 control-label"><strong style="font-size:18px"><span class="text-danger">*</span>name:</strong></label>
+                        <div class="col-lg-7">
+                            <input type="text" id="kind_name" name="name" class="form-control" placeholder="input new kind name" onkeyup="kind_repeat_verify(this, 'name')" />
+                            
+                        </div>
+                        
+                        <div class="col-lg-1">
+                            
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="kind_alias_name" class="col-lg-3 control-label"><strong style="font-size:18px">alias:</strong></label>
+                        <div class="col-lg-7">
+                            <input type="text" id="kind_alias_name" name="alias" class="form-control" placeholder="input new the kind's alias name" onkeyup="kind_repeat_verify(this, 'alias')" />
+                        </div>
+                        <div class="col-lg-1" id="kind_alias_name_msg">
+                            
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="kind_name" class="col-lg-3 control-label"><strong style="font-size:18px">introdution:</strong></label>
+                        <div class="col-lg-7">
+                            <textarea class="form-control" name="introdution"></textarea>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-8 col-lg-offset-2">
+                            <input type="button"  class="btn btn-primary btn-block" onclick="submit_kind_create_form('redi')" value="submit" />
+                            
+                        </div>
+                        
+                        </div>
+
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--/create group-->
+
+<!--create tag-->
+<div class="modal fade" id="create_tag" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                <h4 class="modal-title">tag add:</h4>
+               
+            </div>
+
+            <div class="modal-body">
+                <span id="tag_create_msg" class="text-danger"></span>
+                <form id="tag_create" class="form-horizontal" novalidate>
+                    <div class="form-group">
+                        <label for="tag_name" class="col-lg-3 control-label"><strong style="font-size:18px"><span class="text-danger">*</span>name:</strong></label>
+                        <div class="col-lg-7">
+                            <input type="text" id="tag_name" name="name" class="form-control" placeholder="input new tag name" onkeyup="tag_repeat_verify(this)" />
+                            
+                        </div>
+                        
+                        <div class="col-lg-1" id="tag_name_msg">
+                            
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8 col-lg-offset-2">
+                            <input type="button"  class="btn btn-primary btn-block" onclick="submit_tag_create_form('redi')" value="submit" />
+                            
+                        </div>
+                        
+                        </div>
+                    
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--/create tag-->
+{% endblock %}
+{% block footer_custom_js %}
+<script src="/static/blog_initial.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#kind_list").children().click(function () {
+            if ($(this).hasClass("active")) {
+                $(this).removeClass("active");
+            } else{
+                $(this).addClass("active");
+            }
+            
+        });
+    });
+    function delete_blog() {
+        var blog_id_list = [];
+        var blog_title_list = [];
+        $("[name='blog_id']").each(function () {
+            if ($(this).prop("checked")) {
+                blog_id_list.push($(this).val());
+                var title = $(this).parent().parent().siblings()[0].innerText;
+                blog_title_list.push(title);
+                
+            }
+        });
+        var msg = `<span class="text-danger">${blog_title_list.join("<br />")}</span> will be delete, are you sure`;
+        
+        bootbox.dialog({
+            "title": "warning",
+            "message": msg,
+            "buttons": {
+                "confirm": {
+                    label: "sure",
+                    className: "btn-primary",
+                    callback: function () {
+
+                        $.ajax({
+                            url: "/blog-backend/blog-delete/",
+                            type: "POST",
+                            data: { "blog_id_list": JSON.stringify(blog_id_list) },
+                            dataType: "JSON",
+                            success: function (data) {
+                                console.log(data);
+                                location.reload();
+                            }
+                        })
+                    }
+                },
+                "cancel": {
+                    label: "cancel",
+                    className: "btn-default",
+
+                }
+            }
+        })
+    }
+    
+
+    
+    
+</script>
+{% endblock %}
+
+

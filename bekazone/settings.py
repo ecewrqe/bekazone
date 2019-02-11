@@ -17,7 +17,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'users',
-    'cadmin'
+    'cadmin',
+
+    'blog_backend'
 ]
 
 
@@ -100,6 +102,7 @@ STATIC_URL = '/static/'
 # my staticfiles in write in static folder
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'blog_backend/static'),
 ]
 # a thrill of my wife pregnented
 

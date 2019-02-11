@@ -8,6 +8,13 @@
     group list
 {% endblock %}
 
+{% block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'index' %}">index</a></li>
+    <li class="active">group list</li>
+</ol>
+{% endblock %}
+
 {% block content %}
     <div class="row">
         <div class="col-lg-12">

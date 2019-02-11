@@ -1,0 +1,107 @@
+﻿{% extends 'base.html' %}
+{% block header_custom_js_css %}
+<style>
+    img {
+        max-width:100%;
+        height: auto;
+    }
+</style>
+{% endblock %}
+{% block title %}
+message list
+{% endblock %}
+{% block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'index' %}">index</a></li>
+    <li class="active">message list</li>
+</ol>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-7">
+        {% for message in message_list %}
+    <div class="row">
+            <div class="panel">
+            <div class="panel-heading">
+                <div class="panel-control">
+                    <button msg_id="{{ message.msg_id }}" class="btn btn-default" onclick="delete_message(this)" title="delete">
+                        <i class="fa fa-trash"></i>
+                        
+                        
+                    </button>
+                    <button msg_id="{{ message.msg_id }}" class="btn btn-default" onclick="repair_message(this)" title="repair">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                </div>
+                <div class="panel-title">
+                    <a href="#">
+        <span style="float:left;margin-top:10px;margin-right:5px;">
+            <!-- You may use image instead of an icon.-->
+            <img class="img-circle img-user media-object" src="{{ message.head_pic_url }}" alt="Profile Picture">
+
+        </span>
+        <div style="float:left">
+            {{ message.username }}
+        </div>
+    </a>
+
+                    
+                </div>
+                
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    {{ message.content|safe }}
+                </div>
+                <div class="row">
+                    <span style="color:#c8c6c6">
+                        {% if not message.adjustment_date %}
+                        {{ message.create_date }}
+                        {% else %}
+                        {{ message.adjustment_date }}
+                        {% endif %}
+                    </span>
+                    
+                </div>
+                
+            </div>
+        </div>
+
+        
+    </div>
+    {% endfor %}
+    </div>
+    <div class="col-lg-1">
+            <a href="/blog-backend/message/" class="btn btn-success">add</a>
+        </div>
+    
+
+</div>
+
+{% endblock %}
+{% block footer_custom_js %}
+<script>
+$(document).ready(function(){
+    });
+    function delete_message(itm) {
+        var msg_id = $(itm).attr("msg_id");
+        $.ajax({
+            url: "/blog-backend/message-list/",
+            type: "POST",
+            data: { msg_id: msg_id },
+            dataType: "JSON",
+            success: function (data) {
+                location.reload();
+            }
+        })
+    }
+    function repair_message(itm) {
+        var msg_id = $(itm).attr("msg_id");
+        location.href = "/blog-backend/message/?id=" + msg_id
+    }
+    
+    
+</script>
+{% endblock %}
+
+

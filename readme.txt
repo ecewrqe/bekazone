@@ -4,7 +4,7 @@
 -- django_version: 1.11.5
 
 must be install:
-django 1.11.5, pillow, pymysql, six
+django 1.11.5, pillow, pymysql, six, beautifulSoup4 4.4.0
 
 verification the path and a empty file
 users/migrations/__init__.py
@@ -101,5 +101,129 @@ only is_superadmin is True, can't change its group
 other:
 bekazone is slave of django configure files
 etc have configure files of the platform's
+
+=================================
+beka_admin
+in app of cadmin
+
+config app->_admin.py
+
+from cadmin import baseadmin
+class SimpleAdmin(baseadmin.create_admin())
+    ....
+
+baseadmin.site.register(<model>, <admin>)
+
+config_item:
+    list_display  指定展示的列数
+    list_filter   指定想筛选的列数
+    search_fields  选择想要搜索的列数
+    order_fields  *以list_display为基础，选择那些列需要排序
+    list_per_page  一页显示多少行
+    list_editable  指定哪些字段需要在页面上直接修改
+    
+    model_change_form  指定更改一条数据的自定义表单，默认为系统指定
+    model_add_form  指定添加一条数据的自定义表单，默认为系统指定
+    actions  指定需要让选中的那些项执行什么函数，默认有删除
+
+    
+
+=================================
+bekablog
+/blog-backend/edit-blog/  blog_backend:edit_blog
+/blog-backend/message/  blog_backend:message
+/blog-backend/normal-edit-blog/  blog_backend:normal_edit_blog
+/blog-backend/md-edit-blog/  blog_backend:md_edit_blog
+
+/blog-backend/display-blog-list/  blog_backend:display_blog_list
+/blog-backend/verify-kind/  blog_backend:verify_kind
+/blog-backend/kind-list/  blog_backend:kind_list
+/blog-backend/kind-delete/  blog_backend:kind_delete
+/blog-backend/tag-list/  blog_backend:tag_list
+/blog-backend/verify-tag/  blog_backend:verify_tag
+/blog-backend/tag-delete/  blog_backend:tag_delete
+/blog-backend/blog-title-verify/  blog_backend:blog_title_verify
+/blog-backend/blog-delete/  blog_backend:blog_delete
+/blog-backend/get-blog-message/  blog_backend:get_blog_message
+
+
+blog: 
+a piece of blog:
+title, blog_content, md_content, blog_kind(group), tag, creator, ,create_date, adjustment_date
+
+blog_kind
+name, alias, introdution, create_date
+
+tag: used to search
+name
+
+blog edit/blog list display/create blog kind/blog index
+create: message?normal_blog?technology_blog?
+normal_blog/technology_blog
+message   normal_editor
+normal_blog  title+normal_editor+group_select+tag
+technology_blog  title+md_editor+group_select+tag
+
+
+tinymce(used: normal_blog/message)
+https://www.tiny.cloud/docs/
+
+toolbar: formatselect, bold, italic, strikethrough, underline, forecolor, backcolor, link, alignleft, aligncenter, alignright, alignjustify, outdent, indent, removeformat, numlist, bullist
+
+plugin tool: print, preview, fullscreen, image, media, link, codesample, table, charmap, hr, advlist, lists
+
+list, advlist-> numlist, bullist
+link -> link
+
+unimportant plugin tool: template, pagebreak, nonbreaking, toc, insertdatetime, tinymcespellchecker, a11ychecker
+never effect: autolink, directionality, fullpage, textpattern, imagetools
+network is necessary:advcode, powerpaste
+
+get content
+tinyMCE.activeEditor.getContent();
+tinyMCE.activeEditor.getContent({format : 'raw'});
+tinyMCE.get('message').getContent();
+
+set content
+tinyMCE.activeEditor.setContent(`
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<p>dddddd</p>
+</body>
+</html>
+`, {format : 'raw'});
+tinyMCE.get('my_editor').setContent(data);
+
+editmd(used: technology_blog)
+http://pandao.github.io/editor.md/examples/
+
+
+
+1, edit_blog page select
+3, new normal blog
+4, new markdown blog
+5, editmd control and tinymce control
+
+6, blog table: create blog/modificate blog/recycle blog/delete blog/search blog/filter blog/order blog/ create blog kind/
+7, recycle bin
+8, blog kind table:
+9, blog type
+
+8, blog display page: index/message/normal blog/markdown blog/
+
+
+
+
+
+1, blog form
+2, blog managable table design
+3, blog display pages design
+
+model 模型、データベース表の模型
+mode/modal 様式、方法、やり方、
+
 
 
