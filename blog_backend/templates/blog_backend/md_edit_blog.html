@@ -1,6 +1,11 @@
 ﻿{% extends 'base.html' %}
 {% block header_custom_js_css %}
 <link rel="stylesheet" href="/static/plugins/editmd/css/editormd.css" />
+<style>
+    #text-editmd{
+        z-index: 1000;
+    }
+</style>
 {% endblock %}
 
 {% block title %}
@@ -23,14 +28,18 @@ new markdown blog
             <div class="panel-body">
                 <form id="edit_board" class="form-horizontal" novalidate>
                     {% csrf_token %}
+                    {% if blog_id %}
+                        <input type="hidden" id="blog_id" name="blog_id" value="{{ blog_id }}" />
+                    {% endif %}
                     <div class="form-group">
 
                         <label for="title_edit" class="col-lg-3 control-label"><strong style="font-size:18px">title:</strong></label>
                         <div class="col-lg-7">
-                            <input type="text" name="title" class="form-control" />
+                            <input type="text" id="title_edit" name="title" class="form-control" onkeyup="check_title_repeat(this)" />
                         </div>
-                        
+                        <div class="col-lg-1">
                             
+                        </div>
                     </div>
                     <div class="form-group">
                         <div id="text-editmd">
@@ -38,41 +47,280 @@ new markdown blog
                         </div>
                         
                     </div>
+                    <!--kind-->
                     <div class="form-group">
-                        tag
+                        <label for="blog_kind_select" class="col-lg-3 control-label"><strong style="font-size:18px">blog_kind:</strong></label>
+                        <div class="col-lg-7">
+                            <select name="kind_id" style="width:100%" required id="blog_kind_select">
+                            {% for bk_obj in bk_obj_list %}
+                            <option value="{{ bk_obj.id }}">{{ bk_obj.name }}</option>
+                            {% endfor %}
+
+                        </select>
+                        </div>
+                        <div class="col-lg-2">
+                            <a href="javascript:;" title="create a new kind" class="btn" data-target="#create_kind" data-toggle="modal">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </div>
                     </div>
 
+                    <!--tag-->
+                    <div class="form-group">
+                        <label for="blog_tag" class="col-lg-3 control-label"><strong style="font-size:18px">blog_tag:</strong></label>
+                        <div class="col-lg-7">
+                            <select name="tag" multiple style="width:100%" required id="blog_tag">
+
+                            {% for tg_obj in tg_obj_list %}
+                            <option value="{{ tg_obj.id }}">{{ tg_obj.name }}</option>
+                            {% endfor %}
+                        </select>
+                        </div>
+                        <div class="col-lg-2">
+                            <a href="javascript:;" title="create a new tag" class="btn" data-target="#create_tag" data-toggle="modal">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-lg-1">
         <div class="row">
             <div class="panel">
                 
                 <div class="panel-body">
-                    <button class="btn btn-success">undo</button>
-                    <button class="btn btn-success">submit</button>
+                    <a href="/blog-backend/display-blog-list/" class="btn btn-default" title="undo">
+                        <i class="fa fa-undo" aria-hidden="true"></i>
+                    </a>
+                    <!--1, create;2, repair:have id-->
+                    {% if blog_id %}
+                    <button class="btn btn-success" title="repair" onclick="submit_blog('repair')">
+                        <i class="fa fa-wrench" aria-hidden="true"></i>
+                    </button>
+                    {% else %}
+                    <button class="btn btn-success" title="create" onclick="submit_blog('create')">
+                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                    </button>
+                    {% endif %}
                 </div>
             </div>
+
+            
         </div>
     </div>
 </div>
+
+<!--create kind-->
+<div class="modal fade" id="create_kind" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                <h4 class="modal-title">kind add:</h4>
+                <span class="text-danger err-msg"></span>
+            </div>
+
+            <div class="modal-body">
+                <span id="kind_create_msg" class="text-danger"></span>
+                <form id="kind_create" class="form-horizontal" novalidate>
+                    <div class="form-group">
+                        <label for="kind_name" class="col-lg-3 control-label"><strong style="font-size:18px"><span class="text-danger">*</span>name:</strong></label>
+                        <div class="col-lg-7">
+                            <input type="text" id="kind_name" name="name" class="form-control" placeholder="input new kind name" onkeyup="kind_repeat_verify(this, 'name')" />
+                            
+                        </div>
+                        
+                        <div class="col-lg-1">
+                            
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="kind_alias_name" class="col-lg-3 control-label"><strong style="font-size:18px">alias:</strong></label>
+                        <div class="col-lg-7">
+                            <input type="text" id="kind_alias_name" name="alias" class="form-control" placeholder="input new the kind's alias name" onkeyup="kind_repeat_verify(this, 'alias')" />
+                        </div>
+                        <div class="col-lg-1" id="kind_alias_name_msg">
+                            
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="kind_name" class="col-lg-3 control-label"><strong style="font-size:18px">introdution:</strong></label>
+                        <div class="col-lg-7">
+                            <textarea class="form-control" name="introdution"></textarea>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-8 col-lg-offset-2">
+                            <input type="button"  class="btn btn-primary btn-block" onclick="submit_kind_create_form('unredi')" value="submit" data-dismiss="modal" />
+                            
+                        </div>
+                        
+                        </div>
+
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--/create kind-->
+
+<!--create tag-->
+<div class="modal fade" id="create_tag" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                <h4 class="modal-title">tag add:</h4>
+               
+            </div>
+
+            <div class="modal-body">
+                <span id="tag_create_msg" class="text-danger"></span>
+                <form id="tag_create" class="form-horizontal" novalidate>
+                    <div class="form-group">
+                        <label for="tag_name" class="col-lg-3 control-label"><strong style="font-size:18px"><span class="text-danger">*</span>name:</strong></label>
+                        <div class="col-lg-7">
+                            <input type="text" id="tag_name" name="name" class="form-control" placeholder="input new tag name" onkeyup="tag_repeat_verify(this)" />
+                            
+                        </div>
+                        
+                        <div class="col-lg-1" id="tag_name_msg">
+                            
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8 col-lg-offset-2">
+                            <input type="button"  class="btn btn-primary btn-block" onclick="submit_tag_create_form('unredi')" value="submit" data-dismiss="modal" />
+                            
+                        </div>
+                        
+                        </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--/create tag-->
 {% endblock %}
 
 {% block footer_custom_js %}
+<script src="/static/blog_initial.js"></script>
 <script src="/static/plugins/editmd/editormd.min.js"></script>
+<script src="http://adrai.github.io/flowchart.js/"></script>
 <script>
-    $(function () {
+    
+    
+    $(document).ready(function () {
+
         textEditor = editormd("text-editmd", {
             width: "90%",
             height: 640,
             syncScrolling: "single",
-            path: "/static/plugins/editmd/lib/"
+            path: "/static/plugins/editmd/lib/",
+            saveHTMLToTextarea: true,
+            emoji: true,
+            flowChart: true,
+            onload: function () {
+                var blog_id = $("#blog_id").val();
+            $.ajax({
+            url: `/blog-backend/get-blog-message/?id=${blog_id}`,
+            type: "GET",
+            dataType: "JSON",
+            success: function (data) {
+                if (data.status == 0) {
+                    var title = data.title;
+                    var content = data.content;
+                    var kind_id = data.kind_id;
+                    var tag_id_list = data.tag_id_list.split(",");
+                    //var tag_list = data.tag_list;
+                    $("#title_edit").val(title);
+                    
+                    textEditor.setMarkdown(content);
+                    console.log(kind_id);
+                    $("#blog_kind_select").val(kind_id);
+                    $("#blog_tag").val(tag_id_list)
 
+                    $('select').trigger("chosen:updated");
+                }
+            }
         })
+            }
     })
+
+        $("#blog_kind_select").chosen();
+        $("#blog_tag").chosen();
+    })
+    function submit_blog(typ) {
+        var blog_title = $("#title_edit").val();
+        var content = textEditor.getMarkdown();
+        var kind = $("#blog_kind_select").val();
+        var tag = $("#blog_tag").val();
+        var blog_id = $("[name='blog_id']").val();
+        var url = "/blog-backend/md-edit-blog/";
+        var msg = "";
+        var button_name = "";
+        
+        if (blog_id) {
+            url = add_query(url, { id: blog_id });
+            msg = `Would you repair the blog: <span class='text-primary'>${blog_title}</span>`;
+            button_name = "repair";
+        } else {
+            msg = `Would you create the blog: <span class='text-primary'>${blog_title}</span>`;
+            button_name = "create";
+        }
+        bootbox.dialog({
+            "title": "warning",
+            "message": msg,
+            "buttons": {
+                "confirm": {
+                    label: button_name,
+                    className: "btn-primary",
+                    callback: function () {
+
+                        $.ajax({
+                            url: url,
+                            type: "POST",
+                            data: {
+                                "typ": typ,
+                                "blog_title": blog_title,
+                                "content": content,
+                                "kind_id": kind,
+                                "tag": tag.join(",")
+                            },
+                            dataType: "JSON",
+                            success: function (data) {
+                                
+                                if (data.status == 0) {
+                                    location.href = data.url;
+                                } else {
+
+                                }
+                                
+                                
+                            }
+                        })
+                    }
+                },
+                "cancel": {
+                    label: "cancel",
+                    className: "btn-default",
+                }
+            }
+        });
+    }
 </script>
 
 {% endblock %}

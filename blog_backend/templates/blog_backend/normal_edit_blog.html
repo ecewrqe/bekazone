@@ -4,13 +4,25 @@
 {% endblock %}
 
 {% block title %}
+{% if blog_id %}
+edit: {{ bl_obj.title }}
+{% else %}
 new normal blog
+{% endif %}
+
 {% endblock %}
 {% block breadcrumb %}
 <ol class="breadcrumb">
     <li><a href="{% url 'index' %}">index</a></li>
     <li><a href="{% url 'blog_backend:display_blog_list' %}">display blog list</a></li>
-    <li class="active">new normal blog</li>
+    <li class="active">
+        {% if blog_id %}
+        edit: {{ bl_obj.title }}
+        {% else %}
+        new normal blog
+        {% endif %}
+
+    </li>
 </ol>
 {% endblock %}
 {% block content %}
@@ -104,7 +116,13 @@ new normal blog
                         <i class="fa fa-paper-plane" aria-hidden="true"></i>
                     </button>
                     {% endif %}
-                    
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-body">
+                    <button class="btn btn-default" title="view" onclick="get_view()">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -216,22 +234,13 @@ new normal blog
 {% endblock %}
 
 {% block footer_custom_js %}
-<script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc"></script>
-{#<script src="/static/plugins/tinymce/tinymce.min.js"></script>#}
+
+<script src="/static/plugins/tinymce/tinymce.min.js"></script>
 <script src="/static/blog_initial.js"></script>
 <script>
-    $(document).ready(function () {
-        $("#blog_kind_select").chosen();
-        $("#blog_tag").chosen();
+    function send_init() {
         var blog_id = $("#blog_id").val();
-        tinymce.init({
-          selector: 'textarea#blog_content',
-            plugins: 'preview searchreplace fullscreen image link media table hr anchor toc advlist lists ',
-
-          toolbar: 'formatselect | bold italic forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent',
-        });
-
-        $.ajax({
+            $.ajax({
             url: `/blog-backend/get-blog-message/?id=${blog_id}`,
             type: "GET",
             dataType: "JSON",
@@ -253,28 +262,28 @@ new normal blog
                 }
             }
         })
+        }
+
+    $(document).ready(function () {
+        $("#blog_kind_select").chosen();
+        $("#blog_tag").chosen();
+        
+        tinymce.init({
+          selector: 'textarea#blog_content',
+            plugins: 'preview searchreplace fullscreen image link media table hr anchor advlist lists advcode',
+
+            toolbar: 'formatselect | bold italic forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent',
+            init_instance_callback: function () {
+                send_init();
+            }
+        });
+        
+        
         
     })
     
 
-    function check_title_repeat(itm) {
-        var inp_value = $(itm).val();
-        $.ajax({
-            url: "/blog-backend/blog-title-verify/",
-            type: "POST",
-            data: { "value": inp_value, "typ": "normal" },
-            dataType: "JSON",
-            success: function (data) {
-                if (data.status == 0) {
-                    var msg_tag = `<span class="text-success"><i class="fa fa-check"></i></span>`
-                    $(itm).parent().siblings()[1].innerHTML = msg_tag
-                } else {
-                    var msg_tag = `<span class="text-danger"><i class="fa fa-exclamation"></i></span>`
-                    $(itm).parent().siblings()[1].innerHTML = msg_tag
-                }
-            }
-        })
-    }
+    
     function submit_blog(typ) {
         var blog_title = $("#title_edit").val();
         var content = tinyMCE.get('blog_content').getContent();
@@ -332,6 +341,11 @@ new normal blog
                 }
             }
         });
+    }
+    function get_view(){
+        $.ajax({
+            url: ""
+        })
     }
 
 </script>

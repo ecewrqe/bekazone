@@ -56,3 +56,37 @@
 .btn-bd-dark{
     border: 1px solid #263238;
 }
+
+.link:hover {
+    text-decoration-line: underline;
+}
+.link-primary:hover {
+    color: #42a5f5;
+}
+
+.link-info:hover {
+    color: #009cb0;
+}
+
+.link-success:hover {
+    color: #8bc34a;
+}
+
+.link-mint:hover {
+    color: #26a69a;
+}
+
+.link-warning:hover {
+    color: #ffa726;
+}
+
+.link-danger:hover {
+    color: #ef5350;
+}
+.link-pink:hover {
+    color: #ec407a;
+}
+
+.link-purple:hover {
+    color: #ba68c8;
+}

@@ -367,6 +367,7 @@
   <ItemGroup>
     <Content Include="blog_backend\static\blog_initial.js" />
     <Content Include="blog_backend\templates\blog_backend\blog_type_sel.html" />
+    <Content Include="blog_backend\templates\blog_backend\blog_view.html.bak" />
     <Content Include="blog_backend\templates\blog_backend\blog_view.html" />
     <Content Include="blog_backend\templates\blog_backend\message_list.html" />
     <Content Include="blog_backend\templates\blog_backend\display_blog_list.html" />
@@ -706,6 +707,7 @@
     <Content Include="static\plugins\editmd\examples\use-requirejs.html" />
     <Content Include="static\plugins\editmd\examples\use-seajs.html" />
     <Content Include="static\plugins\editmd\examples\use-zepto.html" />
+    <Content Include="static\plugins\editmd\flowchart.js" />
     <Content Include="static\plugins\editmd\fonts\editormd-logo.eot" />
     <Content Include="static\plugins\editmd\fonts\editormd-logo.svg" />
     <Content Include="static\plugins\editmd\fonts\editormd-logo.ttf" />

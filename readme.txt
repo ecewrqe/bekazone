@@ -1,4 +1,4 @@
-** bekazone templates platform usage explainment
+ï»¿** bekazone templates platform usage explainment
 -- version: 1.0.1
 -- python_vertion: 3.5.0
 -- django_version: 1.11.5
@@ -115,16 +115,16 @@ class SimpleAdmin(baseadmin.create_admin())
 baseadmin.site.register(<model>, <admin>)
 
 config_item:
-    list_display  Ö¸¶¨Õ¹Ê¾µÄÁĞÊı
-    list_filter   Ö¸¶¨ÏëÉ¸Ñ¡µÄÁĞÊı
-    search_fields  Ñ¡ÔñÏëÒªËÑË÷µÄÁĞÊı
-    order_fields  *ÒÔlist_displayÎª»ù´¡£¬Ñ¡ÔñÄÇĞ©ÁĞĞèÒªÅÅĞò
-    list_per_page  Ò»Ò³ÏÔÊ¾¶àÉÙĞĞ
-    list_editable  Ö¸¶¨ÄÄĞ©×Ö¶ÎĞèÒªÔÚÒ³ÃæÉÏÖ±½ÓĞŞ¸Ä
+    list_display  æŒ‡å®šå±•ç¤ºçš„åˆ—æ•°
+    list_filter   æŒ‡å®šæƒ³ç­›é€‰çš„åˆ—æ•°
+    search_fields  é€‰æ‹©æƒ³è¦æœç´¢çš„åˆ—æ•°
+    order_fields  *ä»¥list_displayä¸ºåŸºç¡€ï¼Œé€‰æ‹©é‚£äº›åˆ—éœ€è¦æ’åº
+    list_per_page  ä¸€é¡µæ˜¾ç¤ºå¤šå°‘è¡Œ
+    list_editable  æŒ‡å®šå“ªäº›å­—æ®µéœ€è¦åœ¨é¡µé¢ä¸Šç›´æ¥ä¿®æ”¹
     
-    model_change_form  Ö¸¶¨¸ü¸ÄÒ»ÌõÊı¾İµÄ×Ô¶¨Òå±íµ¥£¬Ä¬ÈÏÎªÏµÍ³Ö¸¶¨
-    model_add_form  Ö¸¶¨Ìí¼ÓÒ»ÌõÊı¾İµÄ×Ô¶¨Òå±íµ¥£¬Ä¬ÈÏÎªÏµÍ³Ö¸¶¨
-    actions  Ö¸¶¨ĞèÒªÈÃÑ¡ÖĞµÄÄÇĞ©ÏîÖ´ĞĞÊ²Ã´º¯Êı£¬Ä¬ÈÏÓĞÉ¾³ı
+    model_change_form  æŒ‡å®šæ›´æ”¹ä¸€æ¡æ•°æ®çš„è‡ªå®šä¹‰è¡¨å•ï¼Œé»˜è®¤ä¸ºç³»ç»ŸæŒ‡å®š
+    model_add_form  æŒ‡å®šæ·»åŠ ä¸€æ¡æ•°æ®çš„è‡ªå®šä¹‰è¡¨å•ï¼Œé»˜è®¤ä¸ºç³»ç»ŸæŒ‡å®š
+    actions  æŒ‡å®šéœ€è¦è®©é€‰ä¸­çš„é‚£äº›é¡¹æ‰§è¡Œä»€ä¹ˆå‡½æ•°ï¼Œé»˜è®¤æœ‰åˆ é™¤
 
     
 
@@ -145,6 +145,8 @@ bekablog
 /blog-backend/blog-title-verify/  blog_backend:blog_title_verify
 /blog-backend/blog-delete/  blog_backend:blog_delete
 /blog-backend/get-blog-message/  blog_backend:get_blog_message
+/blog-backend/verify-related/  blog_backend:verify_related
+/blog-backend/blog-view/  blog_backend:blog_view
 
 
 blog: 
@@ -200,30 +202,43 @@ tinyMCE.get('my_editor').setContent(data);
 editmd(used: technology_blog)
 http://pandao.github.io/editor.md/examples/
 
+<div id="text-editmd">
+<textarea style="display:none"></textarea>
+</div>
+
+textEditor = editormd("text-editmd", {
+            width: "90%",
+            height: 640,
+            syncScrolling: "single",
+            path: "/static/plugins/editmd/lib/",
+            saveHTMLToTextarea: true,
+            emoji:true,
+        })
+
+get content:
+textEditor.getHTML()/textEditor.getMarkdown()â‡”textEditor.getValue()
+textEditor.getPreviewedHTML()
+textEditor.get?
+set content:
+textEditor.setValue()
 
 
-1, edit_blog page select
-3, new normal blog
-4, new markdown blog
-5, editmd control and tinymce control
 
-6, blog table: create blog/modificate blog/recycle blog/delete blog/search blog/filter blog/order blog/ create blog kind/
-7, recycle bin
-8, blog kind table:
-9, blog type
+1, blog list:
 
-8, blog display page: index/message/normal blog/markdown blog/
+editing->view
+order
+front-page: 
+1, database->blog_backend/models
+2, design a series of frontpages of PC
+3, design a series of frontpages of phone
+4, cmdb
 
+django shell:
 
-
-
-
-1, blog form
-2, blog managable table design
-3, blog display pages design
-
-model Ä£ĞÍ¡¢¥Ç©`¥¿¥Ù©`¥¹±í¤ÎÄ£ĞÍ
-mode/modal ˜”Ê½¡¢·½·¨¡¢¤ä¤ê·½¡¢
+from blog_backend.models import Tag
+from blog_backend.models import BlogList
+from blog_backend.models import BlogKind
 
 
 

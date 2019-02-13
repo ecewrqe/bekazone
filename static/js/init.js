@@ -67,7 +67,19 @@ var str01 = "hello/world";
 str01.lsplit("/", 1);
 
 
-//url parse
+/**
+ * url parse
+ * @param {any} url
+ * example: http://www.abc.com/a/b/c?name=Bob&age=24
+ * return example:
+ * {
+ *   "host": "www.abc.com",
+ *   "path": "/a/b/c",
+ *   "querys": {
+ *     name:Bob, age:24
+ *   }
+ * }
+ */
 function url_parse(url) {
     var url_dict = {
         host: null,
@@ -105,7 +117,17 @@ function url_parse(url) {
 
     return url_dict;
 }
-//url unparse
+
+function search_query(url, key) {
+    var url_dict = url_parse(url)
+    var value = url_dict["querys"][key]
+    return value;
+}
+/**
+ * url unparse: reverse by url_parse
+ * url item make to url
+ * @param {any} url_dict
+ */
 function url_unparse(url_dict) {
     var url = "";
     var query_list = []

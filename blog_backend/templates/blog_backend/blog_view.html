@@ -1,5 +1,7 @@
 ﻿{% extends 'base.html' %}
-
+{% block header_custom_js_css %}
+<link rel="stylesheet" href="/static/plugins/editmd/css/editormd.preview.css" />
+{% endblock %}
 {% block title %}
 blog view: {{ bl_obj.title }}
 {% endblock %}
@@ -14,22 +16,103 @@ blog view: {{ bl_obj.title }}
 <div class="row">
     <div class="col-lg-7">
         <div class="panel">
-            <div class="panel-control"></div>
+            
             <div class="panel-heading">
+                <div class="panel-control">
+                <a href="/blog-backend/md-edit-blog/?id={{ bl_obj.id }}" class="btn btn-default" title="edit">
+                    <i class="fa fa-edit"></i>
+                </a>
+
+                    <a href="/blog-backend/display-blog-list/" class="btn btn-default" title="return">
+                    <i class="fa fa-arrow-left"></i>
+                </a>
+            </div>
                 <div class="panel-title">blog view</div>
             </div>
             <div class="panel-body">
-                <h3>{{ bl_obj.title }}</h3>
-
-                {{ bl_obj.blog_content }}
+                <!--author, kind, date-->
+                <div class="row" >
+                    <a href="javascript:;" title="author" class="link link-warning">
+                        <i class="fa fa-user"></i>
+                        {{ bl_obj.creator.username }}
+                    </a>
+                    <span class="link-warning" style="float:right">
+                        {% if bl_obj.adjustment_date %}
+                        {{ bl_obj.adjustment_date }}
+                        {% else %}
+                        {{ bl_obj.create_date }}
+                        {% endif %}
+                    </span>
+                </div>
+                
+                <div class="row">
+                    
+                    <h3 class="text-center">
+                    {{ bl_obj.title }}
+                        <a href="javascript:;" class="link link-warning" title="show markdown content" onclick="show_markdown_content()">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    </h3>
+                    
+                    <div id="editmd_frame" blog_id="{{ bl_obj.id }}">
+                        <textarea style="display:none"></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                        kind: <a href="javascript:;" class="link link-warning">{{ bl_obj.blog_kind.name }}</a><br />
+                        tag: 
+                        {% for tag in bl_obj.tag.all %}
+                        <a href="javascript:;" class="link link-warning">{{ tag.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
 {% block footer_custom_js %}
+
+<script src="/static/plugins/editmd/lib/marked.min.js"></script><script src="/static/plugins/editmd/lib/prettify.min.js"></script>
+<script src="/static/plugins/editmd/lib/raphael.min.js"></script>
+<script src="/static/plugins/editmd/lib/underscore.min.js"></script>
+<script src="/static/plugins/editmd/lib/sequence-diagram.min.js"></script>
+<script src="/static/plugins/editmd/lib/flowchart.min.js"></script>
+<script src="/static/plugins/editmd/lib/jquery.flowchart.min.js"></script><script src="/static/plugins/editmd/editormd.min.js"></script>
 <script>
-$(document).ready(function(){
-});
+
+    $(document).ready(function () {
+        var blog_id = $("#editmd_frame").attr("blog_id");
+        $.ajax({
+            url: `/blog-backend/get-blog-message/?id=${blog_id}`,
+            type: "GET",
+            dataType: "JSON",
+            success: function (data) {
+                var markdown_content = data.content;
+
+                testEditormdView = editormd.markdownToHTML("editmd_frame", {
+                        markdown        : markdown_content ,//+ "\r\n" + $("#append-
+                        htmlDecode      : "style,script,iframe",  // you can filter 
+                        emoji           : true,
+                        flowChart       : true,  // 默认不解析
+                    });
+            }
+
+        });
+    });
+    function show_markdown_content() {
+        bootbox.dialog({
+            "title": "warning",
+            "message": testEditormdView.getMarkdown(),
+            "buttons": {},
+        });
+    }
 </script>
 {% endblock %}

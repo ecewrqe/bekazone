@@ -27,11 +27,32 @@ blog list
                         <button class="btn btn-default" data-toggle="modal" title="delete blog" onclick="delete_blog()">
                             <i class="fa fa-trash"></i>
                         </button>
+                        {% if is_back == True %}
+                        <a href="/blog-backend/display-blog-list/" class="btn btn-default" data-toggle="modal" title="back">
+                            <i class="fa fa-arrow-left"></i>
+                        </a>
+                        {% endif %}
                     </div>
                     <div class="panel-title">blog table</div>
                 </div>
             <div class="panel-body">
-                <table class="table table-bordered">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <!--<span id="tree_str"></span>-->
+                        <button class="btn btn-primary" title="upload_blog"><i class="fa fa-upload" onclick="put_file_upload()"></i></button>
+                        <input type="file" style="display:none" id="get_blog_file" name="blog_file" />
+                    </div>
+                    <!--search tag-->
+                    <div class="col-lg-3" style="float:right;position:relative; margin-bottom:10px;">
+                        <input type="text" class="form-control" placeholder="search" name="search" id="search_blog" value="{% if search_handle %}{{ search_handle }}{% endif %}" />
+                        <a href="javascript:;" onclick="search_blog()" style="position:absolute; right:18px; top:5px">
+                            <i class="fa fa-search"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>
@@ -55,19 +76,39 @@ blog list
                                 <div class="checkbox">
                                     <input type="checkbox" class="magic-checkbox" id="check_{{ bl_obj.id }}" name="blog_id" onclick="check_component('blog_id','checkall')" value="{{ bl_obj.id }}">
                                     <label for="check_{{ bl_obj.id }}"></label>
+                                    
+
                                 </div>
 
                             </td>
                             <td>
-                                <a href="/blog-backend/normal-edit-blog/?id={{ bl_obj.id }}" class="btn-link">{{ bl_obj.title }}</a>
+                                <div class="row">
+                                    <a href="/blog-backend/md-edit-blog/?id={{ bl_obj.id }}" class="btn-link">{{ bl_obj.title }}</a>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="panel-control">
+                                    <a href="/blog-backend/blog-view/?id={{ bl_obj.id }}" class="btn btn-default"><i class="fa fa-eye"></i></a>
+
+                        
+                                </div>
+                                </div>
+                                
                             </td>
-                            <td>{{ bl_obj.blog_kind.name }}</td>
+                            <td>
+                                <a href="javascript:;" onclick="filter_blog(this, 'kind')" class="link link-warning">{{ bl_obj.blog_kind.name }}</a>
+                                
+                            </td>
                             <td>
                                 {% for tag in bl_obj.tag.all %}
-                                {{ tag.name }}|
+                                <a href="javascript:;" class="link link-warning" onclick="filter_blog(this, 'tag')">{{ tag.name }}</a>
+                                
                                 {% endfor %}
                             </td>
-                            <td>{{ bl_obj.creator.username }}</td>
+                            <td>
+                                <a href="javascript:;" class="link link-warning" onclick="filter_blog(this, 'creator')">{{ bl_obj.creator.username }}</a>
+                                
+                            </td>
                             <td>
                                 {% if bl_obj.adjustment_date %}
                                 {{ bl_obj.adjustment_date }}
@@ -81,6 +122,11 @@ blog list
                     </tbody>
                     
                 </table>
+                </div>
+                <div class="row">
+                    {% include "admin/component/page.html" %}
+                </div>
+                
             </div>
         </div>
         </div>
@@ -95,10 +141,10 @@ blog list
                     <button class="btn btn-default" data-target="#create_kind" data-toggle="modal" title="plus">
                         <i class="fa fa-plus"></i>
                     </button>
-                    <button class="btn btn-default" data-target="" data-toggle="modal" title="delete" onclick="kind_delete()">
+                    <button class="btn btn-default" data-toggle="modal" title="delete" onclick="kind_delete()">
                         <i class="fa fa-trash"></i>
                     </button>
-                    <button class="btn btn-default" data-target="" data-toggle="modal" title="come in">
+                    <button class="btn btn-default" data-toggle="modal" title="come in" onclick="filter_blog_in_kind()">
                         <i class="fa fa-check"></i>
                     </button>
                 </div>
@@ -107,7 +153,11 @@ blog list
             <div class="panel-body">
                 <div id="kind_list" class="list-group">
                     {% for bk_obj in bk_obj_list %}
+                    {% if kind == bk_obj.name %}
+                    <a href="javascript:;" title="{{ bk_obj.alias }}" class="list-group-item active">{{ bk_obj.name }}</a>
+                    {% else %}
                     <a href="javascript:;" title="{{ bk_obj.alias }}" class="list-group-item">{{ bk_obj.name }}</a>
+                    {% endif %}
                     {% endfor %}
                     
                 </div>
@@ -124,14 +174,22 @@ blog list
                         <button class="btn btn-default"  onclick="tag_delete()">
                             <i class="fa fa-trash"></i>
                         </button>
+
+                        <button class="btn btn-default"  onclick="filter_tag_in_kind()">
+                            <i class="fa fa-check"></i>
+                        </button>
                     </div>
                     <div class="panel-title">
                         tag
                     </div>
                 </div>
                 <div class="panel-body" id="tag_box">
-                    {% for tag in tag_sim_list %}
-                    <button data-toggle="button" class="btn btn-{{ tag.1 }} btn-labeled" aria-pressed="true">{{ tag.0 }}</button>
+                    {% for tag_sim in tag_sim_list %}
+                    {% if tag == tag_sim.0 %}
+                    <button data-toggle="button" class="btn btn-{{ tag_sim.1 }} btn-labeled active" aria-pressed="true">{{ tag_sim.0 }}</button>
+                    {% else %}
+                    <button data-toggle="button" class="btn btn-{{ tag_sim.1 }} btn-labeled" aria-pressed="true">{{ tag_sim.0 }}</button>
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>
@@ -309,6 +367,12 @@ blog list
             }
             
         });
+        var url_dict = url_parse(location.href);
+        var tree_str = "";
+        for (var k in url_dict["querys"]) {
+            tree_str += `${k}--${url_dict["querys"][k]};`
+        }
+        $("#tree_str").html(tree_str);
     });
     function delete_blog() {
         var blog_id_list = [];
@@ -321,6 +385,8 @@ blog list
                 
             }
         });
+        
+
         var msg = `<span class="text-danger">${blog_title_list.join("<br />")}</span> will be delete, are you sure`;
         
         bootbox.dialog({
@@ -352,10 +418,47 @@ blog list
             }
         })
     }
-    
+    function filter_blog(itm, typ) {
+        var current_url = location.href;
+        var value = $(itm).text();
+        if (typ == "kind") {
+            var new_url = add_query(current_url, { 'kind': value });
+            location.href = new_url;
+        } else if (typ == "tag") {
+            var new_url = add_query(current_url, { 'tag': value });
+            location.href = new_url;
+        } else if (typ == "creator") {
+            var new_url = add_query(current_url, { 'creator': value });
+            location.href = new_url;
+        }
+        
+    }
+    function search_blog() {
+        var search_handle = $("#search_blog").val();
+        var current_url = location.href;
+        var new_url = add_query(current_url, { '_s': search_handle });
+        location.href = new_url;
+    }
 
     
-    
+    $("#search_blog").keydown(function (event) {
+        if (event.keyCode == 13) {
+            search_blog();
+        }
+    });
+
+    function filter_blog_in_kind() {
+        var kind = $("#kind_list").children(".active").first()
+        filter_blog(kind, "kind");
+    }
+    function filter_tag_in_kind() {
+        var tag = $("#tag_box").children(".active").first()
+        filter_blog(tag, "tag");
+    }
+
+    function put_file_upload() {
+
+    }
 </script>
 {% endblock %}
 

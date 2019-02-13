@@ -3,6 +3,8 @@ import json
 import datetime
 from blog_backend.models import MessageList, BlogKind, Tag, BlogList
 from common.utils import JsonResponse
+from common.utils import PageBranch
+from cadmin.utils import get_search_obj
 import random
 from users.auth import login_required
 
@@ -78,6 +80,7 @@ def normal_edit_blog(request):
     if request.method == "GET":
         blog_id = request.GET.get("id")
         if blog_id:
+
             try:
                 bl_obj = BlogList.objects.get(id=blog_id)
             except:
@@ -139,8 +142,65 @@ def md_edit_blog(request):
     """
     markdown mode editor
     """
+    
     if request.method == "GET":
-        return render(request, "blog_backend/md_edit_blog.html")
+        blog_id = request.GET.get("id")
+        if blog_id:
+
+            try:
+                bl_obj = BlogList.objects.get(id=blog_id)
+            except:
+                return redirect("/blog-backend/display-blog-list/")
+        bk_obj_list = BlogKind.objects.all()
+        tg_obj_list = Tag.objects.all()
+        return render(request, "blog_backend/md_edit_blog.html", locals())
+    else:
+        typ = request.POST.get("typ")
+        
+        title = request.POST.get("blog_title")
+        content = request.POST.get("content")
+        kind_id = request.POST.get("kind_id")
+        tag_list = request.POST.get("tag")
+        tag_list = tag_list.split(",")
+        userid = request.session.get("user")["id"]
+        print(content)
+        if typ == "create":
+            bk = BlogList()
+            bk.title = title
+            bk.blog_content = content
+            bk.blog_kind_id = kind_id
+            bk.creator_id = userid
+            bk.create_date = datetime.datetime.now()
+            bk.save()
+        else:
+            print("repair")
+            blog_id = request.GET.get("id")
+            bk = BlogList.objects.filter(id=blog_id).first()
+            if bk:
+                bk.title = title
+                bk.blog_content = content
+                bk.blog_kind_id = kind_id
+                bk.creator_id = userid
+                bk.create_date = datetime.datetime.now()
+                bk.save()
+                
+            else:
+                bk = BlogList()
+                bk.title = title
+                bk.blog_content = content
+                bk.blog_kind_id = kind_id
+                bk.creator_id = userid
+                bk.adjustment_date = datetime.datetime.now()
+                bk.save()
+        bk.tag.clear()
+        for tag in tag_list:
+            if tag:
+                obj = Tag.objects.get(id=tag)
+                bk.tag.add(obj)
+        jrs = JsonResponse()
+        jrs.set_success(0, "ok")
+        jrs.url = "/blog-backend/display-blog-list/";
+        return HttpResponse(jrs.set_json_pack())
 
 @login_required(login_url_name='users:login')
 def display_blog_list(request):
@@ -154,11 +214,39 @@ def display_blog_list(request):
         tag_list = Tag.objects.all()
         tag_sim_list = []
         count = 0
+        is_back = False
         for tag in tag_list:
             color_map = ["primary", "success", "warning", "danger"]
             random.shuffle(color_map)
             tag_sim_list.append([tag.name, color_map[count]])
             count += 1
+
+        
+        kind = request.GET.get("kind")
+        if kind:
+            is_back = True
+            bl_obj_list = bl_obj_list.filter(blog_kind__name=kind)
+
+        tag = request.GET.get("tag")
+        if tag:
+            is_back = True
+            bl_obj_list = bl_obj_list.filter(tag__name=tag)
+
+        creator = request.GET.get("creator")
+        if creator:
+            is_back = True
+            bl_obj_list = bl_obj_list.filter(creator__username = creator)
+
+        search_handle = request.GET.get("_s")
+        search_fields = ["title", "tag__name", "blog_content"]
+        bl_obj_list, search_handle = get_search_obj(request, bl_obj_list, search_fields)
+
+        current_page = int(request.GET.get("_p") or "1")
+        row_in_page = 7
+
+        pb = PageBranch(current_page, row_in_page, data_list=bl_obj_list)
+        pb.get_pglist3()
+        bl_obj_list = pb.get_data_list()
         
         return render(request, "blog_backend/display_blog_list.html", locals())
 
@@ -335,7 +423,6 @@ def get_blog_message(request):
     blog_id = request.GET.get("id")
     
     if blog_id:
-        print(blog_id)
         bl_obj = BlogList.objects.filter(id=blog_id).first()
         if bl_obj:
             jrs.set_success(0, "ok")
@@ -343,7 +430,6 @@ def get_blog_message(request):
             jrs.content = bl_obj.blog_content
             jrs.kind_id = bl_obj.blog_kind_id
             jrs.tag_id_list = [str(tag.id) for tag in bl_obj.tag.all()]
-            print(jrs.tag_id_list)
             if jrs.tag_id_list:
                 jrs.tag_id_list = ",".join(jrs.tag_id_list)
             return HttpResponse(jrs.set_json_pack())
@@ -354,7 +440,66 @@ def get_blog_message(request):
 def blog_view(request):
     """
     display blog view
+    1, list->view
+    2, editing->cache file->view
     """
-    blog_id = request.GET.get("id")
-    bl_obj = BlogList.objects.get(id=blog_id)
-    return render(request, "blog_view.html", locals())
+    if request.method == "POST":
+        title = request.POST.get("title")
+        blog_content = request.POST.get("blog_content")
+        blog_kind_id = request.POST.get("blog_kind_id")
+        tag_id_list = request.post.get("tag_id_list")
+        jrs = JsonResponse()
+        jrs.set_error(0, "error")
+        return redirect("/blog-backend/blog-view/?from=cache")
+    else:
+        blog_id = request.GET.get("id")
+        bl_obj = BlogList.objects.get(id=blog_id)
+        tag_list = bl_obj.tag.all()
+        return render(request, "blog_backend/blog_view.html", locals())
+
+
+def verify_related(request):
+    """
+    verify that blog kind or blog tag is related the blog
+    typ: 
+    k_b kind to blog, search kind-name探した上に、逆にブロックリストへ探す、探さなければ、異常を捨てる
+    t_b tag to blog
+    """
+    jrs = JsonResponse()
+    typ = request.POST.get("typ")
+    name_list = request.POST.get("name_list")
+
+    namelist = json.loads(name_list)
+    for name in namelist:
+        
+        if typ == "k_b":
+            try:
+                bk_obj = BlogKind.objects.get(name=name)
+                bl_li_co = bk_obj.bloglist_set.all().count()
+                if bl_li_co == 0:
+                    continue
+                    
+                else:
+                    jrs.set_success(1, "the kind's relateds is having some blogs, can't delete")
+                    jrs.name = name
+            except:
+                jrs.set_error(300, "didn't find out the kind name")
+            
+        elif typ == "t_b":
+            try:
+                tg_obj = Tag.objects.get(name=name)
+                bl_li_co = tg_obj.bloglist_set.all().count()
+                if bl_li_co == 0:
+                    continue
+                else:
+                    jrs.set_success(1, "the tag's relateds is having some blogs, can't delete")
+                    jrs.name = name
+            except:
+                jrs.set_error(300, "didn't find out the tag name")
+        else:
+            jrs.set_error(300, "didn't find out the name")
+
+        return HttpResponse(jrs.set_json_pack())
+
+    jrs.set_success(0, "the kind's relateds is never, can delete")
+    return HttpResponse(jrs.set_json_pack())

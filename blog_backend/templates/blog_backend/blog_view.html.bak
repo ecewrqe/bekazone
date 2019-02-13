@@ -1,0 +1,75 @@
+﻿{% extends 'base.html' %}
+<!--tinymce中適用のビュー-->
+{% block title %}
+blog view: {{ bl_obj.title }}
+{% endblock %}
+{% block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'index' %}">index</a></li>
+    <li><a href="{% url 'blog_backend:display_blog_list' %}">display blog list</a></li>
+    <li class="active">blog view</li>
+</ol>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-7">
+        <div class="panel">
+            
+            <div class="panel-heading">
+                <div class="panel-control">
+                <a href="/blog-backend/normal-edit-blog/?id={{ bl_obj.id }}" class="btn btn-default" title="edit">
+                    <i class="fa fa-edit"></i>
+                </a>
+
+                    <a href="/blog-backend/display-blog-list/" class="btn btn-default" title="return">
+                    <i class="fa fa-arrow-left"></i>
+                </a>
+            </div>
+                <div class="panel-title">blog view</div>
+            </div>
+            <div class="panel-body">
+                <!--author, kind, date-->
+                <div class="row" >
+                    <a href="javascript:;" title="author" class="link link-warning">
+                        <i class="fa fa-user"></i>
+                        {{ bl_obj.creator.username }}
+                    </a>
+                    <span class="link-warning" style="float:right">
+                        {% if bl_obj.adjustment_date %}
+                        {{ bl_obj.adjustment_date }}
+                        {% else %}
+                        {{ bl_obj.create_date }}
+                        {% endif %}
+                    </span>
+                </div>
+                
+                <div class="row">
+                    
+                    <h3 class="text-center">{{ bl_obj.title }}</h3>
+                    {{ bl_obj.blog_content|safe }}
+                    <div class="row">
+                        <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                        kind: <a href="javascript:;" class="link link-warning">{{ bl_obj.blog_kind.name }}</a><br />
+                        tag: 
+                        {% for tag in bl_obj.tag.all %}
+                        <a href="javascript:;" class="link link-warning">{{ tag.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block footer_custom_js %}
+<script>
+$(document).ready(function(){
+});
+</script>
+{% endblock %}

@@ -16,6 +16,7 @@ urlpatterns = [
     url('^tag-delete/$', views.tag_delete, name='tag_delete'),
     url('^blog-title-verify/$', views.blog_title_verify, name='blog_title_verify'),
     url('^blog-delete/$', views.blog_delete, name='blog_delete'),
+    url('^verify-related/$', views.verify_related, name="verify_related"),
     url('^get-blog-message/$', views.get_blog_message, name='get_blog_message'),
     url('^blog-view/$', views.blog_view, name='blog_view')
 ]
