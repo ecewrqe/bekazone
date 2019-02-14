@@ -7,6 +7,11 @@ from common.utils import PageBranch
 from cadmin.utils import get_search_obj
 import random
 from users.auth import login_required
+import os
+import mimetypes
+import re
+from django.utils.encoding import force_text
+from django.utils.encoding import DjangoUnicodeDecodeError
 
 
 # Create your views here.
@@ -19,8 +24,8 @@ def edit_blog(request):
     edit_type = request.GET.get("edit_type")
     if edit_type == "message":
         return redirect(reverse("blog_backend:message"))
-    elif edit_type == "normal_blog":
-        return redirect(reverse("blog_backend:normal_edit_blog"))
+    elif edit_type == "upload_md":
+        return redirect(reverse("blog_backend:upload_markdown"))
     elif edit_type == "md_blog":
         return redirect(reverse("blog_backend:md_edit_blog"))
     else:
@@ -75,7 +80,7 @@ def message(request):
 @login_required(login_url_name='users:login')
 def normal_edit_blog(request):
     """
-    normal editor
+    normal editor(trash)
     """
     if request.method == "GET":
         blog_id = request.GET.get("id")
@@ -127,6 +132,8 @@ def normal_edit_blog(request):
                 bk.creator_id = userid
                 bk.adjustment_date = datetime.datetime.now()
                 bk.save()
+
+        
         bk.tag.clear()
         for tag in tag_list:
             if tag:
@@ -141,6 +148,7 @@ def normal_edit_blog(request):
 def md_edit_blog(request):
     """
     markdown mode editor
+
     """
     
     if request.method == "GET":
@@ -163,7 +171,6 @@ def md_edit_blog(request):
         tag_list = request.POST.get("tag")
         tag_list = tag_list.split(",")
         userid = request.session.get("user")["id"]
-        print(content)
         if typ == "create":
             bk = BlogList()
             bk.title = title
@@ -173,7 +180,6 @@ def md_edit_blog(request):
             bk.create_date = datetime.datetime.now()
             bk.save()
         else:
-            print("repair")
             blog_id = request.GET.get("id")
             bk = BlogList.objects.filter(id=blog_id).first()
             if bk:
@@ -192,6 +198,18 @@ def md_edit_blog(request):
                 bk.creator_id = userid
                 bk.adjustment_date = datetime.datetime.now()
                 bk.save()
+
+        md_file_name = bk.title
+        path = "var/data/blog_files"
+        tempo_path = os.path.join(path, md_file_name)
+        print(os.path.exists(tempo_path))
+        history_file = "%s-%s.md"%(tempo_path, datetime.datetime.now().strftime("%Y-%m-%d"))
+        if os.path.exists("%s.md" % tempo_path) and not os.path.exists(history_file):
+            os.rename("%s.md" % tempo_path, history_file)
+        
+        with open("%s.md" % tempo_path, "wb") as fp:
+            fp.write(bytes(bk.blog_content, "utf8"))
+
         bk.tag.clear()
         for tag in tag_list:
             if tag:
@@ -199,6 +217,7 @@ def md_edit_blog(request):
                 bk.tag.add(obj)
         jrs = JsonResponse()
         jrs.set_success(0, "ok")
+        jrs.id = bk.id
         jrs.url = "/blog-backend/display-blog-list/";
         return HttpResponse(jrs.set_json_pack())
 
@@ -208,7 +227,7 @@ def display_blog_list(request):
     blog list
     """
     if request.method == "GET":
-        bl_obj_list = BlogList.objects.all()
+        bl_obj_list = BlogList.objects.all().order_by("-adjustment_date", "-create_date")
 
         bk_obj_list = BlogKind.objects.all()
         tag_list = Tag.objects.all()
@@ -503,3 +522,45 @@ def verify_related(request):
 
     jrs.set_success(0, "the kind's relateds is never, can delete")
     return HttpResponse(jrs.set_json_pack())
+
+def upload_markdown(request):
+    """
+    upload markdown file
+    """
+    if request.method == "POST":
+        
+        jrs = JsonResponse()
+        blog_file_path = "var/data/blog_files"
+        markdown_file = request.FILES.get("markdown_file")
+        blog_kind_id = request.POST.get("blog_kind_id")
+        userid = request.session.get("user")["id"]
+        title = os.path.splitext(markdown_file.name)[0]
+        title_group = re.match("(.*)(-[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9])", title)
+        if title_group:
+            title_group = title_group.groups()
+            if len(title_group) >= 2:
+                title = title_group[0]
+        try:
+            bl = BlogList.objects.get(title=title)
+            print("repeat",bl)
+        except:
+            bl = BlogList()
+        bl.title = title
+        blog_file_fullpath = os.path.join(blog_file_path, title)
+        content = markdown_file.read()
+        bl.blog_content = content
+        bl.blog_kind_id = blog_kind_id
+        bl.creator_id = userid
+        bl.create_date = datetime.datetime.now()
+        try:
+            bl.save()
+        except DjangoUnicodeDecodeError as e:
+            bl.blog_content = content.decode("gbk").encode("utf8")
+
+            bl.save()
+        with open("%s.md" % blog_file_fullpath, "wb") as fp:
+            fp.write(bl.blog_content)
+        return HttpResponse(jrs.set_json_pack())
+    else:
+        bk_obj_list = BlogKind.objects.all()
+        return render(request, "blog_backend/upload_markdown.html", locals())

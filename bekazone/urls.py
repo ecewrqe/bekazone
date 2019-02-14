@@ -6,6 +6,7 @@ urlpatterns = [
     url('^users/', include('users.urls.web_urls', namespace='users')),
     url('^admin/', include('cadmin.urls', namespace='admin')),
     url('^blog-backend/', include('blog_backend.urls', namespace='blog_backend')),
+    
 ]
 
 handler404 = page_not_found

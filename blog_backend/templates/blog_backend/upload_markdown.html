@@ -1,0 +1,122 @@
+﻿{% extends 'base.html' %}
+{% block header_custom_js_css %}
+<link href="/static/plugins/dropzone/dropzone.min.css" rel="stylesheet">
+
+{% endblock %}
+{% block title %}
+upload markdown
+{% endblock %}
+{% block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'index' %}">index</a></li>
+    <li class="active">upload markdown</li>
+</ol>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-7">
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="panel-control">
+                    <a href="/blog-backend/display-blog-list/" class="btn btn-default">
+                        <i class="fa fa-arrow-left"></i>
+                    </a>
+                </div>
+                <div class="panel-title">
+                    upload
+                </div>
+            </div>
+            <div class="panel-body">
+                
+                <div>
+                    {% csrf_token %}
+                    <!--file-->
+                    <div class="row">
+
+                        <!--<span id="tree_str"></span>-->
+                        <div id="upload_file" class="dropzone">
+                                
+                        </div>
+                    </div>
+                    <!--kind-->
+                    <div class="row">
+                        <label for="blog_kind" class="col-lg-3 control-label"><strong style="font-size:18px">blog_kind:</strong></label>
+                        <div class="col-lg-7">
+                            <select name="kind_id" style="width:100%" required id="blog_kind">
+                                {% for bk_obj in bk_obj_list %}
+                                <option value="{{ bk_obj.id }}">{{ bk_obj.name }}</option>
+                                {% endfor %}
+
+                            </select>
+                        </div>
+                        <div class="col-lg-2">
+                            <button onclick="upload_file()" class="btn btn-warning" data-toggle="modal">submit</button>
+                        </div>
+                    </div>
+                </div>
+                
+                    
+                        
+            </div>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}
+{% block footer_custom_js %}
+<script src="/static/plugins/dropzone/dropzone.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#blog_kind").chosen();
+        
+    })
+
+    myDropzone = new Dropzone("div#upload_file", {
+        url: "/blog-backend/upload-markdown/",
+        maxFilesize: 2,
+        method: "POST",
+        maxFiles: null,
+        //acceptedFiles: "*", // can accept files
+        accept: function (file, done) {
+            //alert("Naha, you don't.");
+
+        },
+
+    });
+
+    function upload_file() {
+        var file_list = myDropzone.getAddedFiles()
+        
+
+
+        for (file of file_list) {
+            
+            var fd = new FormData();
+            fd.append("blog_kind_id", $("#blog_kind").val());
+            fd.append("markdown_file", file);
+            $.ajax({
+                url: "/blog-backend/upload-markdown/",
+                type: "POST",
+                data: fd,
+                async: false,
+                processData: false,
+                contentType: false,
+                success: function () {
+                    
+                    myDropzone.removeFile(file);
+                }
+
+            })
+        }
+        
+
+
+    }
+
+    function put_file_upload() {
+        $("#blog_files")[0].click();
+    }
+    
+</script>
+{% endblock %}
+

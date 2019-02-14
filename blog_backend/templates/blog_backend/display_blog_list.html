@@ -39,8 +39,8 @@ blog list
                 <div class="row">
                     <div class="col-lg-3">
                         <!--<span id="tree_str"></span>-->
-                        <button class="btn btn-primary" title="upload_blog"><i class="fa fa-upload" onclick="put_file_upload()"></i></button>
-                        <input type="file" style="display:none" id="get_blog_file" name="blog_file" />
+                        <a href="/blog-backend/upload-markdown/" class="btn btn-primary" title="upload_blog"><i class="fa fa-upload"></i></a>
+                        
                     </div>
                     <!--search tag-->
                     <div class="col-lg-3" style="float:right;position:relative; margin-bottom:10px;">
@@ -113,7 +113,7 @@ blog list
                                 {% if bl_obj.adjustment_date %}
                                 {{ bl_obj.adjustment_date }}
                                 {% else %}
-                                {{ bl_obj.create_date }}
+                                {{ bl_obj.create_date|date:"Y-m-d H:i:s" }}
                                 {% endif %}
 
                             </td>
@@ -374,6 +374,14 @@ blog list
         }
         $("#tree_str").html(tree_str);
     });
+
+    document.onkeydown = function (event) {
+        if (event.ctrlKey && event.keyCode == 68) {
+            delete_blog()
+            return false;
+        }
+    }
+
     function delete_blog() {
         var blog_id_list = [];
         var blog_title_list = [];
@@ -456,9 +464,7 @@ blog list
         filter_blog(tag, "tag");
     }
 
-    function put_file_upload() {
-
-    }
+    
 </script>
 {% endblock %}
 

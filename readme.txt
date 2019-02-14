@@ -147,6 +147,7 @@ bekablog
 /blog-backend/get-blog-message/  blog_backend:get_blog_message
 /blog-backend/verify-related/  blog_backend:verify_related
 /blog-backend/blog-view/  blog_backend:blog_view
+/blog-backend/upload-markdown/  blog_backend:blog_markdown
 
 
 blog: 
@@ -225,20 +226,33 @@ textEditor.setValue()
 
 
 1, blog list:
+when creating, ctrl+s save, get id to 
 
-editing->view
-order
-front-page: 
-1, database->blog_backend/models
-2, design a series of frontpages of PC
-3, design a series of frontpages of phone
-4, cmdb
+
 
 django shell:
 
 from blog_backend.models import Tag
 from blog_backend.models import BlogList
 from blog_backend.models import BlogKind
+if had file
 
+このブログは技術者向け、もしくはコンピューターに働いてばかりの方へ考えの機能があります。便利性を考える。
+技術者はたくさん癖があるので、例えば"ctrl+s"セーブ操作、そういうわけで、ctrl+sをブログのセーブ操作に変わろうと考える、例えばテーブルにはctrl+dの削除操作か慣れるので、ボタンの関心は少なくなる。
+==========================================
+front-page: 
+1, database->blog_backend/models
+2, design a series of frontpages of PC
+3, design a series of frontpages of phone
+4, cmdb
 
+index
+technology:
+python
+javascript
+operator
+project_readme
 
+language:
+日本語
+English

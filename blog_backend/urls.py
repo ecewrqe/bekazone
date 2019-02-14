@@ -18,5 +18,6 @@ urlpatterns = [
     url('^blog-delete/$', views.blog_delete, name='blog_delete'),
     url('^verify-related/$', views.verify_related, name="verify_related"),
     url('^get-blog-message/$', views.get_blog_message, name='get_blog_message'),
-    url('^blog-view/$', views.blog_view, name='blog_view')
+    url('^blog-view/$', views.blog_view, name='blog_view'),
+    url('^upload-markdown/$', views.upload_markdown, name='upload_markdown'),
 ]

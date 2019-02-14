@@ -4,6 +4,12 @@
  */
 function check_title_repeat(itm) {
     var inp_value = $(itm).val();
+    var original_title = $(itm).attr("original");
+    if (original_title && original_title == inp_value) {
+        $("#title_msg").empty();
+        return;
+    }
+
     $.ajax({
         url: "/blog-backend/blog-title-verify/",
         type: "POST",
@@ -16,6 +22,7 @@ function check_title_repeat(itm) {
             } else {
                 var msg_tag = `<span class="text-danger"><i class="fa fa-exclamation"></i></span>`
                 $(itm).parent().siblings()[1].innerHTML = msg_tag
+
             }
         }
     })

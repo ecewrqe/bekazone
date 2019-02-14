@@ -103,6 +103,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'blog_backend/static'),
+    os.path.join(BASE_DIR, 'var/data'),
+
 ]
 # a thrill of my wife pregnented
 

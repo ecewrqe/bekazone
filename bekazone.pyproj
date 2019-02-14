@@ -116,6 +116,7 @@
     <Folder Include="static\plugins\bootstrap-select\" />
     <Folder Include="static\plugins\bootstrap-timepicker\" />
     <Folder Include="static\plugins\chosen\" />
+    <Folder Include="static\plugins\dropzone\" />
     <Folder Include="static\plugins\editmd\" />
     <Folder Include="static\plugins\editmd\css\" />
     <Folder Include="static\plugins\editmd\docs\" />
@@ -362,10 +363,13 @@
     <Folder Include="users\urls\" />
     <Folder Include="users\views\" />
     <Folder Include="var\" />
+    <Folder Include="var\data\blog_files\" />
     <Folder Include="var\logs\" />
+    <Folder Include="var\data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="blog_backend\static\blog_initial.js" />
+    <Content Include="blog_backend\templates\blog_backend\upload_markdown.html" />
     <Content Include="blog_backend\templates\blog_backend\blog_type_sel.html" />
     <Content Include="blog_backend\templates\blog_backend\blog_view.html.bak" />
     <Content Include="blog_backend\templates\blog_backend\blog_view.html" />
@@ -600,6 +604,11 @@
     <Content Include="static\plugins\chosen\chosen.jquery.min.js" />
     <Content Include="static\plugins\chosen\chosen.min.css" />
     <Content Include="static\plugins\chosen\LICENSE.txt" />
+    <Content Include="static\plugins\dropzone\dropzone.css" />
+    <Content Include="static\plugins\dropzone\dropzone.js" />
+    <Content Include="static\plugins\dropzone\dropzone.min.css" />
+    <Content Include="static\plugins\dropzone\dropzone.min.js" />
+    <Content Include="static\plugins\dropzone\LICENSE.txt" />
     <Content Include="static\plugins\editmd\.gitignore" />
     <Content Include="static\plugins\editmd\.jshintrc" />
     <Content Include="static\plugins\editmd\bower.json" />
