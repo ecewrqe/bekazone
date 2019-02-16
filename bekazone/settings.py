@@ -19,7 +19,9 @@ INSTALLED_APPS = [
     'users',
     'cadmin',
 
-    'blog_backend'
+    'blog_backend',
+    'framework_test',
+    'rest_framework',
 ]
 
 
@@ -112,3 +114,9 @@ STATICFILES_DIRS = [
 USER_SESSION_EXPIRED = kcp.get_config("bekazone", "user_session_expired")
 if USER_SESSION_EXPIRED:
     USER_SESSION_EXPIRED = eval(USER_SESSION_EXPIRED)
+
+# framework
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
