@@ -237,6 +237,7 @@ def display_blog_list(request):
         for tag in tag_list:
             color_map = ["primary", "success", "warning", "danger"]
             random.shuffle(color_map)
+            count = random.randrange(0, len(color_map))
             tag_sim_list.append([tag.name, color_map[count]])
             count += 1
 
