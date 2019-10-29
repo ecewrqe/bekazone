@@ -5,6 +5,9 @@
     #text-editmd{
         z-index: 1000;
     }
+    #floating-top-right{
+        z-index: 1001;
+    }
 </style>
 {% endblock %}
 
@@ -33,6 +36,7 @@ new normal blog
 {% block content %}
 <div class="row">
     <div class="col-lg-8">
+
         <div class="panel">
             <div class="panel-heading">
                 <div class="panel-control">
@@ -66,6 +70,7 @@ new normal blog
                 <div class="panel-title">edit board</div>
             </div>
             <div class="panel-body">
+
                 <form id="edit_board" class="form-horizontal" novalidate>
                     {% csrf_token %}
                     {% if blog_id %}
@@ -104,11 +109,10 @@ repair -> view button -> save -> search id -> redirect view
                         <label for="blog_kind_select" class="col-lg-3 control-label"><strong style="font-size:18px">blog_kind:</strong></label>
                         <div class="col-lg-7">
                             <select name="kind_id" style="width:100%" required id="blog_kind_select">
-                            {% for bk_obj in bk_obj_list %}
-                            <option value="{{ bk_obj.id }}">{{ bk_obj.name }}</option>
-                            {% endfor %}
-
-                        </select>
+                                {% for bk_obj in bk_obj_list %}
+                                <option value="{{ bk_obj.id }}">{{ bk_obj.name }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="col-lg-2">
                             <a href="javascript:;" title="create a new kind" class="btn" data-target="#create_kind" data-toggle="modal">
@@ -123,10 +127,10 @@ repair -> view button -> save -> search id -> redirect view
                         <div class="col-lg-7">
                             <select name="tag" multiple style="width:100%" required id="blog_tag">
 
-                            {% for tg_obj in tg_obj_list %}
-                            <option value="{{ tg_obj.id }}">{{ tg_obj.name }}</option>
-                            {% endfor %}
-                        </select>
+                                {% for tg_obj in tg_obj_list %}
+                                <option value="{{ tg_obj.id }}">{{ tg_obj.name }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="col-lg-2">
                             <a href="javascript:;" title="create a new tag" class="btn" data-target="#create_tag" data-toggle="modal">
@@ -256,11 +260,10 @@ repair -> view button -> save -> search id -> redirect view
     document.onkeydown = function (event) {
         
         if (event.ctrlKey == true && event.keyCode == 83) {
-            console.log("dddd");
             submit_blog('key');
             return false;
         }
-        
+
         
     }
 
@@ -270,7 +273,7 @@ repair -> view button -> save -> search id -> redirect view
         var url = "";
         $("#blog_kind_select").chosen();
         $("#blog_tag").chosen();
-        
+
         textEditor = editormd("text-editmd", {
             width: "90%",
             height: 640,
@@ -279,6 +282,11 @@ repair -> view button -> save -> search id -> redirect view
             saveHTMLToTextarea: true,
             emoji: true,
             flowChart: true,
+            toolbarIcons : function() {
+                // Or return editormd.toolbarModes[name]; // full, simple, mini
+                // Using "||" set icons align right.
+                return ["undo", "redo", "|", "bold", "link", "reference-link", "table", "|", "preview", "watch", "code-block", "search", "|", "fullscreen", "info"]
+            },
             onload: function () {
                 var blog_id = $("#blog_id").val();
                 if (blog_id) {
@@ -286,34 +294,54 @@ repair -> view button -> save -> search id -> redirect view
                 } else {
                     return;
                 }
-            $.ajax({
-            url: url,
-            type: "GET",
-            dataType: "JSON",
-            success: function (data) {
-                if (data.status == 0) {
-                    var title = data.title;
-                    var content = data.content;
-                    var kind_id = data.kind_id;
-                    if (data.tag_id_list.length != 0) {
-                        var tag_id_list = data.tag_id_list.split(",");
+
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        if (data.status == 0) {
+                            var title = data.title;
+                            var content = data.content;
+                            var kind_id = data.kind_id;
+                            if (data.tag_id_list.length != 0) {
+                                var tag_id_list = data.tag_id_list.split(",");
+                            }
+                            //var tag_list = data.tag_list;
+                            $("#title_edit").val(title);
+
+                            textEditor.setMarkdown(content);
+                            $("#blog_kind_select").val(kind_id);
+                            $("#blog_tag").val(tag_id_list);
+
+                            $('select').trigger("chosen:updated");
+                        }
                     }
-                    //var tag_list = data.tag_list;
-                    $("#title_edit").val(title);
-                    
-                    textEditor.setMarkdown(content);
-                    $("#blog_kind_select").val(kind_id);
-                    $("#blog_tag").val(tag_id_list);
+                })
+            },
+            onchange: function () {
+                var md_value = this.getValue();
+                var title = $("#title_edit").val();
+                // window.storage save
+                var localsave = window.localStorage;
+                localsave.setItem(title, md_value);
 
-                    $('select').trigger("chosen:updated");
-                }
-            }
-        })
-            }
-    })
+                // cache file save
+                $.ajax({
+                    url: "/blog-backend/cache-save/",
+                    type: "POST",
+                    data: {title: title, md_content: md_value},
+                    dataType: "JSON",
+                    success: function (data) {
 
-        
-        
+
+                    }
+                });
+
+            }
+        });  // textEditor
+
+
     })
     /**
      * 
@@ -393,7 +421,6 @@ repair -> view button -> save -> search id -> redirect view
             })
             return false;
         }
-        console.log("dddddd")
         bootbox.dialog({
             "title": "warning",
             "message": msg,
@@ -421,14 +448,64 @@ repair -> view button -> save -> search id -> redirect view
                                             // redirect to repair
                                             url = add_query(url, { id: data.id });
                                             location.href = url;
+
+                                            $.niftyNoty({
+                                                type: 'success',
+                                                container : 'floating',
+                                                title : 'note saved',
+                                                message : `${data.title} created`,
+                                                //html: "<h1>fdsfdsf</h1>",
+                                                // floating: {
+                                                // position
+                                                // },
+                                                closeBtn : false,
+                                                timer : 1500,
+
+                                                onHidden:function(){
+
+                                                }
+                                            })
                                         } else {
-                                            // repair: no action
+                                            $.niftyNoty({
+                                                type: 'info',
+                                                container : 'floating',
+                                                title : 'note saved',
+                                                message : `\`${data.title}\` repaired`,
+                                                //html: "<h1>fdsfdsf</h1>",
+                                                // floating: {
+                                                // position
+                                                // },
+                                                closeBtn : false,
+                                                timer : 1500,
+
+                                                onHidden:function(){
+
+                                                }
+                                            })
                                         }
                                     } else if (redirect_type == "view") {
                                         url = "/blog-backend/blog-view/";
                                         url = add_query(url, { id: data.id });
                                         location.href = url;
                                     }
+                                }
+                                else{
+                                    $.niftyNoty({
+                                                type: 'error',
+                                                container : 'floating',
+                                                title : 'note saving failed',
+                                                message : `\`${data.title}\` note saving failed`,
+                                                //html: "<h1>fdsfdsf</h1>",
+                                                // floating: {
+                                                // position
+                                                // },
+                                                closeBtn : false,
+                                                timer : 1500,
+
+                                                onHidden:function(){
+
+                                                }
+                                            })
                                 }
                             }
                         })
@@ -441,7 +518,7 @@ repair -> view button -> save -> search id -> redirect view
             }
         });
     }
-    
+
 </script>
 
 {% endblock %}

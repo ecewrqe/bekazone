@@ -14,7 +14,7 @@ def get_verbose_name(model_class):
 
 @register.filter
 def decode_utf8(src):
-    return unicode(src)
+    return str(src)
 
 
 @register.simple_tag
@@ -74,7 +74,7 @@ def get_model_value(obj, field):
 @register.simple_tag
 def get_model_url(request, table_obj, field):
     """单个url的制作,目的给前端和内部都能调用"""
-    url = "<td><a href='%s/change/?%s'>%s</a></td>" % (
+    url = "<td><a href='%s/change/?%s' class='btn-link'>%s</a></td>" % (
         table_obj.id,
         "&".join(["%s=%s" % (k, v) for k, v in request.GET.items()]),
         get_model_value(table_obj, field)

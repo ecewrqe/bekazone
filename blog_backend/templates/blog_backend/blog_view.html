@@ -1,6 +1,12 @@
 ﻿{% extends 'base.html' %}
 {% block header_custom_js_css %}
 <link rel="stylesheet" href="/static/plugins/editmd/css/editormd.preview.css" />
+<style>
+    #article{
+        overflow: scroll;
+        height: 100%;
+    }
+</style>
 {% endblock %}
 {% block title %}
 blog view: {{ bl_obj.title }}
@@ -13,12 +19,15 @@ blog view: {{ bl_obj.title }}
 </ol>
 {% endblock %}
 {% block content %}
-<div class="row">
+<div class="row" id="article">
     <div class="col-lg-12">
         <div class="panel">
             
             <div class="panel-heading">
                 <div class="panel-control">
+                    <button class="btn btn-default" title="full_screen" onclick="screen_full_toggle(this)">
+                        <i class="fa fa-expand"></i>
+                    </button>
                 <a href="/blog-backend/md-edit-blog/?id={{ bl_obj.id }}" class="btn btn-default" title="edit">
                     <i class="fa fa-edit"></i>
                 </a>
@@ -117,5 +126,24 @@ blog view: {{ bl_obj.title }}
             "buttons": {},
         });
     }
+    function screen_full_toggle_content(){
+        var article_tag = document.getElementById("article");
+        if(! document.fullscreen){
+            article_tag.requestFullscreen();
+        }else{
+            document.exitFullscreen();
+        }
+    }
+    function screen_full_toggle(item) {
+        screen_full_toggle_content();
+
+    }
+
+    document.addEventListener("keydown", function (event) {
+        if (event.keyCode == 122) {
+            screen_full_toggle_content();
+        }
+        return false;
+    })
 </script>
 {% endblock %}

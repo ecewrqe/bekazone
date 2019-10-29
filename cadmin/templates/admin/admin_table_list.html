@@ -1,32 +1,71 @@
 {% extends 'base.html' %}
 {% load template_tool %}
-ddddd
 {% block title %}
-<span id="app_name">{{ app }}</span>/<span id="table_name">{{ table }}</span>
+<span id="app_name">
+    <a href="{% url 'admin:index' %}" class="link link-warning">admin_tool</a>
+    <span>__</span>
+    <a href="{% url 'admin:table_model_list' app %}" class="link link-warning">{{ app }}</a>
+    </span>__<span id="table_name">
+    {{ table }}
+</span>
 {% endblock %}
 
 {% block breadcrumb %}
 <ol class="breadcrumb">
-    <li><a href="{% url 'index' %}">Home</a></li>
-    <li><a href="{% url 'admin:index' %}">Admin</a></li>
-    <li><a href="{% url 'admin:table_model_list' app %}">{{ app }}</a></li>
+    <li><a href="{% url 'index' %}" class="link link-warning">Home</a></li>
+    <li><a href="{% url 'admin:index' %}" class="link link-warning">Admin</a></li>
+    <li><a href="{% url 'admin:table_model_list' app %}" class="link link-warning">{{ app }}</a></li>
     <li class="active">{{ table }}</li>
 </ol>
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="panel">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{ table }} table</h3>
+<div class="col-lg-8">
+    <div class="row">
+        <div class="panel">
+
+            <div class="panel-heading">
+                <div class="panel-control">
+                    <a href="{% make_url request.path request.GET "add/" %}" class="btn btn-success">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                    <a href="{% url 'admin:table_model_list' app %}" class="btn btn-default" title="return">
+                        <i class="fa fa-arrow-left"></i>
+                    </a>
+
                 </div>
-                <div class="panel-body">
-                    {% include 'admin/component/table_list_full.html' %}
-                </div>
+                <div class="panel-title">{{ table }} table</div>
+            </div>
+            <div class="panel-body">
+                {% include 'admin/component/table_list_full.html' %}
             </div>
         </div>
     </div>
+</div>
+<div class="col-lg-2">
+    <div class="row">
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="panel-title">filter</div>
+            </div>
+            <div class="panel-body">
+                {% include 'admin/component/filter.html' %}
+            </div>
+        </div>
+    </div>
+<div class="row">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="panel-title">batch action</div>
+        </div>
+        <div class="panel-body">
+            {% include 'admin/component/batch_action.html' %}
+        </div>
+    </div>
+</div>
+</div>
+
+
 {% endblock %}
 
 {% block footer_custom_js %}

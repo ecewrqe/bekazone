@@ -4,8 +4,9 @@ from blog_backend import models
 
 
 class BlogAdmin(baseadmin.create_admin()):
-    list_display = ["title", "blog_kind__name", "tag__name"]
-    list_filter = ("title", "blog_kind")
+    list_display = ["title", "blog_kind__name", "tag"]
+    list_filter = ("title", "blog_kind__name")
+    list_editable = ["title"]
     search_fields = ["title"]
     order_fields = ["title"]
 

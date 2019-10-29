@@ -464,8 +464,8 @@ class LoggerCollection(object):
 
 
         date_fmt = cp.get_config("logger", "date_fmt")
-        screen_level = cp.get_config("logger", "screen_level")
-        file_level = cp.get_config("logger", "file_level")
+        screen_level = cp.get_config("logger", "level")
+        file_level = cp.get_config("logger", "level")
         
         self.logger = logging.getLogger(log_name)
         self.logger.setLevel(logging.NOTSET)
@@ -495,3 +495,49 @@ class LoggerCollection(object):
             getattr(self.logger, level, )(msg)
         else:
             assert "the level isn't belong with system_level"
+
+class InputTypeError(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+    def __str__(self):
+        return self.msg
+
+
+def input_wrapper(data, input_type="text", other=None):
+    """
+    インプットの類によって、なんかのhtmlタッグでデータを包むとのこと
+    data：
+    text/password/textarea:{"name":"", "value": ""}
+    radio/checkbox: {"name":"", "value": []}
+    select: {"name": "", "value": []}
+    :param data:
+    :param input_type: (text, password, textarea, checkbox, radio, select)
+    :return:
+    """
+    default_input_type = ["text", "password", "textarea", "checkbox", "radio", "select"]
+    if input_type not in default_input_type:
+        raise InputTypeError("the type is not a html input type")
+    html_text = ""
+    if input_type == "text":
+        html_text = "<input type='text' class='form-control' name='%s' value='%s' />" \
+                    % (data["name"], data["value"])
+    elif input_type == "password":
+        html_text = "<input type='password' class='form-control' name='%s' value='%s' />" \
+                    % (data["name"], data["value"])
+    elif input_type == "textarea":
+        html_text = "<textarea class='form-control' name='%s'>%s</textarea>" \
+                    % (data["name"], data["value"])
+    elif input_type == "radio":
+        for value in data["value"]:
+            html_text += "%s<input type='radio' class='form-control' name='%s' value='%s' />" \
+                         % (value, data["name"], value)
+
+
+    elif input_type == "checkbox":
+        for value in data["value"]:
+            html_text += "%s<input type='checkbox' class='form-control' name='%s' value='%s' />" \
+                         % (value, data["name"], value)
+    elif input_type == "select":
+        pass
+
+

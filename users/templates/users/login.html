@@ -8,6 +8,7 @@
     <title>bekazone</title>
     <link href="/static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     {% include '_head_js_css.html' %}
+    <link rel="stylesheet" href="/static/css/init.css">
     {% block header_custom_js_css %}
         <style>
             div.login-cls-container {
@@ -43,11 +44,17 @@
                             <div class="form-group">
                                 {{ form.password }}
                             </div>
-                            <div class="checkbox pad-btm text-left">
-                                <input id="demo-form-checkbox" class="magic-checkbox" name="rem_me" value="0"
-                                       type="checkbox">
-                                <label for="demo-form-checkbox" style="color: #fff">forgot password</label>
+                            <div style="padding-bottom: 31px">
+                                <div class="" style="float:left">
+                                    <input id="demo-form-checkbox" class="magic-checkbox" name="rem_me" value="0"
+                                           type="checkbox">
+                                    <label for="demo-form-checkbox" style="color: #fff">remember</label>
+                                </div>
+                                <div style="float: right">
+                                    <a href="javascript:;" class="link link-success">forgotted acount</a>
+                                </div>
                             </div>
+
                             <input class="btn btn-primary btn-lg btn-block js-login-btn" value="sign in"/>
                         </form>
                     </div>

@@ -46,12 +46,17 @@
         </ul>
     </li>
 
-    <li></li>
     <li>
-        <a href="{% url 'admin:index' %}">
+        <a href="javascript:;">
             <i class="psi-mouse-3"></i>
-            <span class="menu-title">admin</span>
+            <span class="menu-title">tools</span>
+            <i class="arrow"></i>
         </a>
+        <ul class="collapse">
+            <li><a href="{% url 'admin:index' %}">admin</a></li>
+            <li><a href="">log</a></li>
+            <li><a href="">api framework</a></li>
+        </ul>
     </li>
 
     <!--Menu list item-->

@@ -202,11 +202,11 @@ def md_edit_blog(request):
         md_file_name = bk.title
         path = "var/data/blog_files"
         tempo_path = os.path.join(path, md_file_name)
-        print(os.path.exists(tempo_path))
         history_file = "%s-%s.md"%(tempo_path, datetime.datetime.now().strftime("%Y-%m-%d"))
         if os.path.exists("%s.md" % tempo_path) and not os.path.exists(history_file):
             os.rename("%s.md" % tempo_path, history_file)
-        
+
+        tempo_path = os.path.normpath(tempo_path)
         with open("%s.md" % tempo_path, "wb") as fp:
             fp.write(bytes(bk.blog_content, "utf8"))
 
@@ -218,7 +218,7 @@ def md_edit_blog(request):
         jrs = JsonResponse()
         jrs.set_success(0, "ok")
         jrs.id = bk.id
-        jrs.url = "/blog-backend/display-blog-list/";
+        jrs.url = "/blog-backend/display-blog-list/"
         return HttpResponse(jrs.set_json_pack())
 
 @login_required(login_url_name='users:login')

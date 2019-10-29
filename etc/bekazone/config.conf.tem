@@ -1,0 +1,28 @@
+[bekazone]
+user_session_expired=60*60*24
+data_path=data/
+
+[logger]
+log_path=var/logs
+log_file=access.log
+
+log_name=root
+
+format='%%(asctime)s %%(levelname)s %%(message)s'
+#screen_format='%%(asctime)s %%(levelname)s %%(message)s'
+#file_format='%%(asctime)s %%(levelname)s %%(message)s'
+date_fmt=
+screen_level=DEBUG
+file_level=DEBUG
+
+
+[mysql]
+name=bekazone
+user=bekazone
+password=bekazone
+host=10.0.0.7
+port=3306
+
+
+
+

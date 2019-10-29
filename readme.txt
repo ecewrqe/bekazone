@@ -4,16 +4,25 @@
 -- django_version: 1.11.5
 
 must be install:
-django 1.11.5, pillow, pymysql, six, beautifulSoup4 4.4.0
+django 1.11.5, pillow, pymysql, six
 
 verification the path and a empty file
 users/migrations/__init__.py
 create databaes:
-1, config  etc/bekazone/config.conf->[mysql]->name/user/password/host/port
+1, config  etc/bekazone/config.conf->[mysql]->name&user&password&host&port
 2, create database
 3, initial
 python manage.py makemigrations
 python manage.py migrate
+
+
+========================
+uwsgi,nginx
+
+
+
+
+
 
 start up server and set admin user
 python manage.py runserver localhost:8888 ->
@@ -237,7 +246,7 @@ from blog_backend.models import BlogList
 from blog_backend.models import BlogKind
 if had file
 
-このブログは技術者向け、もしくはコンピューターに働いてばかりの方へ考えの機能があります。便利性を考える。
+このブログは技術者向け、もしくはコンピューターに働いている方へ考えの機能です。便利性を考える。
 技術者はたくさん癖があるので、例えば"ctrl+s"セーブ操作、そういうわけで、ctrl+sをブログのセーブ操作に変わろうと考える、例えばテーブルにはctrl+dの削除操作か慣れるので、ボタンの関心は少なくなる。
 ==========================================
 front-page: 
@@ -253,6 +262,7 @@ javascript
 operator
 project_readme
 
-language:
-日本語
-English
+
+パスワード忘れたらの仕組み
+メールを入力し、発送する、パスワード変更のリンクを含んで紹介文章とともに発送。
+リンクを押したら、パスワード変更画面を表示して、変更できます
