@@ -3,7 +3,11 @@
 -- python_vertion: 3.5.0
 -- django_version: 1.11.5
 
-must be install:
+このブログは技術者向け、もしくはコンピューターに働いている方へ考えの機能です。便利性を考える。
+技術者はたくさん癖があるので、例えば"ctrl+s"セーブ操作、そういうわけで、ctrl+sをブログのセーブ操作に変わろうと考える、例えばテーブルにはctrl+dの削除操作か慣れるので、ボタンの関心は少なくなる。
+
+### 配置
+必ずインストールしするパッケージは以下
 django 1.11.5, pillow, pymysql, six
 
 verification the path and a empty file
@@ -14,105 +18,73 @@ create databaes:
 3, initial
 python manage.py makemigrations
 python manage.py migrate
-
-
 ========================
 uwsgi,nginx
+```
+pip3 install uwsgi  # python3 pip3
+```
+bekazone_uwsgi.ini
+```
+[uwsgi]
+socket = 127.0.0.1:3000   #  <uwsgi port>
+chdir = /app/bekazone/    # project root path
+#home = /usr/local/python/lib/python3.6
+pythonpath = /usr/local/python/lib/python3.6  # この通り
+wsgi-file = bekazone/wsgi.py   # project wsgiファイル
+processes = 4
+threads = 2
+```
 
+nginx.conf
+```
+server {
+        listen       80;
+        server_name  localhost;
 
+        location / {
+            include  uwsgi_params;
+            uwsgi_pass  127.0.0.1:9090;              //uwsgi_port
+            uwsgi_param UWSGI_SCRIPT demosite.wsgi;  // wsgi file path
+            uwsgi_param UWSGI_CHDIR /demosite;       //
+            index  index.html index.htm;
+            client_max_body_size 35m;
+        }
+        location /static{
+          alias /apps/bekazone/static # project_static_path
+        }
+    }
 
+```
 
+config path:
+/etc/bekazone/config.conf
+sections: bekazone, logger, mysql, permission
+```
+[mysql]
+name=bekazone
+user=bekazone
+password=bekazone
+host=localhost
+port=3306
+```
 
+簡単なdjangoの起動:
+```
+python manage.py runserver 0.0.0.0:9000
+```
+nginx and uwsgiの起動は
+```
+# under the project path
+uwsgi bekazone_uwsgi.ini
+systemctl start nginx
+```
 
-start up server and set admin user
-python manage.py runserver localhost:8888 ->
-/users/system_init/
-default groups: admin & normal
-
-logger setting
-etc/bekazone/config.conf
-[logger]
-...
-
-log_path=var/logs
-log_file=access.log
-
-log_name=root
-format='%%(asctime)s %%(levelname)s %%(message)s'
-#screen_format='%%(asctime)s %%(levelname)s %%(message)s'
-#file_format='%%(asctime)s %%(levelname)s %%(message)s'
-date_fmt=
-screen_level=DEBUG
-file_level=DEBUG
-
-"log_path" indicate the log path
-"log_file" indicate the log file name
-"format" indicate the log output format
-"date_fmt" indicate date format in the log output format
-"screen_level" & "file_level" separate the output method to set level
-
-level: debug, info, warning, error, critical
-
-the project named bekazone, is based django environment
-operative template platform, have a lot of base code snippets
-
-folder structure:
---app
-    - cadmin
-    - users
---code snipets
-    - bekazone
-    - common
---html
-    - static
-    - templates
---config
-    - etc
-    - var
-
-url_file:
-    bekazone/urls.py
-    cadmin/urls.py
-    users/urls/web_urls.py
-url_list:
-    - / index
-    - /users/login/  users:login
-    - /users/logout/  users:logout
-    - /users/system_init/  users:system_init
-    - /users/change-password/  users:change-password
-    - /users/setting/  users:setting
-    - /users/head_pic_upload/  users:head_pic_upload
-    - /users/head_pic/  users:head_pic
-    - /users/account-reg/  users:account-reg
-    - /users/account-list/  users:account-list
-    - /users/group-create/  users:group-create
-    - /users/group-list/  users:group-list
-
-    - /cadmin/  cadmin:index
-    - /cadmin/<app>/  cadmin:table_model_list
-    - /cadmin/<app>/<table>/  cadmin:table_list
-    - /cadmin/<app>/<table>/add/  cadmin:table_add
-    - /cadmin/<app>/<table>/<id>/change/  cadmin:table_change
-    - /cadmin/<app>/<table>/<id>/delete/  cadmin:table_delete
-    - /cadmin/get-action/  cadmin:get_action
-    - /cadmin/batch-update/  cadmin:batch_update
-    
-
-the project have two app: users and cadmin
-
-"users" app is charged with platform's user system
-"cadmin" app is database management system
-
-only is_superadmin is True, can't change its group
-
-
-
-other:
+備考:
 bekazone is slave of django configure files
 etc have configure files of the platform's
 
 =================================
-beka_admin
+beka_admin 配置
 in app of cadmin
 
 config app->_admin.py
@@ -122,147 +94,3 @@ class SimpleAdmin(baseadmin.create_admin())
     ....
 
 baseadmin.site.register(<model>, <admin>)
-
-config_item:
-    list_display  指定展示的列数
-    list_filter   指定想筛选的列数
-    search_fields  选择想要搜索的列数
-    order_fields  *以list_display为基础，选择那些列需要排序
-    list_per_page  一页显示多少行
-    list_editable  指定哪些字段需要在页面上直接修改
-    
-    model_change_form  指定更改一条数据的自定义表单，默认为系统指定
-    model_add_form  指定添加一条数据的自定义表单，默认为系统指定
-    actions  指定需要让选中的那些项执行什么函数，默认有删除
-
-    
-
-=================================
-bekablog
-/blog-backend/edit-blog/  blog_backend:edit_blog
-/blog-backend/message/  blog_backend:message
-/blog-backend/normal-edit-blog/  blog_backend:normal_edit_blog
-/blog-backend/md-edit-blog/  blog_backend:md_edit_blog
-
-/blog-backend/display-blog-list/  blog_backend:display_blog_list
-/blog-backend/verify-kind/  blog_backend:verify_kind
-/blog-backend/kind-list/  blog_backend:kind_list
-/blog-backend/kind-delete/  blog_backend:kind_delete
-/blog-backend/tag-list/  blog_backend:tag_list
-/blog-backend/verify-tag/  blog_backend:verify_tag
-/blog-backend/tag-delete/  blog_backend:tag_delete
-/blog-backend/blog-title-verify/  blog_backend:blog_title_verify
-/blog-backend/blog-delete/  blog_backend:blog_delete
-/blog-backend/get-blog-message/  blog_backend:get_blog_message
-/blog-backend/verify-related/  blog_backend:verify_related
-/blog-backend/blog-view/  blog_backend:blog_view
-/blog-backend/upload-markdown/  blog_backend:blog_markdown
-
-
-blog: 
-a piece of blog:
-title, blog_content, md_content, blog_kind(group), tag, creator, ,create_date, adjustment_date
-
-blog_kind
-name, alias, introdution, create_date
-
-tag: used to search
-name
-
-blog edit/blog list display/create blog kind/blog index
-create: message?normal_blog?technology_blog?
-normal_blog/technology_blog
-message   normal_editor
-normal_blog  title+normal_editor+group_select+tag
-technology_blog  title+md_editor+group_select+tag
-
-
-tinymce(used: normal_blog/message)
-https://www.tiny.cloud/docs/
-
-toolbar: formatselect, bold, italic, strikethrough, underline, forecolor, backcolor, link, alignleft, aligncenter, alignright, alignjustify, outdent, indent, removeformat, numlist, bullist
-
-plugin tool: print, preview, fullscreen, image, media, link, codesample, table, charmap, hr, advlist, lists
-
-list, advlist-> numlist, bullist
-link -> link
-
-unimportant plugin tool: template, pagebreak, nonbreaking, toc, insertdatetime, tinymcespellchecker, a11ychecker
-never effect: autolink, directionality, fullpage, textpattern, imagetools
-network is necessary:advcode, powerpaste
-
-get content
-tinyMCE.activeEditor.getContent();
-tinyMCE.activeEditor.getContent({format : 'raw'});
-tinyMCE.get('message').getContent();
-
-set content
-tinyMCE.activeEditor.setContent(`
-<!DOCTYPE html>
-<html>
-<head>
-</head>
-<body>
-<p>dddddd</p>
-</body>
-</html>
-`, {format : 'raw'});
-tinyMCE.get('my_editor').setContent(data);
-
-editmd(used: technology_blog)
-http://pandao.github.io/editor.md/examples/
-
-<div id="text-editmd">
-<textarea style="display:none"></textarea>
-</div>
-
-textEditor = editormd("text-editmd", {
-            width: "90%",
-            height: 640,
-            syncScrolling: "single",
-            path: "/static/plugins/editmd/lib/",
-            saveHTMLToTextarea: true,
-            emoji:true,
-        })
-
-get content:
-textEditor.getHTML()/textEditor.getMarkdown()⇔textEditor.getValue()
-textEditor.getPreviewedHTML()
-textEditor.get?
-set content:
-textEditor.setValue()
-
-
-
-1, blog list:
-when creating, ctrl+s save, get id to 
-
-
-
-django shell:
-
-from blog_backend.models import Tag
-from blog_backend.models import BlogList
-from blog_backend.models import BlogKind
-if had file
-
-このブログは技術者向け、もしくはコンピューターに働いている方へ考えの機能です。便利性を考える。
-技術者はたくさん癖があるので、例えば"ctrl+s"セーブ操作、そういうわけで、ctrl+sをブログのセーブ操作に変わろうと考える、例えばテーブルにはctrl+dの削除操作か慣れるので、ボタンの関心は少なくなる。
-==========================================
-front-page: 
-1, database->blog_backend/models
-2, design a series of frontpages of PC
-3, design a series of frontpages of phone
-4, cmdb
-
-index
-technology:
-python
-javascript
-operator
-project_readme
-
-
-パスワード忘れたらの仕組み
-メールを入力し、発送する、パスワード変更のリンクを含んで紹介文章とともに発送。
-リンクを押したら、パスワード変更画面を表示して、変更できます
