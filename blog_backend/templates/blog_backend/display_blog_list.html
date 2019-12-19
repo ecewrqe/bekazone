@@ -1,6 +1,6 @@
 ﻿{% extends 'base.html' %}
 {% block header_custom_js_css %}
-
+    <script src="/static/js/cut_page.js"></script>
 {% endblock %}
 {% block title %}
 blog list
@@ -153,22 +153,26 @@ blog list
                 <div class="panel-title">kind_select</div>
             </div>
             <div class="panel-body">
-                <div class="row" style="margin-bottom: 5px">
-                    <select name="kind_id" style="width:100%" required id="blog_kind_select">
-                        {% for bk_obj in bk_obj_list %}
-                        <option value="{{ bk_obj.id }}">{{ bk_obj.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+{#                <div class="row" style="margin-bottom: 5px">#}
+{#                    <select name="kind_id" style="width:100%" required id="blog_kind_select">#}
+{#                        {% for bk_obj in bk_obj_list %}#}
+{#                        <option value="{{ bk_obj.id }}">{{ bk_obj.name }}</option>#}
+{#                        {% endfor %}#}
+{#                    </select>#}
+{#                </div>#}
                 <div id="kind_list" class="row list-group">
-                    {% for bk_obj in bk_obj_list %}
-                    {% if kind == bk_obj.name %}
-                    <a href="javascript:;" title="{{ bk_obj.alias }}" class="list-group-item active">{{ bk_obj.name }}</a>
-                    {% else %}
-                    <a href="javascript:;" title="{{ bk_obj.alias }}" class="list-group-item">{{ bk_obj.name }}</a>
-                    {% endif %}
-                    {% endfor %}
-                    
+{#                    {% for bk_obj in bk_obj_list %}#}
+{#                    {% if kind == bk_obj.name %}#}
+{#                    <a href="javascript:;" title="{{ bk_obj.alias }}" class="list-group-item active">{{ bk_obj.name }}</a>#}
+{#                    {% else %}#}
+{#                    <a href="javascript:;" title="{{ bk_obj.alias }}" class="list-group-item">{{ bk_obj.name }}</a>#}
+{#                    {% endif %}#}
+{#                    {% endfor %}#}
+{#                    #}
+                </div>
+                <div class="kind_select_foot" style="margin-top: 15px;">
+                    <div id="change_kind_page">
+                    </div>
                 </div>
             </div>
         </div>
@@ -365,17 +369,17 @@ blog list
 <!--/create tag-->
 {% endblock %}
 {% block footer_custom_js %}
-<script src="/static/blog_initial.js"></script>
+
 <script>
+    KINDLIST = [];
+    KIND_OBJ_LIST = [];
+    KINDPCT = new PageCutter([]);
+
+    TAGLIST = [];
+    TAG_OBJ_LIST = [];
+    TAGPCT = new PageCutter([]);
     $(document).ready(function () {
-        $("#kind_list").children().click(function () {
-            if ($(this).hasClass("active")) {
-                $(this).removeClass("active");
-            } else{
-                $(this).addClass("active");
-            }
-            
-        });
+
         var url_dict = url_parse(location.href);
         var tree_str = "";
         for (var k in url_dict["querys"]) {
@@ -383,11 +387,125 @@ blog list
         }
         $("#tree_str").html(tree_str);
         $("#blog_kind_select").chosen({destroy : "python"});
+
+        // blog kind
+
+        $.ajax({
+            url:"/blog-backend/kind-list/",
+            type: "GET",
+            dataType: "JSON",
+            success: (data)=>{
+
+                if(data.status == 0){
+                    $("#kind_list").empty();
+                    KINDLIST = data.data;
+
+                    for(let kind of KINDLIST){
+                        let a_tag = document.createElement("a");
+                        a_tag.href = "javascript:;";
+                        a_tag.title = kind;
+                        a_tag.classList.add("list-group-item");
+                        a_tag.innerText = kind;
+                        KIND_OBJ_LIST.push(a_tag);
+                    }
+
+                    let pct = new PageCutter(KIND_OBJ_LIST);
+                    KINDPCT = pct;
+                    let new_kind_obj_list = pct.getRowList();
+                    console.log(new_kind_obj_list);
+                    for(let kind of new_kind_obj_list){
+                        $("#kind_list").append(kind);
+                    }
+
+
+
+                    $("#change_kind_page").append(`<a href="javascript:;" id="kind_prev" title="go prev" style="float:left">
+                            <i class="fa fa-arrow-left"></i>
+                        </a>
+
+                        <a href="javascript:;" title="go next" style="float: right;">
+                            <i class="fa fa-arrow-right"  id="kind_next"></i>
+                        </a>`);
+                }
+                $("#kind_prev").click(()=>{
+                    goKindPrev();
+                })
+                $("#kind_next").click(()=>{
+                    goKindNext();
+                })
+
+                $("#kind_list").children().click(function () {
+                    if ($(this).hasClass("active")) {
+                        $(this).removeClass("active");
+                    } else{
+                        $(this).addClass("active");
+                    }
+
+                });
+
+
+            }
+        })
+
+        $.ajax({
+            url: "/blog-backend/tag-list/",
+            type: "GET",
+            dataType: "JSON",
+            success: (data) => {
+                if(data.status == 0){
+                    let tag_list = data.data;
+                    TAGLIST = tag_list;
+
+                }
+
+            }
+        })
     });
+
+
+    function goKindPrev(){
+        console.log("prev");
+        $("#kind_list").empty();
+        let pct = KINDPCT;
+        pct.onGoPrev();
+        let new_kind_obj_list = pct.getRowList();
+        for(let kind of new_kind_obj_list){
+
+            $("#kind_list").append(kind);
+        }
+
+        $("#kind_list").children().click(function () {
+                    if ($(this).hasClass("active")) {
+                        $(this).removeClass("active");
+                    } else{
+                        $(this).addClass("active");
+                    }
+
+                });
+    }
+
+    function goKindNext(){
+        let pct = KINDPCT;
+        $("#kind_list").empty();
+        pct.onGoNext();
+        let new_kind_obj_list = pct.getRowList();
+        for(let kind of new_kind_obj_list){
+            $("#kind_list").append(kind);
+        }
+
+        $("#kind_list").children().click(function () {
+                    if ($(this).hasClass("active")) {
+                        $(this).removeClass("active");
+                    } else{
+                        $(this).addClass("active");
+                    }
+
+                });
+    }
 
     document.onkeydown = function (event) {
         if (event.ctrlKey && event.keyCode == 68) {
-            delete_blog()
+            delete_blog();
             return false;
         }
     }

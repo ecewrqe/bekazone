@@ -1,13 +1,8 @@
-﻿** bekazone templates platform usage explainment
--- version: 1.0.1
+﻿-- version: 1.0.1
 -- python_vertion: 3.5.0
 -- django_version: 1.11.5
 
-このブログは技術者向け、もしくはコンピューターに働いている方へ考えの機能です。便利性を考える。
-技術者はたくさん癖があるので、例えば"ctrl+s"セーブ操作、そういうわけで、ctrl+sをブログのセーブ操作に変わろうと考える、例えばテーブルにはctrl+dの削除操作か慣れるので、ボタンの関心は少なくなる。
-
-### 配置
-必ずインストールしするパッケージは以下
+个人博客，用来写技术文档和一些文章
 django 1.11.5, pillow, pymysql, six
 
 verification the path and a empty file
@@ -29,8 +24,8 @@ bekazone_uwsgi.ini
 socket = 127.0.0.1:3000   #  <uwsgi port>
 chdir = /app/bekazone/    # project root path
 #home = /usr/local/python/lib/python3.6
-pythonpath = /usr/local/python/lib/python3.6  # この通り
-wsgi-file = bekazone/wsgi.py   # project wsgiファイル
+pythonpath = /usr/local/python/lib/python3.6  # 指定python路径
+wsgi-file = bekazone/wsgi.py   # wsgi文件路径
 processes = 4
 threads = 2
 ```
@@ -68,29 +63,13 @@ host=localhost
 port=3306
 ```
 
-簡単なdjangoの起動:
+启动:
 ```
 python manage.py runserver 0.0.0.0:9000
-```
-nginx and uwsgiの起動は
-```
 # under the project path
 uwsgi bekazone_uwsgi.ini
 systemctl start nginx
 ```
 
-備考:
-bekazone is slave of django configure files
-etc have configure files of the platform's
+更新: 2019-12-19
 
-=================================
-beka_admin 配置
-in app of cadmin
-
-config app->_admin.py
-
-from cadmin import baseadmin
-class SimpleAdmin(baseadmin.create_admin())
-    ....
-
-baseadmin.site.register(<model>, <admin>)

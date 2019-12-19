@@ -25,8 +25,8 @@ INSTALLED_APPS = [
 ]
 
 
-CONFIGFILE_PATH = "etc/bekazone/config.conf"
-kcp = utils.BekaConfigParser(os.path.join(BASE_DIR, CONFIGFILE_PATH))
+CONFIGFILE_PATH = os.path.normpath(os.path.join(BASE_DIR, "etc/bekazone/config.conf"));
+kcp = utils.BekaConfigParser(CONFIGFILE_PATH)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

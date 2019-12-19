@@ -7,7 +7,7 @@ from PIL import Image
 import logging
 import os
 from bekazone.utils import BekaConfigParser
-from bekazone.settings import CONFIGFILE_PATH
+from bekazone.settings import CONFIGFILE_PATH,BASE_DIR
 
 class JsonResponse(object):
     """
@@ -452,11 +452,15 @@ class LoggerCollection(object):
     simplify log code, 
     """
     def __init__(self):
+        print("CONFIGFILE_PATH--->", CONFIGFILE_PATH)
+
         cp = BekaConfigParser(CONFIGFILE_PATH)
         
         log_path = cp.get_config("logger", "log_path")
+        log_path = os.path.normpath(os.path.join(BASE_DIR, log_path))
         log_file = cp.get_config("logger", "log_file")
-        log_file = os.path.join(log_path, log_file)
+        log_file = os.path.normpath(os.path.join(log_path, log_file))
+        print("log_file--->", log_file)
         log_name = cp.get_config("logger", "log_name")
         # formatter
         format = cp.get_config("logger", "format")

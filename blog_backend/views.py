@@ -12,6 +12,7 @@ import mimetypes
 import re
 from django.utils.encoding import force_text
 from django.utils.encoding import DjangoUnicodeDecodeError
+from bekazone.settings import BASE_DIR
 
 
 # Create your views here.
@@ -201,11 +202,13 @@ def md_edit_blog(request):
 
         md_file_name = bk.title
         path = "var/data/blog_files"
+        path = os.path.join(BASE_DIR, path)
+
         tempo_path = os.path.join(path, md_file_name)
         history_file = "%s-%s.md"%(tempo_path, datetime.datetime.now().strftime("%Y-%m-%d"))
         if os.path.exists("%s.md" % tempo_path) and not os.path.exists(history_file):
             os.rename("%s.md" % tempo_path, history_file)
-
+        
         tempo_path = os.path.normpath(tempo_path)
         with open("%s.md" % tempo_path, "wb") as fp:
             fp.write(bytes(bk.blog_content, "utf8"))
@@ -299,25 +302,34 @@ def message_list(request):
 
 @login_required(login_url_name='users:login')
 def kind_list(request):
-    name = request.POST.get("name").strip()
-    alias = request.POST.get('alias').strip()
-    introdution = request.POST.get("introdution").strip()
-    if not alias:
-        alias = name
     jrs = JsonResponse()
-    try:
-        bk = BlogKind()
-        bk.name = name
-        bk.alias = alias
-        bk.introdution = introdution
-        bk.create_date = datetime.datetime.now()
-        bk.save()
+    if request.method == "POST":
+        name = request.POST.get("name").strip()
+        alias = request.POST.get('alias').strip()
+        introdution = request.POST.get("introdution").strip()
+        if not alias:
+            alias = name
+
+        try:
+            bk = BlogKind()
+            bk.name = name
+            bk.alias = alias
+            bk.introdution = introdution
+            bk.create_date = datetime.datetime.now()
+            bk.save()
+            jrs.set_success(0, "ok")
+            jrs.url = "/blog-backend/display-blog-list/"
+            jrs.id = bk.id
+            jrs.name = bk.name
+        except:
+            jrs.set_error(300, "create failure")
+    else: # GET
+        bk_obj_list = BlogKind.objects.all()
+        bk_list = []
+        for bk_obj in bk_obj_list:
+            bk_list.append(bk_obj.name)
         jrs.set_success(0, "ok")
-        jrs.url = "/blog-backend/display-blog-list/"
-        jrs.id = bk.id
-        jrs.name = bk.name
-    except:
-        jrs.set_error(300, "create failure")
+        jrs.data = bk_list
     return HttpResponse(jrs.set_json_pack())
 
 @login_required(login_url_name='users:login')
@@ -364,14 +376,23 @@ def kind_delete(request):
 
 @login_required(login_url_name='users:login')
 def tag_list(request):
-    name = request.POST.get("name")
-    tg = Tag()
-    tg.name = name
-    tg.save()
     jrs = JsonResponse()
-    jrs.set_success(0, "ok")
-    jrs.id = tg.id
-    jrs.name = tg.name
+    if request.method == "GET":
+        tg_obj_list = Tag.objects.all()
+        tg_list = []
+        for tg_obj in tg_obj_list:
+            tg_list.append(tg_obj.name)
+        jrs.set_success(0, "ok")
+        jrs.data = tg_list
+    else:
+        name = request.POST.get("name")
+        tg = Tag()
+        tg.name = name
+        tg.save()
+
+        jrs.set_success(0, "ok")
+        jrs.id = tg.id
+        jrs.name = tg.name
     return HttpResponse(jrs.set_json_pack())
 
 @login_required(login_url_name='users:login')
