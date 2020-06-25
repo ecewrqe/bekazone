@@ -124,15 +124,20 @@ class PageBranch(object):
         
         self.data_list = data_list
         self.current_page = current_page
+
         self.row_in_page = row_in_page
         self.row_count = row_count or len(data_list)
 
         self.page_count, self.end_page_row_count = divmod(self.row_count, row_in_page)
+        if self.current_page > self.page_count:
+            self.current_page = 1
         if self.end_page_row_count:
             self.page_count += 1
 
-        self.page_start_index = (current_page - 1) * row_in_page
-        self.page_stop_index = (current_page) * row_in_page
+        self.page_start_index = (self.current_page - 1) * row_in_page
+        self.page_stop_index = (self.current_page) * row_in_page
+
+        
 
         self.page_list = []
 
@@ -167,6 +172,7 @@ class PageBranch(object):
         assert page_range_size % 2 == 1, "page_range_size should even"
 
         self.page_list = []
+        
         if self.page_count <= page_range_size:
             for page in range(1, self.page_count + 1):
                 self.page_list.append(page)
@@ -239,8 +245,12 @@ class PageBranch(object):
                 self.page_list.append("...")
                 for page in range(range_start, range_stop + 1):
                     self.page_list.append(page)
+
+                
                 self.page_list.append("...")
                 self.page_list.append(self.page_count)
+
+        
 
     def get_pgextend(self, is_pn=True, is_ae=True, is_english=False):
         '''

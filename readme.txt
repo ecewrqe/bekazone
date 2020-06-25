@@ -2,7 +2,7 @@
 -- python_vertion: 3.5.0
 -- django_version: 1.11.5
 
-个人博客，用来写技术文档和一些文章
+个人博客，用来写技术文档和一些文章abcd
 django 1.11.5, pillow, pymysql, six
 
 verification the path and a empty file

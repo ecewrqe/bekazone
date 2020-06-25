@@ -245,12 +245,12 @@ def display_blog_list(request):
             count += 1
 
         
-        kind = request.GET.get("kind")
+        kind = request.GET.get("_k") # filter blog in kind
         if kind:
             is_back = True
             bl_obj_list = bl_obj_list.filter(blog_kind__name=kind)
 
-        tag = request.GET.get("tag")
+        tag = request.GET.get("_t")  # filter blog in tag
         if tag:
             is_back = True
             bl_obj_list = bl_obj_list.filter(tag__name=tag)
@@ -261,9 +261,12 @@ def display_blog_list(request):
             bl_obj_list = bl_obj_list.filter(creator__username = creator)
 
         search_handle = request.GET.get("_s")
-        search_fields = ["title", "tag__name", "blog_content"]
-        bl_obj_list, search_handle = get_search_obj(request, bl_obj_list, search_fields)
-
+        search_fields = ["title"]
+        print(search_handle)
+        if search_handle != "None":
+            bl_obj_list, search_handle = get_search_obj(request, bl_obj_list, search_fields)
+        else:
+            search_handle = ""
         current_page = int(request.GET.get("_p") or "1")
         row_in_page = 7
 

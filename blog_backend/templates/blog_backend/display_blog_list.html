@@ -83,12 +83,18 @@ blog list
                             </td>
                             <td>
                                 <div class="row">
-                                    <a href="/blog-backend/md-edit-blog/?id={{ bl_obj.id }}" class="btn-link">{{ bl_obj.title }}</a>
+                                    <a href="/blog-backend/blog-view/?id={{ bl_obj.id }}" class="btn-link">
+                                        {{ bl_obj.title }}
+                                    </a>
                                 </div>
                                 
                                 <div class="row">
                                     <div class="panel-control">
-                                    <a href="/blog-backend/blog-view/?id={{ bl_obj.id }}" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                                        <a href="/blog-backend/md-edit-blog/?id={{ bl_obj.id }}" class="btn btn-default">
+                                            
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                    
 
                         
                                 </div>
@@ -96,13 +102,13 @@ blog list
                                 
                             </td>
                             <td>
-                                <a href="javascript:;" onclick="filter_blog(this, 'kind')" class="link link-warning">{{ bl_obj.blog_kind.name }}</a>
+                                <a href="javascript:;" onclick="filter_blog(this, '_k')" class="link link-warning">{{ bl_obj.blog_kind.name }}</a>
                                 
                             </td>
                             <td>
                                 {% for tag in bl_obj.tag.all %}
                                     {% if forloop.counter0 < 10 %}
-                                        <a href="javascript:;" class="link link-warning" onclick="filter_blog(this, 'tag')">{{ tag.name }}</a>
+                                        <a href="javascript:;" class="link link-warning" onclick="filter_blog(this, '_t')">{{ tag.name }}</a>
                                     {% endif %}
 
                                 {% endfor %}
@@ -197,13 +203,21 @@ blog list
                     </div>
                 </div>
                 <div class="panel-body" id="tag_box">
+                    <div id="tag_list" class="row">
+
+                    </div>
+                    <div id="tag_select_foot" style="margin:15px">
+                        <div id="change_tag_page"></div>
+                    </div>
+                    
+                    <!--
                     {% for tag_sim in tag_sim_list %}
                     {% if tag == tag_sim.0 %}
                     <button data-toggle="button" class="btn btn-{{ tag_sim.1 }} btn-labeled active" aria-pressed="true">{{ tag_sim.0 }}</button>
                     {% else %}
                     <button data-toggle="button" class="btn btn-{{ tag_sim.1 }} btn-labeled" aria-pressed="true">{{ tag_sim.0 }}</button>
                     {% endif %}
-                    {% endfor %}
+                    {% endfor %}-->
                 </div>
             </div>
         </div>
@@ -378,18 +392,28 @@ blog list
     TAGLIST = [];
     TAG_OBJ_LIST = [];
     TAGPCT = new PageCutter([]);
+    TAG_SIM_LIST=new Array();
     $(document).ready(function () {
 
         var url_dict = url_parse(location.href);
         var tree_str = "";
+        var current_kind = "";
         for (var k in url_dict["querys"]) {
+            
             tree_str += `${k}--${url_dict["querys"][k]};`
         }
-        $("#tree_str").html(tree_str);
-        $("#blog_kind_select").chosen({destroy : "python"});
 
+ 
         // blog kind
-
+        if("_k" in url_dict["querys"]){
+            current_kind = url_dict["querys"]._k;
+        }
+        if("_t" in url_dict["querys"]){
+            TAG_SIM_LIST=url_dict["querys"]._t;
+            if(!Array.isArray(TAG_SIM_LIST)){
+                TAG_SIM_LIST=new Array(TAG_SIM_LIST);
+            }
+        }
         $.ajax({
             url:"/blog-backend/kind-list/",
             type: "GET",
@@ -401,18 +425,28 @@ blog list
                     KINDLIST = data.data;
 
                     for(let kind of KINDLIST){
-                        let a_tag = document.createElement("a");
-                        a_tag.href = "javascript:;";
-                        a_tag.title = kind;
-                        a_tag.classList.add("list-group-item");
-                        a_tag.innerText = kind;
-                        KIND_OBJ_LIST.push(a_tag);
+                        if(current_kind && kind == current_kind){
+                            let a_tag = document.createElement("a");
+                            a_tag.href = "javascript:;";
+                            a_tag.title = kind;
+                            a_tag.classList.add("list-group-item");
+                            a_tag.classList.add("active");
+                            a_tag.innerText = kind;
+                            KIND_OBJ_LIST.push(a_tag);
+                        }else{
+                            let a_tag = document.createElement("a");
+                            a_tag.href = "javascript:;";
+                            a_tag.title = kind;
+                            a_tag.classList.add("list-group-item");
+                            a_tag.innerText = kind;
+                            KIND_OBJ_LIST.push(a_tag);
+                        }
+                        
                     }
 
                     let pct = new PageCutter(KIND_OBJ_LIST);
                     KINDPCT = pct;
                     let new_kind_obj_list = pct.getRowList();
-                    console.log(new_kind_obj_list);
                     for(let kind of new_kind_obj_list){
                         $("#kind_list").append(kind);
                     }
@@ -423,8 +457,8 @@ blog list
                             <i class="fa fa-arrow-left"></i>
                         </a>
 
-                        <a href="javascript:;" title="go next" style="float: right;">
-                            <i class="fa fa-arrow-right"  id="kind_next"></i>
+                        <a href="javascript:;" id="kind_next" title="go next" style="float: right;">
+                            <i class="fa fa-arrow-right"></i>
                         </a>`);
                 }
                 $("#kind_prev").click(()=>{
@@ -453,8 +487,43 @@ blog list
             dataType: "JSON",
             success: (data) => {
                 if(data.status == 0){
-                    let tag_list = data.data;
-                    TAGLIST = tag_list;
+                    $("#tag_list").empty();
+                    TAGLIST = data.data;
+                    for(let tag of TAGLIST){
+                        //<button data-toggle="button" class="btn btn-{{ tag_sim.1 }} btn-labeled active" aria-pressed="true">{{ tag_sim.0 }}</button>
+                        let btn_tag = document.createElement("button");
+                        btn_tag.setAttribute("data-toggle", "button");
+                        btn_tag.setAttribute("aria-pressed", "true");
+                        for(var act_tag of TAG_SIM_LIST){
+                            if(tag==act_tag){
+                                btn_tag.setAttribute("aria-pressed", "active");
+                            }
+                        }
+                        btn_tag.innerText = tag;
+                        TAG_OBJ_LIST.push(btn_tag);
+                    }
+                    let pct = new PageCutter(TAG_OBJ_LIST);
+                    TAGPCT = pct;
+
+                    let new_tag_obj_list = pct.getRowList();
+                    for(let tag of new_tag_obj_list){
+                        $("#tag_list").append(tag);
+                    }
+
+                    $("#change_tag_page").append(`<a href="javascript:;" id="tag_prev" title="go prev" style="float:left">
+                            <i class="fa fa-arrow-left"></i>
+                        </a>
+
+                        <a href="javascript:;" id="tag_next" title="go next" style="float: right;">
+                            <i class="fa fa-arrow-right"></i>
+                        </a>`);
+                    
+                        $("#tag_prev").click(()=>{
+                            goTagPrev();
+                        })
+                        $("#tag_next").click(()=>{
+                            goTagNext();
+                        })
 
                 }
 
@@ -462,7 +531,48 @@ blog list
         })
     });
 
+    // change page of tag
+    function goTagPrev(){
+        $("#tag_list").empty();
+        let pct = TAGPCT;
+        pct.onGoPrev();
+        let new_tag_obj_list = pct.getRowList();
+        for(let tag of new_tag_obj_list){
 
+            $("#tag_list").append(tag);
+        }
+
+        $("#tag_list").children().click(function () {
+                    if ($(this).hasClass("active")) {
+                        $(this).removeClass("active");
+                    } else{
+                        $(this).addClass("active");
+                    }
+
+                });
+    }
+
+    function goTagNext(){
+        $("#tag_list").empty();
+        let pct = TAGPCT;
+        pct.onGoNext();
+        let new_tag_obj_list = pct.getRowList();
+        for(let tag of new_tag_obj_list){
+
+            $("#tag_list").append(tag);
+        }
+
+        $("#tag_list").children().click(function () {
+                    if ($(this).hasClass("active")) {
+                        $(this).removeClass("active");
+                    } else{
+                        $(this).addClass("active");
+                    }
+
+                });
+    }
+
+    // change page of kind
     function goKindPrev(){
         console.log("prev");
         $("#kind_list").empty();
@@ -557,11 +667,12 @@ blog list
     function filter_blog(itm, typ) {
         var current_url = location.href;
         var value = $(itm).text();
-        if (typ == "kind") {
-            var new_url = add_query(current_url, { 'kind': value });
+        if (typ == "_k") {  // filter blog in kind
+            var new_url = add_query(current_url, { '_k': value });
+            console.log(new_url);
             location.href = new_url;
-        } else if (typ == "tag") {
-            var new_url = add_query(current_url, { 'tag': value });
+        } else if (typ == "_t") { // filter blog in tag
+            var new_url = add_query(current_url, { '_t': value });
             location.href = new_url;
         } else if (typ == "creator") {
             var new_url = add_query(current_url, { 'creator': value });
@@ -585,11 +696,11 @@ blog list
 
     function filter_blog_in_kind() {
         var kind = $("#kind_list").children(".active").first()
-        filter_blog(kind, "kind");
+        filter_blog(kind, "_k");
     }
     function filter_tag_in_kind() {
         var tag = $("#tag_box").children(".active").first()
-        filter_blog(tag, "tag");
+        filter_blog(tag, "_t");
     }
 
     

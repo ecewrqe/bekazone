@@ -110,8 +110,24 @@ function url_parse(url) {
     url_dict.path = path;
 
     if (typeof querys === "string") {
+        var query_key_list = new Object();
         $.each(querys.split("&"), function (i, query) {
-            url_dict.querys[query.split("=")[0]] = decodeURI(query.split("=")[1]);
+            var k = query.split("=")[0];
+            if(!(k in query_key_list)){
+                query_key_list[k]=1;
+                url_dict.querys[k] = decodeURI(query.split("=")[1]);
+            }else{
+                query_key_list[k]++;
+                if(query_key_list[k] == 2){
+                    var tmp_data = url_dict.querys[k];
+                    url_dict.querys[k] = new Array();
+                    url_dict.querys[k].push(tmp_data);
+                }
+
+                url_dict.querys[k].push(decodeURI(query.split("=")[1]))
+            }
+            
+            
         });
     }
 
