@@ -2,19 +2,40 @@
 -- python_vertion: 3.5.0
 -- django_version: 1.11.5
 
-个人博客，用来写技术文档和一些文章abcd
-django 1.11.5, pillow, pymysql, six
+# personal blog
+
+## installation manual
+※install package: django 1.11.5, pillow, pymysql, six
 
 verification the path and a empty file
 users/migrations/__init__.py
+※remove all migration files without `__init__.py` in each app: blog_backend, users
+
+※ rename the form.py.bak in users to form.py occasionally rename the original form.py to arbitrary temporary name, `reverse the process after migrate`
+
+※
 create databaes:
 1, config  etc/bekazone/config.conf->[mysql]->name&user&password&host&port
-2, create database
+2, create database, the database name correspond with etc/bekazone/config.conf->[mysql]
 3, initial
 python manage.py makemigrations
 python manage.py migrate
-========================
-uwsgi,nginx
+
+※
+create two groups by sql
+```
+insert into user_group (groupname) values ("admin"), ("normal")
+```
+
+※ the first try to start the server
+```
+python manage.py runserver [ip]:[port]
+```
+
+## associate to uwsgi and nginx
+
+option the uwsgi and nginx is used to advance performence
+
 ```
 pip3 install uwsgi  # python3 pip3
 ```
@@ -65,11 +86,4 @@ port=3306
 
 启动:
 ```
-python manage.py runserver 0.0.0.0:9000
-# under the project path
-uwsgi bekazone_uwsgi.ini
-systemctl start nginx
-```
-
-更新: 2019-12-19
-
+python ma
