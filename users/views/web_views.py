@@ -91,9 +91,10 @@ def system_init(request):
     else:
         jrs = JsonResponse()
         form_obj = forms.UserFirstCreateForm(initial=request.POST, data=request.POST)
-
+        
         if form_obj.is_valid():
             lc = LoggerCollection()
+            username = form_obj.clear_data["username"]
             lc.log_output("info", "account:%s, password changed" % username)
             form_obj.save()
 
