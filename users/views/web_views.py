@@ -94,7 +94,7 @@ def system_init(request):
         
         if form_obj.is_valid():
             lc = LoggerCollection()
-            username = form_obj.clear_data["username"]
+            username = form_obj.cleared_data["username"]
             lc.log_output("info", "account:%s, password changed" % username)
             form_obj.save()
 
