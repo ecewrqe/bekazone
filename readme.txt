@@ -2,88 +2,159 @@
 -- python_vertion: 3.5.0
 -- django_version: 1.11.5
 
-# personal blog
 
-## installation manual
-※install package: django 1.11.5, pillow, pymysql, six
+[TOC]
 
-verification the path and a empty file
-users/migrations/__init__.py
-※remove all migration files without `__init__.py` in each app: blog_backend, users
+### packages
+#### yum packages
+development tools, python3, nginx, memcached, mysql, mysql-server
 
-※ rename the form.py.bak in users to form.py occasionally rename the original form.py to arbitrary temporary name, `reverse the process after migrate`
+#### pip packages
+uwsgi, django, pymysql, pillow, six, djangorestframework
 
-※
-create databaes:
-1, config  etc/bekazone/config.conf->[mysql]->name&user&password&host&port
-2, create database, the database name correspond with etc/bekazone/config.conf->[mysql]
-3, initial
+
+#### initial the system
+**->(path base on the project root)**
+1. bekazone/setting.py
+`DEBUG = False` -> `DEBUG = True`
+2. backup the `users/form.py` file and change the `users/form.py` by `users/form.py_bak`
+3. the mysql message on the `etc/bekazone/config.ini`
+```
 python manage.py makemigrations
 python manage.py migrate
+```
+4. reduce the `form.py`
 
-※
-create two groups by sql
+### build a daemon server
+server start and stop(redhat)
 ```
-insert into user_group (groupname) values ("admin"), ("normal")
-```
-
-※ the first try to start the server
-```
-python manage.py runserver [ip]:[port]
+service nginx start/stop # service (name) start/stop/restart/reload
+mysqld, uwsgi
 ```
 
-## associate to uwsgi and nginx
-
-option the uwsgi and nginx is used to advance performence
-
+server boot start
 ```
-pip3 install uwsgi  # python3 pip3
+chkconfig nginx on # chkconfig (name) on/off
 ```
-bekazone_uwsgi.ini
+
+config a daemon server
+path: /etc/systemd/system/
+```
+[Unit]
+Description=uWSGI instance to serve myapp
+
+[Service]
+ExecStartPre=/usr/bin/bash -c 'mkdir -p /var/log/uwsgi; chown nginx:nginx /var/log/uwsgi; mkdir -p /var/run/uwsgi; chown nginx:nginx /var/run/uwsgi'
+ExecStart=/usr/bin/bash -c 'cd /usr/local/bekazone; uwsgi bekazone_uwsgi.ini'
+
+[Install]
+WantedBy=multi-user.target
+```
+
+
+### configurations
+#### uwsgi.ini
 ```
 [uwsgi]
-socket = 127.0.0.1:3000   #  <uwsgi port>
-chdir = /app/bekazone/    # project root path
+socket = 0.0.0.0:3000
+chdir = /usr/local/bekazone
+chmod-socket = 666
 #home = /usr/local/python/lib/python3.6
-pythonpath = /usr/local/python/lib/python3.6  # 指定python路径
-wsgi-file = bekazone/wsgi.py   # wsgi文件路径
+pythonpath = /usr/local/python/lib/python3.6
+wsgi-file = bekazone/wsgi.py
 processes = 4
-threads = 2
+threads = 25
+master = true
+#attach-daemon = memcached -p 11211 -u nginx
+logger = file:/tmp/errlog
+#stats = 127.0.0.1:9191
+pidfile = /var/run/uwsgi/uwsgi.pid
+daemonize=/var/log/uwsgi/%n.log
+vacuum=true
+module=wsgi:application
+uid=nginx
+gid=nginx
+enable-threads = true
+max-requests = 1000
+max-worker-lifetime = 3600
+reload-on-rss = 2048
+worker-reload-mercy = 60
 ```
 
-nginx.conf
+run the uwsgi server:
+`uwsgi uwsgi.ini`
+
+**the fundament configuration**
+select project path: chdir, wsgi-file
+socket: http, socket, http-socket
+
+*have two aspect on the socket configuration
+```
+socket = 0.0.0.0:3000 # give a address or
+socket = /tmp/%n.sock # give a socket file
+```
+
+
+**daemonize**
+logger, daemonize
+
+**config for performance:**
+enable-threads, threads, processes
+max-requests, max-worker-lifetime, reload-on-rss, worker-reload-mercy
+master
+
+
+#### config http on nginx
+config with normal port
 ```
 server {
-        listen       80;
-        server_name  localhost;
-
-        location / {
-            include  uwsgi_params;
-            uwsgi_pass  127.0.0.1:9090;              //uwsgi_port
-            uwsgi_param UWSGI_SCRIPT demosite.wsgi;  // wsgi file path
-            uwsgi_param UWSGI_CHDIR /demosite;       //
-            index  index.html index.htm;
-            client_max_body_size 35m;
-        }
-        location /static{
-          alias /apps/bekazone/static # project_static_path
-        }
+    listen       80;
+   　server_name  localhost;
+   　location / {
+		include        uwsgi_params;
+		uwsgi_pass 127.0.0.1:3000;　　# uwsgi port, or a socket path: unix:///tmp/project.socket
     }
-
+	
+	location /static {
+		alias /usr/local/bekazone/static;
+	}
+	
+	#error_page  404              /404.html;
+	error_page   500 502 503 504 =500 /pages-500.html;
+    location = /pages-500.html {
+		root   /usr/local/bekazone/templates/;
+	}
+}
 ```
 
-config path:
-/etc/bekazone/config.conf
-sections: bekazone, logger, mysql, permission
+
+config with ssl port on nginx
+
 ```
-[mysql]
-name=bekazone
-user=bekazone
-password=bekazone
-host=localhost
-port=3306
+server {
+    listen       443 ssl;
+    server_name  localhost;
+
+	ssl_certificate     /etc/nginx/ssl/server.crt;
+	ssl_certificate_key /etc/nginx/ssl/server.key;
+
+    ssl_session_cache    shared:SSL:1m;
+    ssl_session_timeout  5m;
+
+    ssl_ciphers  HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers  on;
+    location / {
+	    include        uwsgi_params;
+		uwsgi_pass 127.0.0.1:3000;
+	}
+	error_page   500 502 503 504 =500 /pages-500.html;
+	    location = /pages-500.html {
+		root   /usr/local/bekazone/templates/;
+	}
+    location /static {
+		alias /usr/local/bekazone/static;
+	}
+}
 ```
 
-启动:
-```
-python ma
+
