@@ -53,9 +53,8 @@ def login(request):
                 if request.session.get("prepath"):
                     jrs.url = request.session["prepath"]
                 else:
-                    jrs.url = "/"
+                    jrs.url = "/backend"
 
-                print(jrs.url)
 
                 lc = LoggerCollection()
                 lc.log_output("info", "account:%s, login success" % username)
@@ -94,7 +93,7 @@ def system_init(request):
         
         if form_obj.is_valid():
             lc = LoggerCollection()
-            username = form_obj.cleared_data["username"]
+            username = form_obj.cleaned_data["username"]
             lc.log_output("info", "account:%s, password changed" % username)
             form_obj.save()
 
@@ -140,7 +139,6 @@ def user_setting(request):
     user setting page
     """
     if request.method == "GET":
-        print(request.session["user"])
         id = request.session["user"]["id"]
 
         user = User.objects.get(id=id)
@@ -164,7 +162,6 @@ def user_setting(request):
         if setting_form.errors:
 
             errors = setting_form.errors
-            print(errors)
             jrs.set_error(300,errors)
         else:
             jrs.set_success(0, 'change setting success')
@@ -318,14 +315,12 @@ def group_list(request):
                 "groupname": group.groupname,
                 "group_ucount": group_ucount
                 })
-        print(group_list)
         return render(request, 'users/group_list.html', locals())
     else:
         check_list = request.POST.get("check_list")
         check_list = json.loads(check_list)
 
         for check in check_list:
-            print(check)
             g_obj = Group.objects.get(id=check)
             Group.objects.filter(id=check).delete()
 

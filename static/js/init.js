@@ -229,7 +229,6 @@ function orderdict(keys, dict) {
     };
 
     this.get_keys = function () {
-        console.log(this.keys);
         return this.keys;
     };
 
@@ -467,7 +466,6 @@ function table_func_tools(option) {
             datatype: "json",
             success: function (data) {
                 //data的格式是[str,str,str]
-                console.log("data===", data);
                 table_obj.column_head_gen(data);
             }
         })
@@ -499,7 +497,6 @@ function table_func_tools(option) {
     this.tbody_gen = function (arr) {
 
         var table_obj = this;
-        console.log(arr);
         var htr_list = $("#" + this.option.table).find("thead th");
         var tname_list = [];
         $("#" + table_obj.option.table).find("tbody").empty();
@@ -758,10 +755,6 @@ function get_page_li_class(fields) {
                     query_dic[field[0]] = $(field[1]).val();
                 }
 
-/*                console.log(field[0])
-                console.log(field[1])
-                console.log($(field[1]).val())
-                console.log($("#depart_sel").val())*/
                 tmp_url = add_query(tmp_url, query_dic);
             }
             $(this).find("a").attr("href", tmp_url)

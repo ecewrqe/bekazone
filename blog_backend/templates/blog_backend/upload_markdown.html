@@ -18,7 +18,7 @@ upload markdown
         <div class="panel">
             <div class="panel-heading">
                 <div class="panel-control">
-                    <a href="/blog-backend/display-blog-list/" class="btn btn-default">
+                    <a href="/backend/blog-backend/display-blog-list/" class="btn btn-default">
                         <i class="fa fa-arrow-left"></i>
                     </a>
                 </div>
@@ -72,7 +72,7 @@ upload markdown
     })
 
     myDropzone = new Dropzone("div#upload_file", {
-        url: "/blog-backend/upload-markdown/",
+        url: "/backend/blog-backend/upload-markdown/",
         maxFilesize: 2,
         method: "POST",
         maxFiles: null,
@@ -95,7 +95,7 @@ upload markdown
             fd.append("blog_kind_id", $("#blog_kind").val());
             fd.append("markdown_file", file);
             $.ajax({
-                url: "/blog-backend/upload-markdown/",
+                url: "/backend/blog-backend/upload-markdown/",
                 type: "POST",
                 data: fd,
                 async: false,

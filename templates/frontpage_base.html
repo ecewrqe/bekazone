@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <title>bekazone: aligarconfree</title>
+    {% include '_head_js_css.html' %}
+    {% block header_custom_js_css %}
+
+    {% endblock %}
+</head>
+
+<!--TIPS-->
+<!--You may remove all ID or Class names which contain "demo-", they are only used for demonstration. -->
+
+
+<body>
+    <div id="container" class="effect mainnav-out">
+
+        <header id="navbar">
+            <div id="navbar-container" class="boxed">
+
+                <!--Brand logo & name-->
+                <!--================================-->
+                <div class="navbar-header">
+
+                    <a href="/" class="navbar-brand">
+                        <img src="/static/img/logo_2-02.jpg" alt="Alternate Text" class="brand-icon" />
+                        <div class="brand-title">
+
+                            <span class="brand-text">
+                                bekazone
+                            </span>
+                        </div>
+                    </a>
+                </div>
+                <!--Navbar Dropdown-->
+                <!--================================-->
+                <div class="navbar-content clearfix">
+                    <ul class="nav navbar-top-links pull-left">
+
+                        <!--Navigation toogle button-->
+                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                        <li class="tgl-menu-btn">
+                            <a class="mainnav-toggle" href="#">
+                                <i class="pli-view-list icon-lg"></i>
+                            </a>
+                        </li>
+                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                        <!--End Navigation toogle button-->
+                    </ul>
+                    <ul class="nav navbar-top-links pull-right">
+
+                        {% if request.session.user != None %}
+                        {% include '_nav_bar_user.html' %}
+                        {% else %}
+
+                        {% endif %}
+                        <li>
+                            <a href="/backend/" class="aside-toggle" title="go to backend">
+                                <i class="fa fa-sign-out"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!--================================-->
+                <!--End Navbar Dropdown-->
+
+            </div>
+        </header>
+
+        <div class="boxed">
+
+            <!--CONTENT CONTAINER-->
+            <!--===================================================-->
+            <div id="content-container">
+
+                <!--Page Title-->
+                <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                <div id="page-title">
+                    <h1 class="page-header text-overflow">{% block title %}known{% endblock %}</h1>
+
+                    <!--Searchbox-->
+                    <!--<div class="searchbox">
+                    <div class="input-group custom-search-form">
+                        <input type="text" class="form-control" placeholder="Search..">
+                        <span class="input-group-btn">
+                            <button class="text-muted" type="button"><i class="pli-magnifi-glass"></i></button>
+                        </span>
+                    </div>
+                </div>-->
+                </div>
+                <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                <!--End page title-->
+                <!--Breadcrumb-->
+                <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                {% block breadcrumb %}
+                <ol class="breadcrumb">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Library</a></li>
+                    <li class="active">Data</li>
+                </ol>
+                {% endblock %}
+
+                <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                <!--End breadcrumb-->
+                <!--Page content-->
+                <!--===================================================-->
+                <div id="page-content">
+                    {% block content %}
+
+                    {% endblock %}
+                </div>
+                <!--===================================================-->
+                <!--End page content-->
+
+
+            </div>
+            <!--===================================================-->
+            <!--END CONTENT CONTAINER-->
+        </div>
+
+        <button class="scroll-top btn">
+            <i class="pci-chevron chevron-up"></i>
+        </button>
+
+        {% include '_footer.html' %}
+
+        {#        {% include '_return_head_btn.html' %}#}
+    </div>
+    <!--===================================================-->
+    <!-- END OF CONTAINER -->
+    <script>
+
+    </script>
+    {% block footer_custom_js %}
+
+    {% endblock %}
+</body>
+
+
+</html>

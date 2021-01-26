@@ -116,7 +116,7 @@ class PasswdChangeForm(forms.Form):
     old_passwd = forms.CharField(label='Old Password', widget=forms.PasswordInput(attrs={
         'class': 'form-control',
         'id': 'old-passwd',
-    }), validators=[PasswordValidator()])
+    })) 
     new_passwd = forms.CharField(label='New Password', widget=forms.PasswordInput(attrs={
         'class': 'form-control',
         'id': 'new-passwd'
@@ -209,7 +209,6 @@ class UserSettingForm(forms.ModelForm):
         }
 
     def save(self, request, commit=True):
-        #print(self.cleaned_data)
         #super(UserSettingForm, self).save(commit)
         if not self.cleaned_data["group_id"]:
             self.add_error('group_id','not empty')
@@ -312,7 +311,6 @@ class GroupCreateForm(forms.ModelForm):
         groupname = self.instance.groupname
         g_obj = models.Group.objects.filter(groupname=groupname)
         if g_obj:
-            print("is_repeated")
             self.add_error('groupname','is repeated')
         else:
             super(GroupCreateForm, self).save()

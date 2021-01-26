@@ -1,0 +1,115 @@
+﻿{% extends 'base.html' %}
+{% block header_custom_js_css %}
+
+{% endblock %}
+
+{% block title %}
+new message
+{% endblock %}
+{% block breadcrumb %}
+<ol class="breadcrumb">
+    <li><a href="{% url 'index' %}">index</a></li>
+    <li class="active">message</li>
+</ol>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    message
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                <textarea id="message" name="content"></textarea>
+                    
+            </div>
+            <div class="row">
+                <button class="btn btn-success">undo</button>
+                {% if msg_id %}
+                <button class="btn btn-success" onclick="submit_message('repair')">repair</button>
+                <input type="hidden" name="id" id="msg_id" value="{{ msg_id }}" />
+                {% else %}
+                <button class="btn btn-success" onclick="submit_message('create')">create</button>
+                {% endif %}
+                    
+            </div>
+            </div>
+            
+            
+            <!--
+            current user, content, 
+                -->
+        </div>
+    </div>
+
+    
+</div>
+{% endblock %}
+
+{% block footer_custom_js %}
+{#<script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc"></script>#}
+<script src="/static/plugins/tinymce/tinymce.min.js"></script>
+
+<script>
+    function init_data() {
+        msg_id = $("#msg_id").val()
+        console.log(msg_id);
+        if (msg_id) {
+            $.ajax({
+                url: "/blog-backend/message/",
+                type: "POST",
+                data: { "msg_id": msg_id, "typ": "get_content" },
+                dataType: "JSON",
+                success: function (data) {
+                    tinyMCE.get('message').setContent(data.data);
+                }
+            })
+        }
+
+        
+    }
+
+ 
+tinymce.init({
+  selector: 'textarea',
+    plugins: 'image link media',
+
+    toolbar: 'formatselect | bold italic forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
+    init_instance_callback: init_data
+
+ });
+    function submit_message(typ) {
+        if (typ == "create") {
+            var content = tinyMCE.get('message').getContent();
+            $.ajax({
+                url: "/blog-backend/message/",
+                type: "POST",
+                data: { "content": content, "typ": "create" },
+                dataType: "JSON",
+                success: function (data) {
+                    location.href = data.url;
+                }
+            })
+        } else {
+            var content = tinyMCE.get('message').getContent();
+            var msg_id = $("#msg_id").val()
+            $.ajax({
+                url: "/blog-backend/message/",
+                type: "POST",
+                data: { "content": content, "typ": "repair", "msg_id": msg_id },
+                dataType: "JSON",
+                success: function (data) {
+                    location.href = data.url;
+                }
+            })
+        }
+        
+    
+        
+    }
+</script>
+
+{% endblock %}

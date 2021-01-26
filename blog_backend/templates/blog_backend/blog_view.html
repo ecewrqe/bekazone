@@ -28,11 +28,15 @@ blog view: {{ bl_obj.title }}
                     <button class="btn btn-default" title="full_screen" onclick="screen_full_toggle(this)">
                         <i class="fa fa-expand"></i>
                     </button>
-                <a href="/blog-backend/md-edit-blog/?id={{ bl_obj.id }}" class="btn btn-default" title="edit">
+                <a href="/backend/blog-backend/md-edit-blog/?id={{ bl_obj.id }}" class="btn btn-default" title="markdown-edit">
+                    <i class="fa fa-address-book"></i>
+                </a>
+
+                <a href="/backend/blog-backend/normal-edit-blog/?id={{ bl_obj.id }}" class="btn btn-default" title="edit_in_normal">
                     <i class="fa fa-edit"></i>
                 </a>
 
-                    <a href="/blog-backend/display-blog-list/" class="btn btn-default" title="return">
+                    <a href="/backend/blog-backend/display-blog-list/" class="btn btn-default" title="return">
                     <i class="fa fa-arrow-left"></i>
                 </a>
             </div>
@@ -41,7 +45,7 @@ blog view: {{ bl_obj.title }}
             <div class="panel-body">
                 <!--author, kind, date-->
                 <div class="row" >
-                    <a href="/blog-backend/display-blog-list/?creator={{ bl_obj.creator.username }}" title="author" class="link link-warning">
+                    <a href="/backend/blog-backend/display-blog-list/?creator={{ bl_obj.creator.username }}" title="author" class="link link-warning">
                         <i class="fa fa-user"></i>
                         {{ bl_obj.creator.username }}
                     </a>
@@ -55,10 +59,10 @@ blog view: {{ bl_obj.title }}
                 </div>
 
                 <div class="row">
-                        kind: <a href="/blog-backend/display-blog-list/?kind={{ bl_obj.blog_kind.name }}" class="link link-warning">{{ bl_obj.blog_kind.name }}</a><br />
+                        kind: <a href="/backend/blog-backend/display-blog-list/?kind={{ bl_obj.blog_kind.name }}" class="link link-warning">{{ bl_obj.blog_kind.name }}</a><br />
                         tag:
                         {% for tag in bl_obj.tag.all %}
-                        <a href="/blog-backend/display-blog-list/?tag={{ tag.name }}" class="link link-warning">{{ tag.name }}</a>
+                        <a href="/backend/blog-backend/display-blog-list/?tag={{ tag.name }}" class="link link-warning">{{ tag.name }}</a>
                         {% endfor %}
                     </div>
                 
@@ -101,7 +105,7 @@ blog view: {{ bl_obj.title }}
     $(document).ready(function () {
         var blog_id = $("#editmd_frame").attr("blog_id");
         $.ajax({
-            url: `/blog-backend/get-blog-message/?id=${blog_id}`,
+            url: `/backend/blog-backend/get-blog-message/?id=${blog_id}`,
             type: "GET",
             dataType: "JSON",
             success: function (data) {

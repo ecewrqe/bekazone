@@ -7,7 +7,7 @@ class User(models.Model):
     username = models.CharField(verbose_name='username', max_length=128, unique=True)
     password = models.CharField(verbose_name='password', max_length=128)
     email = models.EmailField(verbose_name='email', max_length=128)
-    group = models.ForeignKey('Group', related_name='u_group', null=True, blank=True)
+    group = models.ForeignKey('Group', related_name='u_group', null=True, blank=True, on_delete=models.DO_NOTHING)
     phone = models.CharField(verbose_name='phonenumber', max_length=128, null=True, blank=True)
     is_superadmin = models.BooleanField(verbose_name='is_superadmin', default=False)
 

@@ -1,0 +1,307 @@
+{% extends 'frontpage_base.html' %}
+{% block header_custom_js_css %}
+<script src="/static/js/cut_page.js"></script>
+{% endblock %}
+{% block title %}
+blog list
+{% endblock %}
+{% block breadcrumb %}
+
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-10">
+
+
+        <div class="row">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="panel-control">
+			                            {% if is_back == True %} 
+						                            <a href="/frontpage/" class="btn btn-default" data-toggle="modal" title="back"> 
+										                                <i class="fa fa-arrow-left"></i> 
+														                        </a> 
+																	                        {% endif %}
+                    </div>
+                    <div class="panel-title">blog table</div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <!--search tag-->
+                        <div class="col-lg-3" style="float:right;position:relative; margin-bottom:10px;">
+                            <input type="text" class="form-control" placeholder="search" name="search" id="search_blog" value="{% if search_handle %}{{ search_handle }}{% endif %}" />
+                            <a href="javascript:;" onclick="search_blog()" style="position:absolute; right:18px; top:5px">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    
+                                    <th>blog title</th>
+                                    <th>kind</th>
+                                    <th style="width: 100px">tags</th>
+                                    <th>creator</th>
+                                    <th>last date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for bl_obj in bl_obj_list %}
+                                <tr>
+                                    
+                                    <td>
+                                        <div class="row">
+                                            <a href="/frontpage/post-view/?id={{ bl_obj.id }}" style="font-weight:bold" class="link link-primary">
+                                                {{ bl_obj.title }}
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" onclick="filter_blog(this, '_k')" class="link link-warning">{{ bl_obj.blog_kind.name }}</a>
+
+                                    </td>
+                                    <td>
+                                        {% for tag in bl_obj.tag.all %}
+                                        {% if forloop.counter0 < 10 %}
+                                        <a href="javascript:;" class="link link-warning" onclick="filter_blog(this, '_t')">{{ tag.name }}</a>
+                                        {% endif %}
+
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" class="link link-warning" onclick="filter_blog(this, 'creator')">{{ bl_obj.creator.username }}</a>
+
+                                    </td>
+                                    <td>
+                                        {% if bl_obj.adjustment_date %}
+                                        {{ bl_obj.adjustment_date }}
+                                        {% else %}
+                                        {{ bl_obj.create_date|date:"Y-m-d H:i:s" }}
+                                        {% endif %}
+
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="row">
+                        {% include "admin/component/page.html" %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-lg-2">
+        <div class="panel">
+            <div class="panel-heading">
+		    <div class="panel-control">
+			    <button class="btn btn-default" data-toggle="modal" title="come in" onclick="filter_blog_in_kind()">
+				                            <i class="fa fa-check"></i>
+							                        </button>
+		    </div>
+                <div class="panel-title">kind_select</div>
+            </div>
+
+            <div class="panel-body">
+                <div id="kind_list" class="row list-group">
+                    {#                    {% for bk_obj in bk_obj_list %}#}
+                    {#                    {% if kind == bk_obj.name %}#}
+                    {#                    <a href="javascript:;" title="{{ bk_obj.alias }}" class="list-group-item active">{{ bk_obj.name }}</a>#}
+                    {#                    {% else %}#}
+                    {#                    <a href="javascript:;" title="{{ bk_obj.alias }}" class="list-group-item">{{ bk_obj.name }}</a>#}
+                    {#                    {% endif %}#}
+                    {#                    {% endfor %}#}
+                    {#                    #}
+                </div>
+                <div class="kind_select_foot" style="margin-top: 15px;">
+                    <div id="change_kind_page">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+    {% endblock %}
+    {% block footer_custom_js %}
+<script>
+    KINDLIST = [];
+    KIND_OBJ_LIST = [];
+    KINDPCT = new PageCutter([]);
+
+    TAGLIST = [];
+    TAG_OBJ_LIST = [];
+    TAGPCT = new PageCutter([]);
+    TAG_SIM_LIST = new Array();
+
+    $(document).ready(function () {
+        var url_dict = url_parse(location.href);
+        var tree_str = "";
+        var current_kind = "";
+        for (var k in url_dict["querys"]) {
+
+            tree_str += `${k}--${url_dict["querys"][k]};`
+        }
+
+        if ("_k" in url_dict["querys"]) {
+            current_kind = url_dict["querys"]._k;
+        }
+        if ("_t" in url_dict["querys"]) {
+            TAG_SIM_LIST = url_dict["querys"]._t;
+            if (!Array.isArray(TAG_SIM_LIST)) {
+                TAG_SIM_LIST = new Array(TAG_SIM_LIST);
+            }
+        }
+
+        $.ajax({
+            url: "/backend/blog-backend/kind-list/",
+            type: "GET",
+            dataType: "JSON",
+            success: (data) => {
+                if (data.status == 0) {
+                    $("#kind_list").empty();
+                    KINDLIST = data.data;
+
+                    for (let kind of KINDLIST) {
+                        if (current_kind && kind == current_kind) {
+                            let a_tag = document.createElement("a");
+                            a_tag.href = "javascript:;";
+                            a_tag.title = kind;
+                            a_tag.classList.add("list-group-item");
+                            a_tag.classList.add("active");
+                            a_tag.innerText = kind;
+                            KIND_OBJ_LIST.push(a_tag);
+                        } else {
+                            let a_tag = document.createElement("a");
+                            a_tag.href = "javascript:;";
+                            a_tag.title = kind;
+                            a_tag.classList.add("list-group-item");
+                            a_tag.innerText = kind;
+                            KIND_OBJ_LIST.push(a_tag);
+                        }
+
+                    }
+
+                    let pct = new PageCutter(KIND_OBJ_LIST);
+                    KINDPCT = pct;
+                    let new_kind_obj_list = pct.getRowList();
+                    for (let kind of new_kind_obj_list) {
+                        $("#kind_list").append(kind);
+                    }
+
+
+
+                    $("#change_kind_page").append(`<a href="javascript:;" id="kind_prev" title="go prev" style="float:left">
+                            <i class="fa fa-arrow-left"></i>
+                        </a>
+
+                        <a href="javascript:;" id="kind_next" title="go next" style="float: right;">
+                            <i class="fa fa-arrow-right"></i>
+                        </a>`);
+                }
+                $("#kind_prev").click(() => {
+                    goKindPrev();
+                })
+                $("#kind_next").click(() => {
+                    goKindNext();
+                })
+
+                $("#kind_list").children().click(function () {
+                    if ($(this).hasClass("active")) {
+                        $(this).removeClass("active");
+                    } else {
+                        $(this).addClass("active");
+                    }
+
+                });
+
+
+            }
+        })
+
+    });
+    function filter_blog(itm, typ) {
+        var current_url = location.href;
+        var value = $(itm).text();
+        if (typ == "_k") {  // filter blog in kind
+            var new_url = add_query(current_url, { '_k': value });
+            console.log(new_url);
+            location.href = new_url;
+        } else if (typ == "_t") { // filter blog in tag
+            var new_url = add_query(current_url, { '_t': value });
+            location.href = new_url;
+        } else if (typ == "creator") {
+            var new_url = add_query(current_url, { 'creator': value });
+            location.href = new_url;
+        }
+
+    }
+
+    // change page of kind
+    function goKindPrev() {
+        console.log("prev");
+        $("#kind_list").empty();
+        let pct = KINDPCT;
+        pct.onGoPrev();
+        let new_kind_obj_list = pct.getRowList();
+        for (let kind of new_kind_obj_list) {
+
+            $("#kind_list").append(kind);
+        }
+
+        $("#kind_list").children().click(function () {
+            if ($(this).hasClass("active")) {
+                $(this).removeClass("active");
+            } else {
+                $(this).addClass("active");
+            }
+
+        });
+    }
+
+    function goKindNext() {
+        let pct = KINDPCT;
+        $("#kind_list").empty();
+        pct.onGoNext();
+        let new_kind_obj_list = pct.getRowList();
+        for (let kind of new_kind_obj_list) {
+            $("#kind_list").append(kind);
+        }
+
+        $("#kind_list").children().click(function () {
+            if ($(this).hasClass("active")) {
+                $(this).removeClass("active");
+            } else {
+                $(this).addClass("active");
+            }
+
+        });
+    }
+
+    $("#search_blog").keydown(function (event) {
+        if (event.keyCode == 13) {
+            search_blog();
+        }
+    });
+
+    function search_blog() {
+        var search_handle = $("#search_blog").val();
+        var current_url = location.href;
+        var new_url = add_query(current_url, { '_s': search_handle });
+        location.href = new_url;
+    }
+
+    function filter_blog_in_kind() {
+        var kind = $("#kind_list").children(".active").first()
+        filter_blog(kind, "_k");
+    }
+</script>
+    {% endblock %}

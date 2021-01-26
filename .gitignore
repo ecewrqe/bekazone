@@ -99,11 +99,11 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-
+*.pyc/
 # Spyder project settings
 .spyderproject
 .spyproject
-
+.vs/
 # Rope project settings
 .ropeproject
 
@@ -117,3 +117,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+var/data
+migrations/000".py

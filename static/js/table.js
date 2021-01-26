@@ -528,7 +528,6 @@ TableBuilder.prototype.ch_searchfield = function (sfs) {
             throw "search tag not found!"
         }
     } catch (arr) {
-        console.error(arr);
     }
 }
 
@@ -544,7 +543,6 @@ TableBuilder.prototype.ch_prcound = function (num) {
             throw "page tag not found!"
         }
     } catch (arr) {
-        console.error(arr);
     }
 }
 

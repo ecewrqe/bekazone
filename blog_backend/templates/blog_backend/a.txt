@@ -1,0 +1,162 @@
+
+    function submit_blog(redirect_type) {
+        var blog_id = $("#blog_id").val();
+        
+        var url = "/backend/blog-backend/md-edit-blog/";
+        var blog_title = $("#title_edit").val();
+        var msg, typ, button_name;
+        if (blog_id) {
+            console.log(blog_id);
+            url = add_query(url, { id: blog_id });
+            typ = "repair";
+            msg = `Would you repair the blog: <span class='text-primary'>${blog_title}</span>`;
+            button_name = "repair";
+        } else {
+            typ = "create";
+            msg = `Would you create the blog: <span class='text-primary'>${blog_title}</span>`;
+            button_name = "create";
+        }
+        var content = textEditor.getMarkdown();
+        var kind = $("#blog_kind_select").val();
+        var tag = $("#blog_tag").val();
+        var send_data = {
+            "typ": typ,
+            "blog_title": blog_title,
+            "content": content,
+            "kind_id": kind,
+            "tag": tag.join(",")
+        };
+
+        var danger_handle = $("#title_msg").children('#title_msg')[0];
+
+        
+        
+        // is title empty
+        if (!blog_title) {
+            msg = `can't create blog, please once more try after defined title`;
+            bootbox.dialog({
+                "title": "warning",
+                "message": msg,
+                "buttons": {
+                    "cancel": {
+                        label: "cancel",
+                        className: "btn-default",
+                    }
+                }
+            })
+            return false;
+        }
+        // is title has error
+        if (danger_handle) {
+            
+            
+            msg = `can't create blog, please once more try after changed title`;
+            bootbox.dialog({
+                "title": "warning",
+                "message": msg,
+                "buttons": {
+                    "cancel": {
+                        label: "cancel",
+                        className: "btn-default",
+                    }
+                }
+            })
+            return false;
+        }
+        bootbox.dialog({
+            "title": "warning",
+            "message": msg,
+            "buttons": {
+                "confirm": {
+                    label: button_name,
+                    className: "btn-primary",
+                    callback: function () {
+                        // save
+                        $.ajax({
+                            url: url,
+                            type: "POST",
+                            data: send_data,
+                            dataType: "JSON",
+                            success: function (data) {
+                                console.log(data.url);
+                                console.log(redirect_type);
+                                if (data.status == 0) {
+                                    // redirect_typ: list?view
+                                    if (redirect_type == "list") {
+                                        console.log(data.url);
+                                        location.href = data.url;
+                                    } else if (redirect_type == "key") {
+                                        if (typ == "create") {
+                                            // redirect to repair
+                                            url = add_query(url, { id: data.id });
+                                            location.href = url;
+
+                                            $.niftyNoty({
+                                                type: 'success',
+                                                container : 'floating',
+                                                title : 'note saved',
+                                                message : `${data.title} created`,
+                                                //html: "<h1>fdsfdsf</h1>",
+                                                // floating: {
+                                                // position
+                                                // },
+                                                closeBtn : false,
+                                                timer : 1500,
+
+                                                onHidden:function(){
+
+                                                }
+                                            })
+                                        } else {
+                                            $.niftyNoty({
+                                                type: 'info',
+                                                container : 'floating',
+                                                title : 'note saved',
+                                                message : `\`${data.title}\` repaired`,
+                                                //html: "<h1>fdsfdsf</h1>",
+                                                // floating: {
+                                                // position
+                                                // },
+                                                closeBtn : false,
+                                                timer : 1500,
+
+                                                onHidden:function(){
+
+                                                }
+                                            })
+                                        }
+                                    } else if (redirect_type == "view") {
+                                        url = "/backend/blog-backend/blog-view/";
+                                        url = add_query(url, { id: data.id });
+                                        location.href = url;
+                                    }
+                                }
+                                else{
+                                    $.niftyNoty({
+                                                type: 'error',
+                                                container : 'floating',
+                                                title : 'note saving failed',
+                                                message : `\`${data.title}\` note saving failed`,
+                                                //html: "<h1>fdsfdsf</h1>",
+                                                // floating: {
+                                                // position
+                                                // },
+                                                closeBtn : false,
+                                                timer : 1500,
+
+                                                onHidden:function(){
+
+                                                }
+                                            })
+                                }
+                            }
+                        })
+                    }
+                },
+                "cancel": {
+                    label: "cancel",
+                    className: "btn-default",
+                }
+            }
+        });
+    }

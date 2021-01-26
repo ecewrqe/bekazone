@@ -29,4 +29,3 @@ class TokenRedisIO(RedisIO):
 if __name__ == "__main__":
     trio = TokenRedisIO("redis://@localhost:6379/0")
     trio.redis_input_ex("ww", "bb",100)
-    print(trio.redis_output("ww"))

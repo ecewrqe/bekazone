@@ -40,13 +40,11 @@ def message(request):
     if request.method == "GET":
         msg_id = request.GET.get("id")
         if msg_id:
-            print(msg_id)
             ml_obj = MessageList.objects.filter(id=msg_id)
         return render(request, "blog_backend/message.html", locals())
     else:
         typ = request.POST.get("typ")
         if typ == "get_content":
-            print(typ)
             msg_id = request.POST.get("msg_id")
             ml_obj = MessageList.objects.get(id=msg_id)
             jrs = JsonResponse()
@@ -74,7 +72,7 @@ def message(request):
                 ml_obj.save()
             jrs.set_success(0, "ok")
         
-            jrs.url = "/blog-backend/message-list/";
+            jrs.url = "/backend/blog-backend/message-list/";
 
             return HttpResponse(jrs.set_json_pack())
 
@@ -90,7 +88,7 @@ def normal_edit_blog(request):
             try:
                 bl_obj = BlogList.objects.get(id=blog_id)
             except:
-                return redirect("/blog-backend/display-blog-list/")
+                return redirect("/backend/blog-backend/display-blog-list/")
         bk_obj_list = BlogKind.objects.all()
         tg_obj_list = Tag.objects.all()
 
@@ -114,7 +112,6 @@ def normal_edit_blog(request):
             bk.create_date = datetime.datetime.now()
             bk.save()
         else:
-            print("repair")
             blog_id = request.GET.get("id")
             bk = BlogList.objects.filter(id=blog_id).first()
             if bk:
@@ -142,7 +139,7 @@ def normal_edit_blog(request):
                 bk.tag.add(obj)
         jrs = JsonResponse()
         jrs.set_success(0, "ok")
-        jrs.url = "/blog-backend/display-blog-list/";
+        jrs.url = "/backend/blog-backend/display-blog-list/";
         return HttpResponse(jrs.set_json_pack())
 
 @login_required(login_url_name='users:login')
@@ -159,7 +156,7 @@ def md_edit_blog(request):
             try:
                 bl_obj = BlogList.objects.get(id=blog_id)
             except:
-                return redirect("/blog-backend/display-blog-list/")
+                return redirect("/backend/blog-backend/display-blog-list/")
         bk_obj_list = BlogKind.objects.all()
         tg_obj_list = Tag.objects.all()
         return render(request, "blog_backend/md_edit_blog.html", locals())
@@ -221,7 +218,7 @@ def md_edit_blog(request):
         jrs = JsonResponse()
         jrs.set_success(0, "ok")
         jrs.id = bk.id
-        jrs.url = "/blog-backend/display-blog-list/"
+        jrs.url = "/backend/blog-backend/display-blog-list/"
         return HttpResponse(jrs.set_json_pack())
 
 @login_required(login_url_name='users:login')
@@ -262,7 +259,6 @@ def display_blog_list(request):
 
         search_handle = request.GET.get("_s")
         search_fields = ["title"]
-        print(search_handle)
         if search_handle != "None":
             bl_obj_list, search_handle = get_search_obj(request, bl_obj_list, search_fields)
         else:
@@ -299,11 +295,11 @@ def message_list(request):
         jrs = JsonResponse()
         jrs.set_success(0, "ok")
         
-        jrs.url = "/blog-backend/message-list/";
+        jrs.url = "/backend/blog-backend/message-list/";
 
         return HttpResponse(jrs.set_json_pack())
 
-@login_required(login_url_name='users:login')
+# @login_required(login_url_name='users:login')
 def kind_list(request):
     jrs = JsonResponse()
     if request.method == "POST":
@@ -321,7 +317,7 @@ def kind_list(request):
             bk.create_date = datetime.datetime.now()
             bk.save()
             jrs.set_success(0, "ok")
-            jrs.url = "/blog-backend/display-blog-list/"
+            jrs.url = "/backend/blog-backend/display-blog-list/"
             jrs.id = bk.id
             jrs.name = bk.name
         except:
@@ -359,7 +355,6 @@ def kind_verify(request):
             else:
                 jrs.set_error(300, "repeated")
         else:
-            print("none")
             jrs.set_success(0, "ok")
         
     else:
@@ -374,7 +369,7 @@ def kind_delete(request):
         BlogKind.objects.filter(name=name).delete()
     jrs = JsonResponse()
     jrs.set_success(0, "ok")
-    jrs.url = "/blog-backend/kind-delete/"
+    jrs.url = "/backend/blog-backend/kind-delete/"
     return HttpResponse(jrs.set_json_pack())
 
 @login_required(login_url_name='users:login')
@@ -453,7 +448,6 @@ def blog_title_verify(request):
     return HttpResponse(jrs.set_json_pack())
 
 def blog_delete(request):
-    print("blog delete")
     blog_id_list = request.POST.get("blog_id_list")
     blog_id_list = json.loads(blog_id_list)
     for blog_id in blog_id_list:
@@ -494,7 +488,7 @@ def blog_view(request):
         tag_id_list = request.post.get("tag_id_list")
         jrs = JsonResponse()
         jrs.set_error(0, "error")
-        return redirect("/blog-backend/blog-view/?from=cache")
+        return redirect("/backend/blog-backend/blog-view/?from=cache")
     else:
         blog_id = request.GET.get("id")
         bl_obj = BlogList.objects.get(id=blog_id)
@@ -567,7 +561,6 @@ def upload_markdown(request):
                 title = title_group[0]
         try:
             bl = BlogList.objects.get(title=title)
-            print("repeat",bl)
         except:
             bl = BlogList()
         bl.title = title

@@ -49,7 +49,6 @@ def auth_login(request, user):
         del user_dict['_state']
     if user_dict.get("_group_cache"):
         del user_dict['_group_cache']
-    print("login:user_dict===", user_dict)
     request.session['user'] = user_dict
     request.session.set_expiry(settings.USER_SESSION_EXPIRED or 300)
 

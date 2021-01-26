@@ -428,19 +428,14 @@ def parse_payload(payload):
     payload_len = len(payload)
     while True:
         match_res = items_pattern.match(payload[pos:])
-        print([payload[pos:]])
         res = re.match(r".*", payload[pos:])
-        print(res)
         if match_res:
             imap_res = item_map_pattern.match(payload[pos:])
-            print(imap_res.groups())
             pos = imap_res.end()
-            print([payload[pos]])
         else:
             match_res = items_pattern2.match(payload[pos:])
             if match_res:
                 imap_res = item_map_pattern2.match(payload[pos:])
-                print(imap_res.groups())
                 pos = imap_res.end()
             else:
                 raise Exception("payload格式不正确")
@@ -452,7 +447,6 @@ def time_clock(func):
         start_clock = time.time()
         res = func(*args, **kwargs)
         stop_clock = time.time()
-        print(stop_clock - start_clock)
         return res
     return inner
 
@@ -462,7 +456,6 @@ class LoggerCollection(object):
     simplify log code, 
     """
     def __init__(self):
-        print("CONFIGFILE_PATH--->", CONFIGFILE_PATH)
 
         cp = BekaConfigParser(CONFIGFILE_PATH)
         
@@ -470,7 +463,6 @@ class LoggerCollection(object):
         log_path = os.path.normpath(os.path.join(BASE_DIR, log_path))
         log_file = cp.get_config("logger", "log_file")
         log_file = os.path.normpath(os.path.join(log_path, log_file))
-        print("log_file--->", log_file)
         log_name = cp.get_config("logger", "log_name")
         # formatter
         format = cp.get_config("logger", "format")

@@ -32,5 +32,5 @@ class BekaConfigParser(object):
         res = self.get_config("mysql", option)
         return res
 
-def page_not_found(request):
+def page_not_found(request, exception):
     return render(request, 'pages-404.html')

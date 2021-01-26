@@ -8,7 +8,6 @@ def perm_check_content(request,app,*args,**kwargs):
     perm_dict=app.permissions.perm_dict
 
     url_obj = resolve(request.path)
-    print(url_obj)
     url_name = url_obj.url_name
     matched_key=None
     matched_list = [None]
@@ -40,11 +39,9 @@ def perm_check_content(request,app,*args,**kwargs):
 
                 kwargs_matched = False
                 for k, v in perm_item_param_dict.items():
-                    print(k,v,req_param.get(k))
 
                     if req_param.get(k) == v:
                         kwargs_matched = True
-                        print(kwargs_matched)
                     else:
                         kwargs_matched = False
                         break

@@ -35,11 +35,15 @@ new normal blog
 {% endblock %}
 {% block content %}
 <div class="row">
-    <div class="col-lg-8">
+    <div class="col-lg-12">
 
         <div class="panel">
             <div class="panel-heading">
                 <div class="panel-control">
+			<a href="/backend/blog-backend/normal-edit-blog/?id={{ bl_obj.id }}" class="btn btn-default" title="normal">
+
+				                                            <i class="fa fa-edit"></i>
+									                                            </a>
                     <!--1, create;2, repair:have id-->
                     {% if blog_id %}
                     <button class="btn btn-success" title="repair" onclick="submit_blog('list')">
@@ -63,7 +67,7 @@ new normal blog
 
                     
                     
-                    <a href="/blog-backend/display-blog-list/" class="btn btn-default" title="return">
+                    <a href="/backend/blog-backend/display-blog-list/" class="btn btn-default" title="return">
                         <i class="fa fa-arrow-left" aria-hidden="true"></i>
                     </a>
                 </div>
@@ -290,7 +294,7 @@ repair -> view button -> save -> search id -> redirect view
             onload: function () {
                 var blog_id = $("#blog_id").val();
                 if (blog_id) {
-                    url = `/blog-backend/get-blog-message/?id=${blog_id}`
+                    url = `/backend/blog-backend/get-blog-message/?id=${blog_id}`
                 } else {
                     return;
                 }
@@ -328,7 +332,7 @@ repair -> view button -> save -> search id -> redirect view
 
                 // cache file save
                 $.ajax({
-                    url: "/blog-backend/cache-save/",
+                    url: "/backend/blog-backend/cache-save/",
                     type: "POST",
                     data: {title: title, md_content: md_value},
                     dataType: "JSON",
@@ -358,14 +362,13 @@ repair -> view button -> save -> search id -> redirect view
      * @param typ
      * @param is_redirect
      */
-    function submit_blog(redirect_type) {
+	 function submit_blog(redirect_type) {
         var blog_id = $("#blog_id").val();
         
-        var url = "/blog-backend/md-edit-blog/";
+        var url = "/backend/blog-backend/md-edit-blog/";
         var blog_title = $("#title_edit").val();
         var msg, typ, button_name;
         if (blog_id) {
-            console.log(blog_id);
             url = add_query(url, { id: blog_id });
             typ = "repair";
             msg = `Would you repair the blog: <span class='text-primary'>${blog_title}</span>`;
@@ -408,6 +411,7 @@ repair -> view button -> save -> search id -> redirect view
         // is title has error
         if (danger_handle) {
             
+            
             msg = `can't create blog, please once more try after changed title`;
             bootbox.dialog({
                 "title": "warning",
@@ -436,12 +440,9 @@ repair -> view button -> save -> search id -> redirect view
                             data: send_data,
                             dataType: "JSON",
                             success: function (data) {
-                                console.log(data.url);
-                                console.log(redirect_type);
                                 if (data.status == 0) {
                                     // redirect_typ: list?view
                                     if (redirect_type == "list") {
-                                        console.log(data.url);
                                         location.href = data.url;
                                     } else if (redirect_type == "key") {
                                         if (typ == "create") {
@@ -484,7 +485,7 @@ repair -> view button -> save -> search id -> redirect view
                                             })
                                         }
                                     } else if (redirect_type == "view") {
-                                        url = "/blog-backend/blog-view/";
+                                        url = "/backend/blog-backend/blog-view/";
                                         url = add_query(url, { id: data.id });
                                         location.href = url;
                                     }
@@ -518,7 +519,6 @@ repair -> view button -> save -> search id -> redirect view
             }
         });
     }
-
 </script>
 
 {% endblock %}

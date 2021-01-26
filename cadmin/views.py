@@ -240,7 +240,6 @@ def batch_update(request):
         app_dict = site.app_dict
         model_class, admin_class = app_dict[app][table]
 
-        print(data_dict)
 
         for id, data in data_dict.items():
             model_class.objects.filter(id=id).update(**data)

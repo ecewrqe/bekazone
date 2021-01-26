@@ -11,7 +11,7 @@ function check_title_repeat(itm) {
     }
 
     $.ajax({
-        url: "/blog-backend/blog-title-verify/",
+        url: "/backend/blog-backend/blog-title-verify/",
         type: "POST",
         data: { "value": inp_value, "typ": "normal" },
         dataType: "JSON",
@@ -32,7 +32,7 @@ function check_title_repeat(itm) {
 function kind_repeat_verify(itm, verify_field) {
     var value = $(itm).val();
     $.ajax({
-        url: "/blog-backend/verify-kind/",
+        url: "/backend/blog-backend/verify-kind/",
         type: "POST",
         data: { "verify_field": verify_field, "value": value },
         dataType: "JSON",
@@ -82,7 +82,7 @@ function submit_kind_create_form(typ) {
     }
     var kc_send_ser = $("#kind_create").serialize();
     $.ajax({
-        url: "/blog-backend/kind-list/",
+        url: "/backend/blog-backend/kind-list/",
         type: "POST",
         data: kc_send_ser,
         dataType: "JSON",
@@ -139,7 +139,7 @@ function kind_delete() {
         return;
     }
     $.ajax({
-        url: "/blog-backend/verify-related/",
+        url: "/backend/blog-backend/verify-related/",
         type: "POST",
         data: { typ: "k_b", name_list: JSON.stringify(name_list) },
         dataType: "JSON",
@@ -156,7 +156,7 @@ function kind_delete() {
                         callback: function () {
 
                             $.ajax({
-                                url: "/blog-backend/kind-delete/",
+                                url: "/backend/blog-backend/kind-delete/",
                                 type: "POST",
                                 data: { "name_list": JSON.stringify(name_list) },
                                 dataType: "JSON",
@@ -224,7 +224,7 @@ function submit_tag_create_form(typ) {
         return;
     }
     $.ajax({
-        url: "/blog-backend/tag-list/",
+        url: "/backend/blog-backend/tag-list/",
         type: "POST",
         data: { "name": name },
         dataType: "JSON",
@@ -251,7 +251,7 @@ function tag_repeat_verify(itm) {
     var name = $(itm).val();
     console.log(name);
     $.ajax({
-        url: "/blog-backend/verify-tag/",
+        url: "/backend/blog-backend/verify-tag/",
         type: "POST",
         data: { "name": name },
         dataType: "JSON",
@@ -289,7 +289,7 @@ function tag_delete() {
     }
 
     $.ajax({
-        url: "/blog-backend/verify-related/",
+        url: "/backend/blog-backend/verify-related/",
         type: "POST",
         data: { typ: "t_b", name_list: JSON.stringify(name_list) },
         dataType: "JSON",
@@ -305,7 +305,7 @@ function tag_delete() {
                         callback: function () {
 
                             $.ajax({
-                                url: "/blog-backend/tag-delete/",
+                                url: "/backend/blog-backend/tag-delete/",
                                 type: "POST",
                                 data: { "name_list": JSON.stringify(name_list) },
                                 dataType: "JSON",
@@ -354,3 +354,54 @@ function tag_delete() {
     
 
 }
+
+    function submit_blog(redirect_type) {
+        var blog_id = $("#blog_id").val();
+        
+        var url = "/backend/blog-backend/md-edit-blog/";
+        var blog_title = $("#title_edit").val();
+        var msg, typ, button_name;
+        if (blog_id) {
+            console.log(blog_id);
+            url = add_query(url, { id: blog_id });
+            typ = "repair";
+            msg = `Would you repair the blog: <span class='text-primary'>${blog_title}</span>`;
+            button_name = "repair";
+        } else {
+            typ = "create";
+            msg = `Would you create the blog: <span class='text-primary'>${blog_title}</span>`;
+            button_name = "create";
+        }
+        var content = textEditor.getMarkdown();
+        var kind = $("#blog_kind_select").val();
+        var tag = $("#blog_tag").val();
+        var send_data = {
+            "typ": typ,
+            "blog_title": blog_title,
+            "content": content,
+            "kind_id": kind,
+            "tag": tag.join(",")
+        };
+
+        var danger_handle = $("#title_msg").children('#title_msg')[0];
+
+        
+        
+        // is title empty
+        if (!blog_title) {
+            msg = `can't create blog, please once more try after defined title`;
+            bootbox.dialog({
+                "title": "warning",
+                "message": msg,
+                "buttons": {
+                    "cancel": {
+                        label: "cancel",
+                        className: "btn-default",
+                    }
+                }
+            })
+            return false;
+        }
+        // is title has error
+        if (danger_handle) {
+            

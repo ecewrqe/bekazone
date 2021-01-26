@@ -46,7 +46,6 @@ def get_search_obj(request, model_objs, search_field):
         q_search.connector = "OR"
         for field in search_field:
             field_obj = search_fieldobj(model_objs.model, field)
-            print("----", field_obj)
             type_flag = re.search(r"IntegerField|ForeignKey",
                                   field_obj.get_internal_type.__str__())
             if type_flag:
@@ -58,7 +57,6 @@ def get_search_obj(request, model_objs, search_field):
             else:
                 q_search.children.append(("%s__icontains" % field, keyword))
         # 如果该字段是Integer,或Forignkey，转换成数字，如果不能转换，放弃该字段
-        print(q_search)
         model_objs = model_objs.filter(q_search)
     return model_objs, search_keyword
 

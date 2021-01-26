@@ -4,7 +4,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = 'fqcbjs4t#%)-m*)$igcr_mo4f)47(^d*c(+-vy)o@(7c7=iq#b'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'blog_backend',
     'framework_test',
     'rest_framework',
+    'frontpage',
 ]
 
 

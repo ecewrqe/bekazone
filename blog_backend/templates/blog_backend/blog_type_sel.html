@@ -13,11 +13,11 @@ select blog type
 {% endblock %}
 {% block content %}
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-9">
         <div class="panel">
             <div class="panel-heading">
                 <div class="panel-control">
-                    <a href="/blog-backend/display-blog-list/" class="btn btn-default" title="return to list"><i class="fa fa-arrow-left"></i></a>
+                    <a href="/backend/blog-backend/display-blog-list/" class="btn btn-default" title="return to list"><i class="fa fa-arrow-left"></i></a>
                 </div>
                 <div class="panel-title">
                     select
@@ -29,34 +29,18 @@ select blog type
                     <div class="form-group">
                         
                         <label class="col-lg-5 control-label"><strong>please select a editor to edit:</strong></label>
-                        <div class="col-lg-5">
-                            
+                        <div class="col-lg-5 list-group">
+				    <a href="/backend/blog-backend/message/" class="list-group-item">message</a>
 
-                            <div class="radio">
-                                <input type="radio" id="sel_01" name="edit_type" value="message" class="magic-radio" />
-                                <label for="sel_01">message</label>
-                                </div>
-
-                            <div class="radio">
-                                <input type="radio" id="sel_02" name="edit_type" value="md_blog" class="magic-radio" />
-                                <label for="sel_02">markdown_blog</label>
-                            </div>
-
-                            <div class="radio">
-                                <input type="radio" id="sel_03" name="edit_type" value="upload_md" class="magic-radio" />
-                                <label for="sel_03">upload_md_file</label>
-                            </div>
+				    <a href="/backend/blog-backend/md-edit-blog/" class="list-group-item">md-edit-blog</a>
+				    <a href="/backend/blog-backend/normal-edit-blog/" class="list-group-item">normal-edit-blog</a>
+				    <a href="/backend/blog-backend/upload-markdown/" class="list-group-item">upload-md-file</a>
                                 
                                 
                             
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-lg-7 col-lg-offset-5">
-                            <button class="btn btn-primary">come in</button>
-                        </div>
-                    </div>
                 </form>
             </div>
         </div>

@@ -56,10 +56,9 @@ new message
 <script>
     function init_data() {
         msg_id = $("#msg_id").val()
-        console.log(msg_id);
         if (msg_id) {
             $.ajax({
-                url: "/blog-backend/message/",
+                url: "/backend/blog-backend/message/",
                 type: "POST",
                 data: { "msg_id": msg_id, "typ": "get_content" },
                 dataType: "JSON",
@@ -85,7 +84,7 @@ tinymce.init({
         if (typ == "create") {
             var content = tinyMCE.get('message').getContent();
             $.ajax({
-                url: "/blog-backend/message/",
+                url: "/backend/blog-backend/message/",
                 type: "POST",
                 data: { "content": content, "typ": "create" },
                 dataType: "JSON",
@@ -97,7 +96,7 @@ tinymce.init({
             var content = tinyMCE.get('message').getContent();
             var msg_id = $("#msg_id").val()
             $.ajax({
-                url: "/blog-backend/message/",
+                url: "/backend/blog-backend/message/",
                 type: "POST",
                 data: { "content": content, "typ": "repair", "msg_id": msg_id },
                 dataType: "JSON",

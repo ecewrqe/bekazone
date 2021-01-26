@@ -18,6 +18,13 @@ message list
 {% endblock %}
 {% block content %}
 <div class="row">
+	<div class="col-lg-1">
+		<a href="/backend/blog-backend/message/" class="btn btn-success" title="add">
+			<i class="fa fa-plus"></i>
+		</a>
+	</div>
+</div>
+<div class="row">
     <div class="col-lg-7">
         {% for message in message_list %}
     <div class="row">
@@ -71,11 +78,7 @@ message list
     </div>
     {% endfor %}
     </div>
-    <div class="col-lg-1">
-            <a href="/blog-backend/message/" class="btn btn-success" title="add">
-                <i class="fa fa-plus"></i>
-            </a>
-        </div>
+    
     
 
 </div>
@@ -88,7 +91,7 @@ $(document).ready(function(){
     function delete_message(itm) {
         var msg_id = $(itm).attr("msg_id");
         $.ajax({
-            url: "/blog-backend/message-list/",
+            url: "/backend/blog-backend/message-list/",
             type: "POST",
             data: { msg_id: msg_id },
             dataType: "JSON",
@@ -99,7 +102,7 @@ $(document).ready(function(){
     }
     function repair_message(itm) {
         var msg_id = $(itm).attr("msg_id");
-        location.href = "/blog-backend/message/?id=" + msg_id
+        location.href = "/backend/blog-backend/message/?id=" + msg_id
     }
     
     
